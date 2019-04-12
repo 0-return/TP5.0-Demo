@@ -38,15 +38,11 @@ class Complaint extends Init
     {
         foreach ($list as $key => $value)
         {
-            $where['uid'] = $value['lid'];
-            $data['type'] = 'value';
-            $data['fields'] = 'username';
-            $list[$key]['lname'] = getFields($this->obj->table($this->config['prefix'].'lawyer'),$where,$data); unset($where);
 
             $where['uid'] = $value['uid'];
             $data['type'] = 'value';
             $data['fields'] = 'username';
-            $list[$key]['uname'] = getFields($this->obj->table($this->config['prefix'].'member'),$where,$data);
+            $list[$key]['uname'] = getFields($this->obj[1]->table($this->config['prefix'].'member'),$where,$data);
         }
     }
 

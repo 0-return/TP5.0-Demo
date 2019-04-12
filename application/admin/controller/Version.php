@@ -59,7 +59,7 @@ class Version extends Init
 
         }else{
 
-            $list = $this->obj->table($this->config['prefix'].'role')->where('status','>','0')->select();
+            $list = $this->obj[1]->table($this->config['prefix'].'admin_role')->where('status','>','0')->select();
             $this->assign('list', $list);
         }
     }

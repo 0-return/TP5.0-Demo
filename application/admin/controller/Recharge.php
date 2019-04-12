@@ -27,7 +27,7 @@ class Recharge extends Init
     function _initialize()
     {
         parent::_init();
-        $this->table = $this->config['prefix'].'rechargelog';
+        $this->table = $this->config['prefix'].'member_order_recharge';
     }
 
     public function index()
@@ -58,7 +58,7 @@ class Recharge extends Init
         foreach ($list as $key => $value)
         {
             $where['uid'] = $value['uid'];
-            $res = $this->obj->table($this->config['prefix'].'member')->where($where)->field('username,nickname')->find();
+            $res = $this->obj[1]->table($this->config['prefix'].'member')->where($where)->field('username,nickname')->find();
             $list[$key]['username'] = $res['username'];
             $list[$key]['nickname'] = $res['nickname'];
             $list[$key]['status_cn'] = $this->status_cn[$value['status']];

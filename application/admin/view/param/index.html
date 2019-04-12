@@ -8,12 +8,12 @@
 <div class="page-container">
 	<div id="tab-system" class="HuiTab">
 		<div class="tabBar cl">
-			<span>律师参数设置</span>
-			<span>用户参数设置</span>
+			<!-- <span>律师参数设置</span>
+			<span>用户参数设置</span> -->
 			<span>公共参数设置</span>
 		</div>
 		<!--律师端-->
-		<form class="form form-horizontal" id="form-lawyer-data">
+		<!-- <form class="form form-horizontal" id="form-lawyer-data">
 		<input type="hidden" class="hidden-id" name="id" value="{{$assist.id}}">
 			<div class="tabCon">
 				
@@ -48,9 +48,9 @@
 					</div>
 				</div>
 			</div>
-		</form>
+		</form> -->
 		<!--用户端-->
-		<form class="form form-horizontal" id="form-user-data">
+		<!-- <form class="form form-horizontal" id="form-user-data">
 		<input type="hidden" class="hidden-id" name="id" value="{{$assist.id}}">
 			<div class="tabCon">
 				<div class="row cl">
@@ -131,14 +131,14 @@
 					<button onClick="layer_close();" class="btn btn-default radius" type="button">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
 					</div>
 				</div>
-
+		
 			</div>
-		</form>
+		</form> -->
 		<!--后台-->
 		<form class="form form-horizontal" id="form-other-data">
 		<input type="hidden" class="hidden-id" name="id" value="{{$config.id}}">
 			<div class="tabCon">
-				<div class="row cl">
+				<!-- <div class="row cl">
 					<label class="form-label col-xs-4 col-sm-2">
 					<span class="c-red">*</span>
 					律师注册开关：</label>
@@ -159,7 +159,7 @@
 							<option value='1' <if condition="$config['is_reigster_member'] eq '1'">selected</if>>开</option>
 						</select>
 					</div>
-				</div>
+				</div> -->
 				<div class="row cl">
 					<label class="form-label col-xs-4 col-sm-2">
 					<span class="c-red">*</span>
@@ -171,7 +171,7 @@
 						</select>
 					</div>
 				</div>
-				<div class="row cl">
+				<!-- <div class="row cl">
 					<label class="form-label col-xs-4 col-sm-2">
 					<span class="c-red">*</span>
 					卡密激活开关：</label>
@@ -181,7 +181,7 @@
 							<option value='1' <if condition="$config['card'] eq '1'">selected</if>>开</option>
 						</select>
 					</div>
-				</div>
+				</div> -->
 				
 				<div class="row cl">
 					<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">

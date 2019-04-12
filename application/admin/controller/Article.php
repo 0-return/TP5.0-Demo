@@ -1,163 +1,189 @@
 <?php
 namespace app\admin\controller;
+
 use app\admin\common\controller\Init;
 use think\Db;
-use Think\Exception;
 
 /**
  * Create by .
  * Cser Administrator
  * Time 16:18
- * Note：律师文章
+ * Note：法条管理
  */
 class Article extends Init
 {
-    private $sms_config;
 
-    /**
-     * @auth YW
-     * @date 2017.12.2
-     * @purpose 初始化
-     * @return void
-     */
-    public function _initialize()
+    public $tag = array(
+        'f' => '推荐',
+        'h' => '热点',
+    );
+    function _initialize()
     {
         parent::_init();
-        $this->table = $this->config['prefix'].'lawyer_content';
-        $where['status'] = '1';
-        $where['type'] = 'Jhsms';
-        $this->sms_config = $this->obj->table($this->config['prefix'].'sms_config')->where($where)->find();
+        $this->table = $this->config['prefix'] . 'article';
     }
-
+    /**
+     * @auth PT
+     * @date 2019.3.1
+     * @purpose 列表
+     * @return void
+     */
     public function index()
     {
         $map = $this->_search();
         if (method_exists($this, '_filter')) {
             $this->_filter($map);
         }
-        $map['status'] = array('gt',-1);
+        $map['status'] = array('gt', '-1');
+        $map['sort'] = '1';
         $where['where'] = $map;
-        $this->_list('',$where);
+        $this->_list('', $where);
         return view();
     }
 
     public function _filter(&$map)
     {
-        $get = $this->request->get();
-        if (!empty($get['begintime']) && !empty($get['endtime']))
-        {
-            $map['addtime'] = array('between',array(strtotime($get['begintime']),strtotime($get['endtime'])));
-        }
         $this->checkSearch($map);
     }
 
+    /**
+     * @auth PT
+     * @date 2019.3.1
+     * @purpose 添加公告前序列化图片，添加时间
+     * @return void
+     */
+    public function _before_add(&$list)
+    {
+
+        if ($this->request->post()) {
+            $data = $this->request->post();
+
+            $list['tag'] = implode(',', $data['tag']);
+            $list['content'] = $data['content'];
+            $list['status'] = '0';
+            $list['add_time'] = time();
+        } else {
+            $option = $this->cate_tree_html($this->obj[1], $this->config['prefix'] . 'article_cate');
+            $this->assign('option', $option);
+            $this->display();
+        }
+    }
+
+    /**
+     * @auth PT
+     * @date 2019.3.1
+     * @purpose 列表展示前反序列化图片
+     * @return void
+     */
     public function _after_list(&$list)
     {
-        foreach ($list as $key => $value)
-        {
-            $where['id'] = $value['type'];
-            try{
-                $res = $this->obj->table($this->config['prefix'].'lawyer_content_type')->where($where)->find();
-                $list[$key]['type_cn'] = $res['name'];
-            }catch (Exception $e)
-            {
-                $list[$key]['type_cn'] = '其他';
+
+        foreach ($list as $key => $value) {
+            $list[$key]['type_cn'] = get_type_str($this->obj[1], $this->config['prefix'].'article_cate', $value['type'], 'id,tid,name', array('condition' => 'id', 'flag' => 'name', 'pid' => 'tid'));
+            $list[$key]['title'] = mb_substr($value['title'], 0, 12) . '...';
+        }
+    }
+
+    /**
+     * @auth PT
+     * @date 2019.3.1
+     * @purpose 修改操作前序列化图片、编辑时间、写入日志
+     * @return void
+     */
+    public function _before_update(&$list)
+    {
+
+        foreach ($list as $key => $value) {
+            if (empty($value)) {
+                unset($list[$key]);
             }
         }
+        $list['tag'] = implode(',', $list['tag']);
+        $list['content'] = $list['content'];
+        $map['id'] = $list['id'];
+        unset($list['schedule_mc']); //去掉多餘數據
+
     }
 
-    public function _before_forbid(&$data)
+    /**
+     * @auth PT
+     * @date 2019.3.1
+     * @purpose
+     * @return void
+     */
+
+    public function _before_edit(&$list)
     {
 
-        $data = 'review_status';
-    }
-
-    public function _after_forbid(&$id)
-    {
-        $this->obj->startTrans();
-        $data['review_time'] = time();
-
-        $where['id'] = array('in',$id);
-        $res = $this->obj->table($this->table)->where($where)->update($data); unset($where);
-
-        $where['sid'] = array('in',$id);;
-        $status = $this->obj->table('fwy_article_main')->where($where)->value('status');
-        $status = $status?'0':'1';
-
-        $id = editArticleMainId($this->obj->table('fwy_article_main'),$id,$status);
-        if ($res && $id)
-        {
-            $this->obj->commit();
-            echoMsg('10000',$this->message['success']);
-        }else{
-            $this->obj->rollback();
-            echoMsg('10001',$this->message['error']);
+        if ($this->request->post()) { } else {
+            $w['id'] = $list['id'];
+            $tid = $this->obj[1]->table($this->table)->where($w)->value('type');
+            $option = $this->cate_tree_html($this->obj[1], $this->config['prefix'] . 'article_cate', '-1', 0, $tid);
+            $this->assign('option', $option);
         }
-    }
-
-    public function _after_edit(&$list)
-    {
-
-        $list['tag'] = !empty($list['tag'])?explode(',',$list['tag']):array('t');
-        $where['id'] = $list['type'];
-        $res = $this->obj->table($this->config['prefix'].'lawyer_content_type')->where($where)->find();
-        $list['type_cn'] = !empty($res['name'])?$res['name']:'其他';
-    }
-
-    public function _after_delete($id)
-    {
-
-        delArticleMainId($this->obj->table('fwy_article_main'),$id);
-        echoMsg('10000',$this->message['success']);
-    }
-
-    public function _before_update(&$post)
-    {
-
-        foreach ($post as $key => $value) {
-            if ($value == '') {
-                unset($post[$key]);
-            }
-        }
-        $post['tag'] = implode(',', $post['tag']);
-        if (intval(isset($post['review_status'])) > 1) $post['review_time'] = time();
-
-    }
-
-    public function _after_update(&$id)
-    {
-        $post = $this->request->post();
-        $where['sid'] = $id;
-        if ($post['review_status'] == '0')
-        {
-            $data['status'] = '0';
-            $data['tag'] = implode(',', $post['tag']);
-            $this->obj->table($this->config['prefix'].'article_main')->where($where)->update($data); unset($where);
-        }elseif($post['review_status'] == 1){
-            $data['status'] = '1';
-            $data['tag'] = implode(',', $post['tag']);
-            $this->obj->table($this->config['prefix'].'article_main')->where($where)->update($data); unset($where);
-        }else{
-            $data['status'] = '-1';
-            $this->obj->table($this->config['prefix'].'article_main')->where($where)->update($data);
-        }
-        echoMsg('10000',$this->message['success']);
     }
 
 
     /**
      * @auth PT
      * @date 2019.3.1
-     * @purpose 预览
+     * @purpose 编辑时反序列化图片用于展示
+     * @return void
+     */
+    public function _after_edit(&$list)
+    {
+        $list['tag'] = explode(',', $list['tag']);
+    }
+
+    /**
+     * @auth PT
+     * @date 2019.3.1
+     * @purpose 预览法条
      * @return void
      */
 
     public function preview()
     {
-        $get = $this->request->request();
-        $where['id'] = $get['id'];
-        $res = $this->obj->table($this->table)->where($where)->find();
+        $get = $this->request->request('id');
+        $where['id'] = $get;
+        $res = $this->obj[1]->table($this->table)->where($where)->find();
         $this->assign('vo', $res);
         return view();
     }
+
+    /**
+     * note:无限分类(内嵌样式)
+     * auth:YW
+     * input $data数据，$parentid父id $count累加次数
+     * return htmlstr
+     */
+    public function cate_tree_html($obj, $table = null, $parentid = '-1', $count = 0, $tid = '')
+    {
+        $obj = empty($table) ? $obj : $obj->table($table);
+        $where['tid'] = $parentid;
+        $where['status'] = array('gt', 0);
+        $res = $obj->where($where)->select();
+        if (empty($res)) return false;
+        $optionHtml = '';
+        $linstr = str_repeat("——|", $count);
+        foreach ($res as $key => $value) {
+            if (empty($tid)) {
+                if ($value['tid'] == $parentid) {
+                    $optionHtml .= "<option value='{$value['id']}'>{$linstr} {$value['name']}</option>";
+                    $optionHtml .= $this->cate_tree_html($obj, $table, $value['id'], $count + 1);
+                }
+            } else {
+                if ($value['tid'] == $parentid) {
+                    if ($tid == $value['id'] || $tid == '-1') {
+                        $optionHtml .= "<option selected value='{$value['id']}'>{$linstr} {$value['name']}</option>";
+                    } else {
+                        $optionHtml .= "<option value='{$value['id']}'>{$linstr} {$value['name']}</option>";
+                    }
+                    $optionHtml .= $this->cate_tree_html($obj, $table, $value['id'], $count + 1, $tid);
+                }
+            }
+        }
+        return $optionHtml;
+    }
+
 }

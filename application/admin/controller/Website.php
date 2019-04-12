@@ -15,12 +15,13 @@ class Website extends Init
     function _initialize()
     {
         parent::_init();
-        $this->table = $this->config['prefix'].'config';
+        $this->table = $this->config['prefix'].'config_system';
     }
 
     public function index()
     {
-        $res = $this->obj->table($this->table)->find();
+
+        $res = $this->obj[1]->table($this->table)->find();
         $this->assign('vo',$res);
         return view();
     }

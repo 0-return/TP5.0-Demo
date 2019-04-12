@@ -28,12 +28,12 @@ class Taskbar extends Init
         $user = json_decode(Cookie::get($this->request->module().'_info'),1);
 
         $where['uid'] = $user['id'];
-        $ids = $this->obj->table($this->table)->where($where)->find();
+        $ids = $this->obj[1]->table($this->table)->where($where)->find();
         $ids['acids'] = explode(',',$ids['acids']);
         unset($where);
         $where['ismenu'] = '1';
         $where['pid'] = array('neq',0);
-        $res = $this->obj->table($this->config['prefix'].'auth')->where($where)->select();
+        $res = $this->obj[1]->table($this->config['prefix'].'admin_auth')->where($where)->select();
         foreach ($res as $key => $value) {
             if (in_array($value['id'],$ids['acids']))
             {

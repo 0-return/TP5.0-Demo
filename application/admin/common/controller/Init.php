@@ -132,7 +132,7 @@ class Init extends Controller
             $res = $model->insert($_POST);
             $id = $model->getLastInsID();
             if ($res) {                 //保存成功
-                self::log();
+                //self::log();
                 if (method_exists($this, "_after_add")) {
                     $this->_after_add($id);
                 }else{
@@ -173,7 +173,7 @@ class Init extends Controller
                 $list = $model->where($condition)->update(['status'=> -1]);
                 if ($list !== false) {
                     if(method_exists($this, "_after_delete")){
-                        self::log();
+                        //self::log();
                         $this->_after_delete($id);
                     }else{
                         echoMsg('10000',$this->message['success']);
@@ -227,7 +227,7 @@ class Init extends Controller
         $list = $model->where($map)->update($_POST);
         //echo $model->getLastSql();exit;
         if (false !== $list) {
-            self::log();
+            //self::log();
             if(method_exists($this, "_after_update")){
                 $this->_after_update($_REQUEST[$pk]);
             }else{
@@ -267,7 +267,7 @@ class Init extends Controller
                 }
                 $list = $model->where($condition)->$type($field, $number);
                 if ($list !== false) {
-                    self::log();
+                    //self::log();
                     if(method_exists($this, "_after_cal")){
                         $data['str'] = ($str = $type == 'setInc'?'+':'-').$number.' '.$field;
                         $this->_after_cal($data);
@@ -308,7 +308,7 @@ class Init extends Controller
                 }
                 $list = $model->where($condition)->setField($field, $status);
                 if ($list !== false) {
-                    self::log();
+                    //self::log();
                     if(method_exists($this, "_after_forbid")){
                         $this->_after_forbid($id);
                     }else{
@@ -332,6 +332,7 @@ class Init extends Controller
      */
     protected function _search() {
         $map = $this->_condition($this->getModel());
+
         return $map;
     }
     /**
@@ -415,7 +416,7 @@ class Init extends Controller
             $list = $obj->paginate($limit,false,['query'=>request()->param()]);
         }
 
-        //echo $model->getLastSql();
+        if ($debug == true) echo $model->getLastSql();
 
         $page = $list->render();
         $count = $list->total();

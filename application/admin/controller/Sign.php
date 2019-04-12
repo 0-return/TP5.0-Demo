@@ -14,6 +14,7 @@ class Sign extends Init
     function _initialize()
     {
         parent::_init();
+        $this->table = $this->config['prefix'].'member_sign';
     }
 
 

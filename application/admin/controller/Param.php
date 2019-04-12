@@ -30,10 +30,10 @@ class Param extends Init
     {
         if ($this->request->isPost())
         {
-            $this->table = $this->config['prefix'].'config';
+            $this->table = $this->config['prefix'].'config_system';
             $this->updateByAjax();
         }else{
-            $res = $this->obj->table($this->config['prefix'].'config')->find();
+            $res = $this->obj[1]->table($this->config['prefix'].'config_system')->find();
             return $res;
         }
 
@@ -43,10 +43,10 @@ class Param extends Init
     {
         if ($this->request->isPost())
         {
-            $this->table = $this->config['prefix'].'assist';
+            $this->table = $this->config['prefix'].'config_assist';
             $this->updateByAjax();
         }else{
-            $res = $this->obj->table($this->config['prefix'].'assist')->find();
+            $res = $this->obj[1]->table($this->config['prefix'].'config_assist')->find();
             return $res;
         }
 

@@ -115,7 +115,7 @@ class Img extends Init
             $data['size'] = $vl['info']['size'];
             $data['status'] = '1';
             $data['add_time'] = time();
-            $res = $this->obj->table($this->table)->insert($data);
+            $res = $this->obj[1]->table($this->table)->insert($data);
             if ($res)
             {
                 $i++;
@@ -144,7 +144,7 @@ class Img extends Init
      */
     private function this_list($model = '', $map = '', $sortBy = '', $asc = false,$limit = 10){
         //如果没有设置模型对象，则获取当前的模型对象
-        $model = $this->obj->table($this->table);
+        $model = $this->obj[1]->table($this->table);
         //如果没有传入排序条件，默认根据id排序
         if(isset($_REQUEST['_order']))
         {

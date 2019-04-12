@@ -65,16 +65,7 @@
 					</if>
 				</td>
                 <td>
-                   <if condition="$vo['isvip'] eq '1'">
-                   		<if condition="$vo['isfenpeilayer'] eq '0'">
-							<u style="cursor:pointer;text-decoration:none;" class="text-primary" onclick="_lawyer_select('{{$vo.username}}-{{$vo.nickname}}','{{:url('lawyerList')}}','{{$vo.id}}','1000','600')" title="选择律师">选择律师</u>
-                   		<else />
-                   			{{$vo.lawyer}}
-                   		</if>
-                    <else />
-                        未激活vip
-                    </if>
-
+                   
                 </td>
                 <td>
                 	<if condition="$vo['isfenpeilayer'] eq '1'">

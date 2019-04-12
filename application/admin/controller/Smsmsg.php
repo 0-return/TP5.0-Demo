@@ -18,7 +18,7 @@ class Smsmsg extends Init
         $this->table = $this->config['prefix'] . 'sms';
         $where['status'] = '1';
         $where['type'] = 'Jhsms';
-        $this->sms_config = $this->obj->table($this->config['prefix'].'sms_config')->where($where)->find();
+        $this->sms_config = $this->obj[1]->table($this->config['prefix'].'sms_config')->where($where)->find();
     }
 
     /**
@@ -44,7 +44,7 @@ class Smsmsg extends Init
         {
 
         }else{
-            $res = $this->obj->table($this->config['prefix'] . 'sms_jh_module')->select();
+            $res = $this->obj[1]->table($this->config['prefix'] . 'sms_jh_module')->select();
             $this->assign('list',$res);
         }
     }
@@ -64,7 +64,7 @@ class Smsmsg extends Init
         if ($this->request->isPost())
         {
             $post = $this->request->Post();
-            $modult_code = Common::msgConf($this->obj,$this->config,$post);
+            $modult_code = Common::msgConf($this->obj[1],$this->config,$post);
 
             $where = '';
             switch ($post['send_type'])
@@ -143,9 +143,9 @@ class Smsmsg extends Init
 
             if ($where)
             {
-                $res = $this->obj->table($this->config['prefix'].$db)->where($where)->select();
+                $res = $this->obj[1]->table($this->config['prefix'].$db)->where($where)->select();
             }else{
-                $res = $this->obj->table($this->config['prefix'].$db)->select();
+                $res = $this->obj[1]->table($this->config['prefix'].$db)->select();
             }
 
             $count = count($res);
@@ -195,7 +195,7 @@ class Smsmsg extends Init
     private function save_date(&$data)
     {
         $data['add_time'] = time();
-        $res = $this->obj->table($this->table)->insert($data);
+        $res = $this->obj[1]->table($this->table)->insert($data);
         return $res?true:false;
     }
 

@@ -19,6 +19,7 @@ class Payapi extends Init
     public function _initialize()
     {
         parent::_init();
+        $this->table = $this->config['prefix'].'payapi';
     }
 
     public function index()
@@ -27,12 +28,12 @@ class Payapi extends Init
         if ($post)
         {
             $where['id'] = $post['id'];
-            $res = $this->obj->table($this->table)->where($where)->find();
+            $res = $this->obj[1]->table($this->table)->where($where)->find();
             if ($res)
             {
-                $res = $this->obj->table($this->table)->where($where)->update($post);
+                $res = $this->obj[1]->table($this->table)->where($where)->update($post);
             }else{
-                $res = $this->obj->table($this->table)->add($post);
+                $res = $this->obj[1]->table($this->table)->add($post);
             }
 
             if ($res)
@@ -43,10 +44,10 @@ class Payapi extends Init
             }
         }else{
             $where['type'] = 'alipay';
-            $alipay = $this->obj->table($this->table)->where($where)->find();
+            $alipay = $this->obj[1]->table($this->table)->where($where)->find();
 
             $where['type'] = 'wxpay';
-            $wxpay = $this->obj->table($this->table)->where($where)->find();
+            $wxpay = $this->obj[1]->table($this->table)->where($where)->find();
 
             $sms = array('alipay' => $alipay,'wxpay'=> $wxpay);
             $this->assign('vo', $sms);

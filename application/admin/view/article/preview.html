@@ -1,11 +1,11 @@
 <include file="public:top" />
-<title>文章详情</title>
+<title>公告列表</title>
 </head>
 <body>
 <article class="page-container">
     <div>
         <h4>{{$vo.title}}</h4>
-        <h5><span class="l">日期：{{$vo.add_time|date="Y-m-d H:i:s",###}}</span></h5>
+        <h5><span class="l">日期：{{$vo.add_time|date="Y-m-d H:i:s",###}}</span><span class="r">部门：{{$vo.section}}</span></h5>
         <h4></h4>
         <div style="clear: both;">{{$vo.content}}</div>
     </div>

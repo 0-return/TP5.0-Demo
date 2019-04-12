@@ -14,7 +14,6 @@
                 <tr class="text-c">
                     <th width="15"><input type="checkbox" name="" value=""></th>
                     <th width="20">用户</th>
-                    <th width="20">律师</th>
                     <th width="50">投诉类型</th>
                     <th width="50">反馈内容</th>
                     <!-- <th width="50">图片</th> -->
@@ -32,7 +31,7 @@
                 <tr class="text-c">
                     <td><input type="checkbox" value="{{$vo.id}}" name="id"></td>
                     <td title="用户">{{$vo.uname}}</td>
-                    <td title="律师">{{$vo.lname}}</td>
+                    
                     <td title="投诉类型">
                     <notempty name="vo['uname']">{{$vo.uname}}<notempty name="vo['lname']"> 投诉 {{$vo.lname}}<else/> 反馈 平台</notempty></notempty>
                    

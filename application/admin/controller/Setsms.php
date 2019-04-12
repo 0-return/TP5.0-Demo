@@ -33,17 +33,17 @@ class Setsms extends Init
             {
                 $where['status'] = array('gt','-1');
                 $data['status'] = '0';
-                $this->obj->table($this->table)->where($where)->update($data);      //将其他全部设置为关闭
+                $this->obj[1]->table($this->table)->where($where)->update($data);      //将其他全部设置为关闭
                 unset($where);
             }
 
             $where['id'] = $post['id'];
-            $res = $this->obj->table($this->table)->where($where)->find();
+            $res = $this->obj[1]->table($this->table)->where($where)->find();
             if ($res)
             {
-                $res = $this->obj->table($this->table)->where($where)->update($post);
+                $res = $this->obj[1]->table($this->table)->where($where)->update($post);
             }else{
-                $res = $this->obj->table($this->table)->add($post);
+                $res = $this->obj[1]->table($this->table)->add($post);
             }
 
             if ($res)
@@ -54,13 +54,13 @@ class Setsms extends Init
             }
         }else{
             $where['type'] = 'Alsms';
-            $sms = $this->obj->table($this->table)->where($where)->find();
+            $sms = $this->obj[1]->table($this->table)->where($where)->find();
 
             $where['type'] = 'Jhsms';
-            $jh_sms = $this->obj->table($this->table)->where($where)->find();
+            $jh_sms = $this->obj[1]->table($this->table)->where($where)->find();
 
             $where['type'] = 'Clysms';
-            $cly_sms = $this->obj->table($this->table)->where($where)->find();
+            $cly_sms = $this->obj[1]->table($this->table)->where($where)->find();
 
             $sms = array('sms' => $sms,'jh'=> $jh_sms,'cly' => $cly_sms);
             $this->assign('vo', $sms);

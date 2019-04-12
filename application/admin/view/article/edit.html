@@ -4,18 +4,36 @@
 <body>
     <article class="page-container">
         <form method="post" class="form form-horizontal" id="form-data-add" enctype="multipart/form-data">
+            <input type="hidden" class="input-text" value="1" placeholder="" id="sort" name="sort">
             <input type="hidden" class="input-text" value="{{$vo.id}}" placeholder="" id="id" name="id">
             <div class="row cl">
                 <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>标题：</label>
                 <div class="formControls col-xs-8 col-sm-9">
-                    <input type="text" class="input-text" value="{{$vo.title}}" >
+                    <input type="text" class="input-text" value="{{$vo.title}}" placeholder="" id="title" name="title">
                 </div>
+            </div>
+          
+         <div class="row cl">
+            <label class="form-label col-xs-3 col-sm-2"><span class="c-red">*</span>图片：</label>
+            <div class="formControls col-xs-5 col-sm-7">
+                <input type="text" class="input-text" disabled="true" >
+                <div class="img-box a0b923820dcc509a-img"></div>
+            </div>
+            <div class="formControls col-xs-4 col-sm-3"><a title='图片显示' href='javascript:;' onclick="ajaxpage('1','a0b923820dcc509a-img');" class='btn btn-secondary radius' style='text-decoration:none'>图片</a></div>
+        </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>类型：</label>
+                <div class="formControls col-xs-8 col-sm-9"> <span class="select-box">
+                        <select name="type" class="select">
+                            {{$option}}
+                        </select>
+                    </span> </div>
             </div>
             <div class="row cl">
                 <label class="form-label col-xs-4 col-sm-2">标记：</label>
                 <div class="skin-minimal col-xs-8 col-sm-9">
                     <div class="check-box">
-                        <input type="checkbox" name="tag[]" id="checkbox-1" value="f" <if condition="in_array('f',$vo['tag'])">
+                        <input type="checkbox" name="tag[]" id="checkbox-1" checked value="f" <if condition="in_array('f',$vo['tag'])">
                         checked </if>>
                         <label for="checkbox-1">推荐</label>
                     </div>
@@ -26,32 +44,27 @@
                     </div>
                 </div>
             </div>
-            <div class="row cl">
-                <label class="form-label col-xs-4 col-sm-2">类别：</label>
-                <div class="formControls col-xs-8 col-sm-9">
-                    <input type="text" class="input-text" value="{{$vo.type_cn}}" placeholder="" >
-                </div>
-            </div>
-            <div class="row cl">
-                <label class="form-label col-xs-4 col-sm-2">提交时间：</label>
-                <div class="formControls col-xs-8 col-sm-9">
-                    <input type="text" onfocus="WdatePicker({minDate:'{%y-10}-%M-#%d',dateFmt:'yyyy-MM-dd'})" class="input-text Wdate"
-                        autocomplete="off" value="{{$vo['add_time']|date="Y-m-d",###}}">
-                </div>
-            </div>
+
             
-
-            <div class="row cl">
-                <label class="form-label col-xs-4 col-sm-2">审核：</label>
-                <div class="formControls col-xs-8 col-sm-9"> <span class="select-box">
-                        <select name="review_status" class="select">
-                            <option value="0" <if condition="$vo['review_status'] eq 0">selected </if>>不审核</option>
-                            <option value="1" <if condition="$vo['review_status'] eq 1">selected </if>>审核通过</option>
-                            <option value="2" <if condition="$vo['review_status'] eq 2">selected </if>>审核不通过</option>
-                        </select>
-                    </span> </div>
+            
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-2">发布作者：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <input type="text" class="input-text" value="" placeholder="如果为空则为默认" id="author" name="author">
             </div>
-
+        </div>
+           <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-2">预设点击：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <input type="text" class="input-text" value="{{$vo.histort_click_count}}" placeholder="" id="histort_click_count" name="histort_click_count">
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-2">预设浏览：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <input type="text" class="input-text" value="{{$vo.histort_browse_count}}" placeholder="" id="histort_browse_count" name="histort_browse_count">
+            </div>
+        </div>
             <div class="row cl">
                 <label class="form-label col-xs-4 col-sm-2">内容：</label>
                 <div class="formControls col-xs-8 col-sm-9">
