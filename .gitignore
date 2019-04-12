@@ -2,3 +2,5 @@
 composer.lock
 *.log
 runtime
+config
+application/database.php
