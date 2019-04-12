@@ -1,0 +1,315 @@
+<include file="public:top" />
+</head>
+
+<body>
+	<style type="text/css">
+		.lawBox {
+			position: relative;
+		}
+
+		.lawList {
+			position: absolute;
+			left: 15px;
+			width: 90%;
+			background: #fff;
+			z-index: 999;
+			background: #f1f1f1;
+		}
+
+		.lawList li {
+			padding: 2px 0;
+			border-bottom: 1px solid #eaeaea;
+			padding: 0 4px;
+		}
+	</style>
+	<script type="text/javascript">
+		function getJumpData(tar) {
+			var table = $('#msgType').val();
+
+			var reunite = $('#keyword').val();
+
+			if (!reunite) {
+				return false;
+			}
+			if ($("#checkbox-2").prop("checked")) {
+				var mark = 1;
+			}
+
+			$.ajax({
+				type: 'POST',
+				url: '__ADMIN__/Push/showtitle',
+				dataType: 'json',
+				data: {
+					'type': table,
+					'keywords': reunite,
+					'mark': mark
+				},
+				success: function (data) {
+					if (data.code == 200) {
+						data = data.data;
+						html = '';
+						$('.lawList').html("");
+						for (var i = 0; i < data.length; i++) {
+							html += "<li data-tag=ss  data-id=" + data[i]['id'] + " data-content=" + data[i]['title'] + ">" + data[i][
+								'title'
+							] + "</li>";
+						}
+						$('.lawList').append(html);
+
+						$(".lawList li").on("click", function () {
+							$('#msgid').val($(this).data('id'));
+							$('#keyword').val($(this).data('content'));
+							<!-- $('#tag').val($(this).data('tag')); -->
+							$("#website-reunite").val($(this).text());
+							$(".lawList").html("");
+						})
+					}
+
+				},
+				error: function (data) {
+					console.log(data.msg);
+				},
+			});
+
+		}
+	</script>
+	<article class="page-container">
+		<form action="" method="post" class="form form-horizontal" id="form-add">
+			<input type="hidden" name="fromId" value="{{$Think.cookie.cookie_Admin_username}}">
+			<!-- <input type="hidden" name="fromName" value="系统消息"> -->
+			<div class="row cl">
+				<input type="hidden" name="id" value="{{$vo.id}}">
+				<label class="form-label col-xs-4 col-sm-3">
+					<span class="c-red">*</span>接收端：
+				</label>
+				<div class="formControls col-xs-8 col-sm-9">
+
+					<span class="select-box">
+						<select class="select" id="toPort" name="toPort">
+							<option value="all" selected='selected'>用户端</option>
+							<!--  <option value="user">用户端</option>
+		            <option value="lawyer">律师端</option> -->
+						</select>
+					</span>
+				</div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>定时：</label>
+				<div class="formControls col-xs-8 col-sm-9 skin-minimal">
+					<if condition="$vo['push_type'] eq 1">
+						<div class="check-box">
+							<input type="checkbox" name="push_type1" id="checkbox-1" value="1">
+							<label for="checkbox-1">推送</label>
+						</div>
+						<div class="check-box">
+							<input type="checkbox" name="push_type2" id="checkbox-2" checked value="1">
+							<label for="checkbox-2">发布</label>
+						</div>
+						<elseif condition="$vo['push_type'] eq 2" />
+						<div class="check-box">
+							<input type="checkbox" name="push_type1" id="checkbox-1" checked value="1">
+							<label for="checkbox-1">推送</label>
+						</div>
+						<div class="check-box">
+							<input type="checkbox" name="push_type2" id="checkbox-2" checked value="1">
+							<label for="checkbox-2">发布</label>
+						</div>
+						<else />
+						<div class="check-box">
+							<input type="checkbox" name="push_type1" id="checkbox-1" checked value="1">
+							<label for="checkbox-1">推送</label>
+						</div>
+						<div class="check-box">
+							<input type="checkbox" name="push_type2" id="checkbox-2" value="1">
+							<label for="checkbox-2">发布</label>
+						</div>
+					</if>
+				</div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>时间：</label>
+				<div class="formControls col-xs-8 col-sm-9">
+					<input type="text" onfocus="WdatePicker({minDate:'{%y-10}-%M-#%d',dateFmt:'yyyyMMdd HH:mm:ss'})" class="input-text Wdate"
+					 autocomplete="off" value="{{$vo.push_time|date='Ymd H:m:s',###}}" placeholder="发布|推送时间" id="push_time" name="push_time">
+				</div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-xs-4 col-sm-3">
+					<span class="c-red">*</span>类型：
+				</label>
+				<div class="formControls col-xs-8 col-sm-9">
+					<span class="select-box">
+						<select class="select" id="msgType" name="msgType">
+							<volist name="tree" id="a">
+								<option value="{{$a.tag}}" <if condition="$vo['msgtype'] eq $a['tag']">selected</if>>{{$a.name}}</option>
+							</volist>
+						</select>
+					</span>
+				</div>
+			</div>
+
+			<div class="row cl">
+				<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>跳转地址：</label>
+				<div class="formControls col-xs-8 col-sm-9">
+					<input type="text" class="input-text" value="" placeholder="请填写备注" id="keyword" onkeyup="getJumpData(this)" name="">
+					<input type="hidden" class="input-text" id="msgid" name="msgid" value="">
+					<ul class="lawList"></ul>
+
+				</div>
+			</div>
+
+			<div class="row cl">
+				<label class="form-label col-xs-4 col-sm-3">
+					<span class="c-red">*</span>内容：
+				</label>
+				<div class="formControls col-xs-8 col-sm-9">
+					<textarea id="content" name="content" cols="" rows="" class="textarea" placeholder="请填写内容...最少输入5个字符" datatype="*5-200"
+					 nullmsg="内容不能为空！">{{$vo.content}}</textarea>
+				</div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-xs-4 col-sm-3">排序：</label>
+				<div class="formControls col-xs-8 col-sm-9">
+					<input type="text" class="input-text" placeholder="请填写数字" id="sort" name="sort" value="{{$vo.sort}}">
+				</div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-xs-4 col-sm-3">
+					<span class="c-red">*</span>状态：
+				</label>
+				<div class="formControls col-xs-8 col-sm-9">
+					<span class="select-box">
+						<select class="select" id="status" name="status">
+							<option value="1" <if condition="$vo[status] eq 1">selected</if>>正常</option>
+							<option value="0" <if condition="$vo[status] eq 0">selected</if>>禁用</option>
+							<option value="-1" <if condition="$vo[status] eq -1">selected</if>>删除</option>
+							<option value="2" <if condition="$vo[status] eq 2">selected</if>>审核</option>
+						</select>
+					</span>
+				</div>
+			</div>
+
+			<div class="row cl">
+				<label class="form-label col-xs-4 col-sm-3">备注：</label>
+				<div class="formControls col-xs-8 col-sm-9">
+					<input type="text" class="input-text" value="{{$vo.note}}" placeholder="请填写备注" id="note" name="note">
+				</div>
+			</div>
+			<div class="row cl">
+				<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+					<button class="btn btn-primary radius" id="sub" type="submit">&nbsp;&nbsp;提交&nbsp;&nbsp;</button>
+					<button onClick="layer_close();" class="btn btn-default radius" type="button">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
+				</div>
+			</div>
+		</form>
+	</article>
+
+	<include file="public:footer-style" />
+
+	<!--请在下方写此页面业务相关的脚本-->
+	<script type="text/javascript" src="__PUBLICADMIN__lib/My97DatePicker/4.8/WdatePicker.js"></script>
+	<script type="text/javascript" src="__PUBLICADMIN__lib/jquery.validation/1.14.0/jquery.validate.js"></script>
+	<script type="text/javascript" src="__PUBLICADMIN__lib/jquery.validation/1.14.0/validate-methods.js"></script>
+	<script type="text/javascript" src="__PUBLICADMIN__lib/jquery.validation/1.14.0/messages_zh.js"></script>
+	<script type="text/javascript">
+		$(function () {
+			$("#form-add").validate({
+				rules: {
+
+					push_time: {
+						required: true,
+					},
+					keyword: {
+						required: true,
+					},
+					msgid: {
+						required: true,
+					},
+					status: {
+						required: true,
+					}
+
+				},
+				onkeyup: false,
+				focusCleanup: true,
+				success: "valid",
+				submitHandler: function (form) {
+					$(form).ajaxSubmit({
+						type: 'post',
+						url: "__ADMIN__/Push/edit",
+						success: function (data) {
+							if (data.code == 11101) {
+								layer.msg(data.msg, {
+									icon: 1,
+									time: 500
+								});
+								setTimeout('parent.location.reload();', 500);
+							} else if (data.code == 11103) {
+								layer.msg(data.msg, {
+									icon: 1,
+									time: 800
+								});
+							} else {
+								layer.msg(data.msg, {
+									icon: 2,
+									time: 500
+								});
+							}
+						},
+						error: function (XmlHttpRequest, textStatus, errorThrown) {
+							layer.msg('未知错误!', {
+								icon: 5,
+								time: 1000
+							});
+						}
+					});
+					var index = parent.layer.getFrameIndex(window.name);
+					//parent.layer.close(index);
+				}
+			});
+		});
+		$('#msgType').change(function () {
+			$('#keyword').val('');
+		});
+
+		$("#checkbox-2").on("click", function () {
+			$('#keyword').val('');
+			if ($("#checkbox-2").prop("checked")) {
+				$("#checkbox-1").removeAttr("checked");
+			} else {
+				$("#checkbox-1").prop("checked", "checked");
+			}
+		})
+		$("#checkbox-1").on("click", function () {
+			$('#keyword').val('');
+			if ($("#checkbox-1").prop("checked")) {
+				$("#checkbox-2").removeAttr("checked");
+			} else {
+				$("#checkbox-2").prop("checked", "checked");
+			}
+		})
+		<!-- function second_select(){ -->
+		<!-- var id=$("#msgType").val(); -->
+		<!-- $.ajax({ -->
+		<!-- type : "post", -->
+		<!-- url : "__ADMIN__/Push/showtitle", -->
+		<!-- data : { -->
+		<!-- id : id, -->
+		<!-- }, -->
+		<!-- dataType : "json", -->
+		<!-- success : function(res) { -->
+		<!-- $("#msgid").empty(); -->
+		<!-- if(res.code == 200 ){ -->
+		<!-- for(var i=0;i<res.data.length;i++){ -->
+		<!-- $("#msgid").append("<option value="+res.data[i].id+">"+res.data[i].title+"</option>"); -->
+		<!-- } -->
+		<!-- }else{//没有批次 -->
+		<!-- alert("没有获取到对应数据"); -->
+		<!-- } -->
+		<!-- } -->
+
+		<!-- }); -->
+		<!-- } -->
+	</script>
+	<!--/请在上方写此页面业务相关的脚本-->
+	<include file="public:footer" />

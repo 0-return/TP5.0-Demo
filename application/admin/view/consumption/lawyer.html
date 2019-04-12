@@ -1,0 +1,99 @@
+<include file="public:top" />
+<title>订单列表</title>
+</head>
+<body>
+ <include file="public:crumbs" />
+<div class="page-container">
+
+    <div class="text-c">
+        <form action="{{:url('memberHistoryLawyer')}}" method="get" autocomplete="off">
+        <input type="hidden" name="sfields" title="要查询的字段" value="username,phone">
+        日期范围：
+        <input type="hidden" name="uid" value="{{$uid}}">
+        <input type="text" onfocus="WdatePicker({ maxDate:'#F{$dp.$D(\'datemax\')||\'%y-%M-%d\'}' })" id="datemin" class="input-text Wdate" style="width:120px;" name="begin_time">
+        -
+        <input type="text" onfocus="WdatePicker({ minDate:'#F{$dp.$D(\'datemin\')}',maxDate:'%y-%M-%d' })" id="datemax" class="input-text Wdate" style="width:120px;" name="end_time">
+        <input type="text" class="input-text" style="width:250px" placeholder="输入会员昵称、电话" id="reunite" name="reunite">
+        <button type="submit" class="btn btn-success radius" id="" name=""><i class="Hui-iconfont">&#xe665;</i> 搜用户</button>
+
+        </form>
+    </div>
+    <div class="cl pd-5 bg-1 bk-gray mt-20">
+        <span class="dropDown l" style="margin-left: 4px;">
+            <a class=" btn btn-danger radius" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"> 导出EXCEL</a>
+            <ul class="dropDown-menu menu radius box-shadow">
+                <li><a onClick="exportData('数据导出','{{$uid}}','{{$condition.begintime}}','{{$condition.endtime}}','{{$condition.reunite}}')" >导出当前</a></li>
+            </ul>
+        </span>
+
+        <span class="r">共有数据：<strong>{{$count}}</strong> 条</span>
+        <span class="r"><if condition="$userlist['vipdietime']  lt 0"> 会员已经过期<else/>离VIP结束日期还有：{{$userlist.vipdietime}}天 </if>&nbsp;</span>
+    </div>
+    <div class="mt-20">
+    <table class="table table-border table-bordered table-hover table-bg table-sort">
+        <thead>
+            <tr class="text-c">
+                <th width="50">姓名</th>
+                <th width="50">电话</th>
+                <th width="50">地区</th>
+                <th width="90">行业</th>
+                <th width="50">开始日期</th>
+                <th width="50">结束日期</th>
+                <th width="50">服务天数</th>
+                <th width="50">当前状态</th>
+                <th width="50">备注</th>
+            </tr>
+        </thead>
+        <tbody>
+            <volist name="list" id="vo">
+                <tr class="text-c">
+                    <td>{{$vo.username}}</td>
+                    <td>{{$vo.phone}}</td>
+                    <td>{{$vo.area}}</td>
+                    <td>{{$vo.industry}}</td>
+                    <td>{{$vo.begin_time|date="Y-m-d H:i:s",###}}</td>
+                    <td><if condition="$vo.endtime neq ''">{{$vo.end_time|date="Y-m-d H:i:s",###}}</if></td>
+                    <td>{{$vo.days}}</td>
+                    <td>{{$vo['status']?'服务中':'已结束'}}</td>
+                    <td>{{$vo.content}}</td>
+                </tr>
+            </volist>
+        </tbody>
+        <if condition="$count gt 30">
+        <tbody>
+            <tr class="text-c">
+                <td colspan="16">{{$showpage}}</td>
+            </tr>
+        </tbody>
+        </if>
+    </table>
+    </div>
+</div>
+<include file="public:footer-style" />
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="{{$Think.const.ADMIN}}lib/My97DatePicker/4.8/WdatePicker.js"></script>
+<!-- <script type="text/javascript" src="{{$Think.const.ADMIN}}lib/datatables/1.10.0/jquery.dataTables.min.js"></script> -->
+<!-- <script type="text/javascript" src="{{$Think.const.ADMIN}}lib/laypage/1.2/laypage.js"></script> -->
+<script type="text/javascript">
+
+/*用户-查看*/
+function order_show(title,url,w,h){
+    layer_show(title,url,w,h);
+}
+function exportData(title,uid,bgtime,edtime,reunite){
+
+$.ajax({
+    type:"get",
+    url:"{{:url('memberHistoryLawyer')}}",
+    data:{'uid':uid,'begintime':bgtime,'endtime':edtime,'reunite':reunite,'do':'export'},
+    success:function(data){
+        document.location.href = data.url;
+    },
+    error:function(){
+        layer.msg('导出失败!',{icon:2,time:2000});
+    }
+    });
+}
+</script>
+<include file="public:footer" />

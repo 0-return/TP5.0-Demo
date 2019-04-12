@@ -1,0 +1,98 @@
+﻿<include file="public:top" />
+<title>短信消息管理</title>
+</head>
+<body>
+<include file="public:crumbs" />
+<div class="page-container">
+    <div class="text-c">
+        <form action="{{:url('index')}}" method="get">
+        <input type="hidden" name="sfields" title="要查询的字段" value="title">
+        日期范围：
+        <input type="text" autocomplete="off" onfocus="WdatePicker({ maxDate:'#F{$dp.$D(\'datemax\')||\'%y-%M-%d\'}' })" id="datemin" class="input-text Wdate" style="width:120px;" >
+        -
+        <input type="text" autocomplete="off" onfocus="WdatePicker({ minDate:'#F{$dp.$D(\'datemin\')}',maxDate:'%y-%M-%d' })" id="datemax" class="input-text Wdate" style="width:120px;" >
+        <input type="text" class="input-text" style="width:250px" placeholder="输入搜索信息" id="reunite" name="reunite">
+        <button type="submit" class="btn btn-success radius" id="" name=""><i class="Hui-iconfont">&#xe665;</i> 搜索</button>
+        </form>
+    </div>
+    <div class="cl pd-5 bg-1 bk-gray mt-20">
+        <span class="l"><a href="javascript:;" onclick="_del()" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a>
+    </span>
+    <span class="r">共有数据：<strong class="jl">{{$count}}</strong> 条</span> </div>
+    <style type="text/css">
+        .box { width: 100%;}
+        .box-list li{ width: 140px; height: 180px; margin: 1px 5px; text-align: center; float: left; background: #F5FAFE; }
+        .box-list li .title{ display: inline-block; width: 120px; text-align: left; font-size: 12px;}
+        .box-list li .delete{ cursor: pointer; }
+        .box-list li img{ height: 140px;}
+    </style>
+    <div class="mt-20">
+        <div class="box">
+        <div class="box-list">
+            <ul>
+            <volist name="list" id="vo">
+                <li>
+                    <label for="select-id-{{$vo.id}}"><span><img src="{{$vo.weburl}}{{$vo.path}}" width="100%" ></span>
+                    <p>
+                    <span class="title l"><input id="select-id-{{$vo.id}}" type='checkbox' value='{{$vo.id}}' name='id'>{{$vo.title|substr=0,12}}</span>
+                    <span onclick="_del(this,{{$vo.id}})" class="delete r"><i class="Hui-iconfont">&#xe6e2;</i></span></p>
+                    </label>
+                </li>
+            </volist>
+            </ul>
+        </div>
+    </div>
+    <div style="clear: both;">
+        <if condition="$count gt 10">
+        <tfoot>
+            <tr class="list-page">
+                <td colspan="10">{{$page}}</td>
+            </tr>
+        </tfoot>
+        </if>
+    </div>
+    </div>
+    
+</div>
+<include file="public:footer-style" />
+<script type="text/javascript" src="__PUBLICADMIN__lib/My97DatePicker/4.8/WdatePicker.js"></script>
+<script type="text/javascript" src="__PUBLICADMIN__lib/datatables/1.10.0/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="__PUBLICADMIN__lib/laypage/1.2/laypage.js"></script>
+<script type="text/javascript">
+
+
+/*单独删除*/
+function _del(obj = '',id = ''){
+    if (!id) 
+    {
+        var id = new Array();
+        $("input[name='id']:checked").each(function(i){
+            id.push($(this).val());//向数组中添加元素
+        });
+    }
+    layer.confirm('确认要删除吗？',function(index){
+        $.ajax({
+            type: 'POST',
+            url: "{{:url('deleteByAjax')}}",
+            data:{
+                id: id
+            },
+            dataType: 'json',
+            success: function(data){
+                if(data.code == 10000){
+                    layer.msg(data.msg,{icon: 1,time:1000});
+                    setTimeout('location.reload();',1000);
+                }else{
+                    layer.msg(data.msg,{icon: 5,time:1000});
+                }
+            },
+            error:function(data) {
+                alert("系统繁忙");
+                location.reload();
+            },
+        });
+    });
+}
+
+
+</script>

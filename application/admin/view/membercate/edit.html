@@ -1,0 +1,117 @@
+<include file="public:top" />
+</head>
+<body>
+<article class="page-container">
+    <form class="form form-horizontal" id="form-industury-edit">
+    <input type="hidden" name="id" value="{{$vo.id}}">
+
+    <div class="row cl">
+        <label class="form-label col-xs-3 col-sm-2">分类：</label>
+        <div class="formControls col-xs-7 col-sm-9"> 
+            <span class="select-box">
+                <select class="select" name="iid" size="1">
+                    <option value="0">顶级</option>
+                    {{$option}}
+                </select>
+            </span>
+             </div>
+    </div>
+    <div class="row cl">
+        <label class="form-label col-xs-3 col-sm-2"><span class="c-red">*</span>行业名称：</label>
+        <div class="formControls col-xs-7 col-sm-9">
+            <input type="text" class="input-text" value="{{$vo.title}}" placeholder="" id="title" name="title">
+        </div>
+    </div>
+    <div class="row cl">
+        <label class="form-label col-xs-3 col-sm-2"><span class="c-red">*</span>英文标识：</label>
+        <div class="formControls col-xs-7 col-sm-9">
+            <input type="text" class="input-text" value="{{$vo.title_en}}" placeholder="谨慎填写，前端根据这个标识写入到订单系统" id="title_en" name="title_en">
+        </div>
+    </div>
+    <div class="row cl">
+        <label class="form-label col-xs-3 col-sm-2"><span class="c-red">*</span>分红奖励：</label>
+        <div class="formControls col-xs-7 col-sm-9">
+            <input type="text" class="input-text" value="{{$vo.reward}}" placeholder="" id="reward" name="reward">
+        </div>
+    </div>
+    <div class="row cl">
+        <label class="form-label col-xs-3 col-sm-2">状态：</label>
+        <div class="formControls col-xs-7 col-sm-9"> <span class="select-box">
+            <select class="select select-box" name="status" size="1" id="industrystatus">
+                <option value="1" <if condition="$vo.status eq 1">selected</if>>正常</option>
+                <option value="0" <if condition="$vo.status eq 0">selected</if>>禁用</option>
+            </select>
+            </span> </div>
+    </div>
+    <div class="row cl">
+        <label class="form-label col-xs-3 col-sm-2">备注：</label>
+        <div class="formControls col-xs-7 col-sm-9">
+            <textarea name="describe" id="describe" cols="" rows="" class="textarea"  placeholder="说点什么...100个字符以内" dragonfly="true" onKeyUp="$.Huitextarealength(this,100)">{{$vo.describe}}</textarea>
+            <p class="textarea-numberbar"><em class="textarea-length">0</em>/100</p>
+        </div>
+    </div>
+    <div class="row cl">
+        <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+            <input class="btn btn-primary radius" type="submit" value="&nbsp;&nbsp;提交&nbsp;&nbsp;">
+        </div>
+    </div>
+    </form>
+</article>
+
+<include file="public:footer-style" />
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="__PUBLICADMIN__lib/jquery.validation/1.14.0/jquery.validate.js"></script>
+<script type="text/javascript" src="__PUBLICADMIN__lib/jquery.validation/1.14.0/validate-methods.js"></script>
+<script type="text/javascript" src="__PUBLICADMIN__lib/jquery.validation/1.14.0/messages_zh.js"></script>
+<script type="text/javascript">
+
+function _show(title,url,id,w,h){
+    layer_show(title,url+"?tag="+id,w,h);
+}
+
+$(function(){
+    $('.skin-minimal input').iCheck({
+        checkboxClass: 'icheckbox-blue',
+        radioClass: 'iradio-blue',
+        increaseArea: '20%'
+    });
+
+    $("#form-industury-edit").validate({
+        rules:{
+            name:{
+                required:true,
+                minlength:2,
+                maxlength:16
+            },
+            status:{
+                required:true,
+            },
+        },
+        onkeyup:false,
+        focusCleanup:true,
+        success:"valid",
+        submitHandler:function(form){
+            $(form).ajaxSubmit({
+                type: 'post',
+                url: "{{:url('updateByAjax')}}",
+                success: function(data){
+                    if (data.code==10000) {
+                        layer.msg(data.msg,{icon:1,time:1000});
+                        setTimeout('parent.location.reload();',1500);
+                    }else{
+                        layer.msg(data.msg,{icon:5,time:1000});
+                     }
+                },
+                error: function(XmlHttpRequest, textStatus, errorThrown){
+                    layer.msg('修改失败!',{icon:5,time:1000});
+                }
+            });
+
+        }
+    });
+});
+</script>
+<!--/请在上方写此页面业务相关的脚本-->
+<include file="public:img" />
+<include file="public:footer" />

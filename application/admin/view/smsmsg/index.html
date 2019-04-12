@@ -1,0 +1,124 @@
+﻿<include file="public:top" />
+<title>短信消息管理</title>
+</head>
+<body>
+<include file="public:crumbs" />
+<div class="page-container">
+
+	<div class="text-c">
+	</div>
+	<div class="cl pd-5 bg-1 bk-gray">
+		<span class="l">
+			<a href="javascript:;" onclick="_del()" class="btn btn-danger radius">
+				<i class="Hui-iconfont">&#xe6e2;</i> 批量删除
+			</a>
+			<a class="btn btn-primary radius" href="javascript:;" onclick="_add('群发短信','{{:url('addByajax')}}','1000','600')">
+				<i class="Hui-iconfont">&#xe600;</i> 创建发送
+			</a>
+			
+		</span>
+		<span class="r">共有数据：<strong>{{$count}}</strong> 条</span>
+	</div>
+	<table class="table table-border table-sort table-bordered table-hover table-bg">
+		<thead>
+			<tr>
+				<th scope="col" colspan="11">短信列表</th>
+			</tr>
+			<tr class="text-c">
+				<th width="1%"><input type="checkbox" value="" name=""></th>
+				<th width="5%">发送平台</th>
+				<th width="8%">发送对象</th>
+				<th width="30%">描述</th>
+				<th width="8%">创建时间</th>
+				<th width="5%">状态</th>
+				<th width="5%">操作</th>
+			</tr>
+		</thead>
+		<tbody>
+			<volist name="list" id="vo">
+				<tr class="text-c">
+					<td><input type="checkbox" value="{{$vo.id}}" name="id"></td>
+					<if condition = "$vo['send_type'] eq '1'">
+						<td>用户端</td>
+					<elseif condition = "$vo['send_type'] eq '2'"/>
+						<td>律师端</td>
+					<else/>
+						<td>自定义</td>
+					</if>
+					<if condition = "$vo['type'] eq 1">
+						<td>批量用户</td>
+					<else/>
+						<td>{{$vo.target}}</td>
+					</if>
+					<td>{{$vo.describe}}</td>
+					<td>{{$vo.add_time|date="Y-m-d H:i:s",###}}</td>
+					<td>
+						<if condition = "$vo['status'] eq 0">
+							<span class="label label-danger  radius">发送失败</span>
+						<elseif condition="$vo['status'] eq 1"/>
+							<span class="label label-success radius">全部成功</span>
+						<else/>
+							<span class="label label-warning radius">部分成功</span>
+						</if>
+					</td>
+					<td class="{{$vo.id}}">
+						<a title="删除" href="javascript:;" onclick="_del(this,'{{$vo.id}}')" class="ml-5" style="text-decoration:none">
+							<i class="Hui-iconfont">&#xe6e2;</i>
+						</a>
+					</td>
+				</tr>
+			</volist>
+		</tbody>
+		<if condition="$count gt 10">
+		<tfoot>
+			<tr class="list-page">
+				<td colspan="10">{{$page}}</td>
+			</tr>
+		</tfoot>
+		</if>
+	</table>
+</div>
+<include file="public:footer-style" />
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="__PUBLICADMIN__lib/My97DatePicker/4.8/WdatePicker.js"></script>
+<script type="text/javascript">
+/*添加*/
+function _add(title,url,w,h){
+	layer_show(title,url,w,h);
+}
+
+/*删除*/
+function _del(obj = '',id = ''){
+	if (!id) 
+	{
+		var id = new Array();
+	    $("input[name='id']:checked").each(function(i){
+	        id.push($(this).val());//向数组中添加元素
+	    });
+	}
+	
+	layer.confirm('删除须谨慎，确认要删除吗？',function(index){
+		$.ajax({
+			type: 'POST',
+			url: '{{:url('deleteByajax')}}',
+			dataType: 'json',
+			data:{'id':id},
+			success: function(data){
+				if(data.code == 10000){
+					layer.msg(data.msg,{icon:1,time:1000});
+					$(obj).parents("tr").remove();
+				}else{
+					layer.msg(data.msg,{icon:1,time:1000});
+				}
+				setTimeout('location.reload();',1500);
+			},
+			error:function(data) {
+				console.log(data.msg);
+			},
+		});
+	});
+}
+
+</script>
+<include file="public:footer" />

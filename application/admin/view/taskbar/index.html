@@ -1,0 +1,93 @@
+﻿<include file="public:top" />
+<title>常用设置</title>
+</head>
+
+<body>
+	<include file="public:crumbs" />
+	<div class="page-container">
+		<form class="form form-horizontal" id="form-add-data">
+			<input type="hidden" name="id" value="{{$vo.id}}">
+			<div id="tab-system" class="HuiTab">
+				<div class="tabBar cl">
+					<span>常用设置</span>
+				</div>
+
+				<div class="tabCon">
+					<div class="row cl">
+						<label class="form-label col-xs-4 col-sm-2">
+							<span class="c-red">*</span>
+							功能选择：</label>
+						<div class="formControls col-xs-8 col-sm-9">
+							<ul class="system-config-role-checkbox">
+								<volist name="list" id="vo">
+									<li data-id="{{$vo.id}}" style="float: left; padding-right: 10px;">
+										<input id="{{$vo.id}}" <if condition="$vo['mark'] eq '1'">checked</if> type="checkbox" name="acids[]"
+										value="{{$vo.id}}">
+										<label for="{{$vo.id}}">{{$vo.title}}</label>
+									</li>
+								</volist>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row cl">
+				<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
+					<button id="save_submit" class="btn btn-primary radius" type="submit"><i class="Hui-iconfont">&#xe632;</i> 保存</button>
+					<button onClick="layer_close();" class="btn btn-default radius" type="button">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
+				</div>
+			</div>
+		</form>
+	</div>
+	<include file="public:footer-style" />
+	<!--请在下方写此页面业务相关的脚本-->
+	<script type="text/javascript" src="__PUBLICADMIN__lib/My97DatePicker/4.8/WdatePicker.js"></script>
+	<script type="text/javascript" src="__PUBLICADMIN__lib/jquery.validation/1.14.0/jquery.validate.js"></script>
+	<script type="text/javascript" src="__PUBLICADMIN__lib/jquery.validation/1.14.0/validate-methods.js"></script>
+	<script type="text/javascript" src="__PUBLICADMIN__lib/jquery.validation/1.14.0/messages_zh.js"></script>
+	<script type="text/javascript">
+		$(function () {
+			$('.skin-minimal input').iCheck({
+				checkboxClass: 'icheckbox-blue',
+				radioClass: 'iradio-blue',
+				increaseArea: '20%'
+			});
+			$("#tab-system").Huitab({
+				index: 0
+			});
+			$("#form-add-data").validate({
+				onkeyup: false,
+				focusCleanup: true,
+				success: "valid",
+				submitHandler: function (form) {
+					$(form).ajaxSubmit({
+						type: 'post',
+						url: "__ADMIN__/Taskbar/updateByAjax",
+						success: function (data) {
+							if (data.code == 10000) {
+								layer.msg(data.msg, {
+									icon: 1,
+									time: 1000
+								});
+								setTimeout('location.reload();', 1500);
+							} else {
+								layer.msg(data.msg, {
+									icon: 5,
+									time: 1000
+								});
+							}
+						},
+						error: function (XmlHttpRequest, textStatus, errorThrown) {
+							layer.msg('修改失败!', {
+								icon: 5,
+								time: 1000
+							});
+						},
+					});
+				}
+
+			});
+		});
+	</script>
+	<!--/请在上方写此页面业务相关的脚本-->
+	<include file="public:footer" />

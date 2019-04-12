@@ -1,0 +1,30 @@
+<include file="public:top" />
+</head>
+<body>
+<div class="page-container">
+    <div id="tab-system" class="HuiTab">
+      <div><span>问题描述：{{$list.content}}</span> </div>
+      <div><span>提交时间：{{$vo.add_time|date="Y-m-d H:i:s",###}}</span></div>
+      <hr>
+      <div>
+          <volist name="$list['images']" id="vo">
+          <neq name="$vo['images']" value="">
+            <img src="{{$vo.weburl}}{{$vo.images}}">
+            <else/>
+            <span>没有提供图片</span>
+          </neq>
+          </volist>
+      </div>
+  </div>
+</div>
+<include file="public:footer-style" />
+<script type="text/javascript">
+$(function(){
+  $
+  $("#tab-system").Huitab({
+    index:0
+  });
+});
+</script>
+<!--/请在上方写此页面业务相关的脚本-->
+<include file="public:footer" />

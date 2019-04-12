@@ -1,0 +1,115 @@
+<include file="public:top" />
+<title>订单列表</title>
+</head>
+<body>
+ <include file="public:crumbs" />
+<div class="page-container">
+
+    <div class="text-c">
+        <form action="{{:url('index')}}" method="get" autocomplete="off">
+        <input type="hidden" name="sfields" title="要查询的字段" value="nickname">
+        <!--地区信息-->
+        <div id="distpicker3" >
+        地区范围：
+          <select name="province_cn" class="select-box" style="width: 100px;" ></select>
+          <select name="city_cn" class="select-box" style="width: 100px;"></select>
+          <select name="area_cn" class="select-box" style="width: 100px;"></select>
+          日期范围：<input type="text" onfocus="WdatePicker({ maxDate:'#F{$dp.$D(\'datemax\')||\'%y-%M-%d\'}' })" id="datemin" class="input-text Wdate" style="width:120px;" name="begintime">
+        -
+        <input type="text" onfocus="WdatePicker({ minDate:'#F{$dp.$D(\'datemin\')}',maxDate:'%y-%M-%d' })" id="datemax" class="input-text Wdate" style="width:120px;" name="endtime">
+        <input type="text" class="input-text" style="width:250px" placeholder="输入用户名称，昵称，电话" id="reunite" name="reunite">
+        <button type="submit" class="btn btn-success radius" id="" name=""><i class="Hui-iconfont">&#xe665;</i> 搜用户</button>
+        </div>
+        </form>
+    </div>
+    <div class="cl pd-5 bg-1 bk-gray mt-20">
+        <span class="dropDown l" style="margin-left: 4px;">
+            <a class=" btn btn-danger radius" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"> 导出EXCEL</a>
+           <ul class="dropDown-menu menu radius box-shadow"><li><a onClick="exportData('数据导出','{{$condition.province_cn}}','{{$condition.city_cn}}','{{$condition.area_cn}}','','','')" >导出当前</a></li>
+            </ul>
+        </span>
+        <span class="r"><notempty name="address">搜索地区：{{$area_cn}}</notempty> 共有数据：<strong>{{$count}}</strong> 条</span>
+    </div>
+    <div class="mt-20">
+    <table class="table table-border table-bordered table-hover table-bg table-sort">
+        <thead>
+            <tr class="text-c">
+                <th>省/市/区</th>
+                <th>昵称</th>
+                <th>性别</th>
+                <th>历史订单</th>
+                <th>历史服务律师</th>
+                <th>金额支出</th>
+            </tr>
+        </thead>
+        <tbody>
+            <volist name="list" id="vo">
+            <tr class="text-c">
+                <td>{{$vo.province_cn}}-{{$vo.city_cn}}-{{$vo.area_cn}}</td>
+                <td>{{$vo.nickname}}</td>
+                <td>{{$vo['sex']?'男':'女'}}</td>
+                <td>
+                <a href="javascript:;" <if condition="$vo['ordercount'] neq '0'"> onclick="order_show('历史订单详情','{{:url('memberHistoryOrder')}}','{{$vo.uid}}','1200','660')"</if> title="点击查看"><span style="color:#FA862D;font-size:14px; cursor:pointer;text-decoration:none;">{{$vo.ordercount}}</span></a>
+
+                </td>
+                <td>
+                <a href="javascript:;" <if condition="$vo['lawyercount'] neq '0'">onclick="lawyer_show('历史服务律师','{{:url('memberHistoryLawyer')}}','{{$vo.uid}}','1200','660')" </if> title="点击查看" title="点击查看"><span style="color:#FA862D;font-size:14px; cursor:pointer;text-decoration:none;">{{$vo.lawyercount}}</span></a></td>
+                <td>{{$vo.total}}</td>
+            </tr>
+            </volist>
+        </tbody>
+        <if condition="$count gt 10">
+        <tbody>
+            <tr class="text-c">
+                <td colspan="16">{{$page}}</td>
+            </tr>
+        </tbody>
+        </if>
+    </table>
+    </div>
+</div>
+<include file="public:footer-style" />
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="__PUBLICADMIN__lib/My97DatePicker/4.8/WdatePicker.js"></script>
+<!--地区插件-->
+<script type="text/javascript" src="__PUBLICADMIN__lib/jQueryDistpicker20160621/js/distpicker.data.js"></script>
+<script type="text/javascript" src="__PUBLICADMIN__lib/jQueryDistpicker20160621/js/distpicker.js"></script>
+<script type="text/javascript" src="__PUBLICADMIN__lib/jQueryDistpicker20160621/js/main.js"></script>
+<script type="text/javascript">
+
+$("#distpicker3").distpicker({
+  province: "{{$condition.province_cn}}",
+  city: "{{$condition.city_cn}}",
+  district: "{{$condition.area_cn}}"
+});
+
+/*用户-查看*/
+function member_show(title,url,w,h){
+    layer_show(title,url,w,h);
+}
+/*用户-查看订单*/
+function order_show(title,url,id,w,h){
+    layer_show(title,url+'?uid='+id,w,h);
+}
+/*用户-查看服务律师*/
+function lawyer_show(title,url,id,w,h){
+    layer_show(title,url+'?uid='+id,w,h);
+}
+function exportData(title,pro,city,area,begintime,endtime,reunite){
+
+$.ajax({
+    type:"get",
+    url:"{{:url('index')}}",
+    data:{'pro':pro,'city':city,'area':area,'begintime':begintime,'endtime':endtime,'reunite':reunite,'do':'export'},
+    success:function(data){
+        document.location.href = data.url;
+    },
+    error:function(){
+        layer.msg('导出失败!',{icon:2,time:2000});
+    }
+    });
+}
+
+</script>
+<include file="public:footer" />

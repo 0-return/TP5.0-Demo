@@ -1,0 +1,348 @@
+<include file="public:top" />
+</head>
+<style type="text/css">
+    .lawBox {
+        position: relative;
+    }
+
+    .nice-select ul {
+        display: none;
+        border: 1px solid #d5d5d5;
+        width: 96.4%;
+        position: absolute;
+        top: 2.2em;
+        overflow: hidden;
+        background-color: #fff;
+        max-height: 150px;
+        overflow-y: auto;
+        border-top: 0;
+        z-index: 10001;
+    }
+
+    .nice-select ul li {
+        height: 30px;
+        line-height: 2em;
+        overflow: hidden;
+        padding: 0 10px;
+        cursor: pointer;
+        border-top: 1px solid #d5d5d5;
+    }
+
+
+    .lawList li {
+        padding: 2px 0;
+        border-bottom: 1px solid #eaeaea;
+        padding: 0 4px;
+    }
+
+    .nice-select input {
+
+        background: url(__PUBLICADMIN__static/h-ui.admin/images/xiala.png) no-repeat scroll right center transparent;
+
+    }
+</style>
+<script type="text/javascript">
+    function getJumpData(tar) {
+        var table = $('#msgType').val();
+
+        // var reunite = $('#keyword').val();
+
+        if (!table) {
+            return false;
+        }
+        //判断定时
+        var mark = $('#con_state').val();
+        //获取时间对比
+        push_time = $('#push_time').val();
+        if (mark == 0) {
+            if (push_time) {
+
+            } else {
+                $('#push_time').val(CurentTime());
+            }
+            push_time = $('#push_time').val();
+
+        } else {
+            $('#push_time').val('');
+        }
+        $.ajax({
+            type: 'POST',
+            url: "{{:url('showtitle')}}",
+            dataType: 'json',
+            data: {
+                'type': table,
+                'mark': mark,
+                'push_time': push_time
+            },
+            success: function (data) {
+                console.log(data);
+                if (data.code == 200) {
+                    data = data.data;
+                    html = '';
+                    $('#list').html("");
+                    for (var i = 0; i < data.length; i++) {
+                        html += "<li data-tag=ss  data-id=" + data[i]['id'] + "  data-content=" + data[i][
+                            'title'
+                        ] + ">" + data[i][
+                            'title'
+                        ] + "</li>";
+                    }
+                    $('#list').append(html);
+                    $('#customerId').val('');
+                    $('#content').val('');
+                    $('#msgid').val('');
+
+                    $("#list li").on("click", function () {
+                        $('#msgid').val($(this).data('id'));
+                        $('#content').val($(this).data('content'));
+                    });
+
+                } else {
+                    $('#customerId').val('');
+                    $('#msgid').val('');
+                    $('#content').val('');
+                    $("#list").html("");
+                }
+
+            },
+            error: function (data) {
+                console.log(data.msg);
+            },
+        });
+
+    }
+
+    function CurentTime() {
+        var now = new Date();
+        var year = now.getFullYear(); //年
+        var month = now.getMonth() + 1; //月
+        var day = now.getDate(); //日
+        var hh = now.getHours(); //时
+        var mm = now.getMinutes(); //分
+        var ss = now.getSeconds(); //秒
+        var clock = year + "";
+        if (month < 10)
+            clock += "0";
+        clock += month + "";
+        if (day < 10)
+            clock += "0";
+        clock += day + " ";
+        if (hh < 10)
+            clock += "0";
+        clock += hh + 1 + ":"; //提前一个小时
+        if (mm < 10) clock += '0';
+        clock += mm + ":";
+        if (ss < 10) clock += '0';
+        clock += ss;
+        return (clock);
+    }
+</script>
+
+<body>
+    <article class="page-container">
+        <form class="form form-horizontal" id="form-article-add" method="post" enctype="multipart/form-data">
+            <input type="hidden" id="con_state" value="1">
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-3">定时推送：</label>
+                <div class="formControls col-xs-2 col-sm-3 ">
+                    <div id='mySwitch' class="switch size-S">
+                        <input type="checkbox" name='push_status' value='1' />
+                    </div>
+                </div>
+
+                <div class="formControls col-xs-4 col-sm-3" id='scheduletime' style='display:none'>
+                    <input type="text" onfocus="WdatePicker({minDate:'%y-%M-%d-{%H+1}',dateFmt:'yyyyMMdd HH:mm:ss'})"
+                        class="input-text Wdate" autocomplete="off" value="" placeholder="发布时间" id="push_time" name="push_time">
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-3">
+                    <span class="c-red">*</span>接收端：
+                </label>
+                <div class="formControls col-xs-4 col-sm-2">
+                    <span class="select-box">
+                        <select class="select" id="toPort" name="toport">
+                            <option value="all" selected='selected'>所有端</option>
+                            <option value="user">用户端</option>
+                            <option value="lawyer">律师端</option>
+                        </select>
+                    </span>
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-3">
+                    <span class="c-red">*</span>类型：
+                </label>
+                <div class="formControls col-xs-4 col-sm-2">
+                    <span class="select-box">
+                        <select class="select" id="msgType" name="msgType" onchange="getJumpData(this)">
+                            <volist name="tree" id="vo">
+                                <option value="{{$vo.tag}}">{{$vo.name}}</option>
+                            </volist>
+                        </select>
+                    </span>
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>跳转地址：</label>
+                <div class="nice-select formControls col-xs-8 col-sm-9">
+                    <input id="customerId" type="text" class="input-text" oninput="searchList(this.value)" autocomplete="off" />
+                    <ul id="list">
+                        <volist name="arr" id="l">
+                            <li data-tag="ss"  data-id="{{$l.id}}" data-content="{{$l.title}}">{{$l.title}}</li>
+                        </volist>
+                    </ul>
+                </div>
+                <input type="hidden" class="input-text" id="msgid" name="msgid" value="">
+            </div>
+
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-3">
+                    <span class="c-red">*</span>内容：
+                </label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <textarea id="content" name="content" cols="" rows="" class="textarea" placeholder="请填写内容...最少输入5个字符"
+                        datatype="*5-200" nullmsg="内容不能为空！"></textarea>
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-3">排序：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <input type="text" class="input-text" placeholder="请填写数字" id="sort" name="sort" value="99">
+                </div>
+            </div>
+            <div class="row cl" style='display:none'>
+                <label class="form-label col-xs-4 col-sm-3">备注：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <input type="text" class="input-text" value="" placeholder="请填写备注" id="note" name="note">
+                </div>
+            </div>
+            <div class="row cl">
+                <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+                    <input class="btn btn-primary radius" type="submit" value="&nbsp;&nbsp;提交&nbsp;&nbsp;">
+                </div>
+            </div>
+        </form>
+
+
+    </article>
+
+    <include file="public:footer-style" />
+
+    <!--请在下方写此页面业务相关的脚本-->
+    <script type="text/javascript" src="__PUBLICADMIN__lib/My97DatePicker/4.8/WdatePicker.js"></script>
+    <script type="text/javascript" src="__PUBLICADMIN__lib/jquery.validation/1.14.0/jquery.validate.js"></script>
+    <script type="text/javascript" src="__PUBLICADMIN__lib/jquery.validation/1.14.0/validate-methods.js"></script>
+    <script type="text/javascript" src="__PUBLICADMIN__lib/jquery.validation/1.14.0/messages_zh.js"></script>
+    <script type="text/javascript" src="__PUBLICADMIN__lib/ueditor/1.4.3/ueditor.config.js"></script>
+    <script type="text/javascript" src="__PUBLICADMIN__lib/ueditor/1.4.3/ueditor.all.js"> </script>
+    <script type="text/javascript" src="__PUBLICADMIN__lib/ueditor/1.4.3/lang/zh-cn/zh-cn.js"></script>
+
+    <script type="text/javascript">
+        // 定时切换控制
+        $('#mySwitch').on('switch-change', function (e, data) {
+            var $el = $(data.el),
+                value = data.value;
+            // <!-- console.log(e, $el, value); -->
+            if (value) {
+                $('#scheduletime').show();
+                $('#con_state').val('0');
+            } else {
+                $('#scheduletime').hide();
+                $('#con_state').val('1');
+            }
+            $('#content').val('');
+            $('#msgid').val('');
+            $("#list").html("");
+            $('#customerId').val('');
+        });
+        $(function () {
+            // 新增开始
+            $(".nice-select").click(function (e) {
+                $(this).find("ul").show();
+                e.stopPropagation();
+            });
+
+            $('#list').delegate('li', 'mouseover mouseout', function (e) {
+                $(this).toggleClass("on");
+                e.stopPropagation();
+            });
+
+            $('#list').delegate('li', 'click', function (e) {
+                var val = $(this).text();
+                var showContent = $('input[name="showContent"]:checked').val();
+                if (showContent == "portion") {
+                    if (val.indexOf('--') != -1)
+                        val = val.substring(0, val.indexOf('--'));
+                }
+                $(".nice-select").find("input").val(val);
+                $(".nice-select").find("ul").hide();
+                e.stopPropagation();
+            });
+
+            $(document).click(function () {
+                $(".nice-select").find("ul").hide();
+            });
+
+            // 新增结束
+
+            $('.skin-minimal input').iCheck({
+                checkboxClass: 'icheckbox-blue',
+                radioClass: 'iradio-blue',
+                increaseArea: '20%'
+            });
+
+            //表单验证
+            $("#form-article-add").validate({
+                rules: {
+                    title: {
+                        required: true,
+                    },
+                    gid: {
+                        required: true,
+                    },
+                    price: {
+                        required: true,
+                    }
+                },
+                onkeyup: false,
+                focusCleanup: true,
+                success: "valid",
+                submitHandler: function (form) {
+                    layer.confirm('如未开启定时将立即推送，确认？', function (index) {
+                        $(form).ajaxSubmit({
+                            type: 'post',
+                            url: "{{:url('addByAjax')}}",
+                            success: function (data) {
+                                if (data.code == 10000) {
+                                    layer.msg(data.msg, {
+                                        icon: 1,
+                                        time: 1000
+                                    });
+                                    setTimeout('parent.location.reload();',
+                                        1500);
+                                } else {
+                                    layer.msg(data.msg, {
+                                        icon: 5,
+                                        time: 1000
+                                    });
+                                }
+                            },
+                            error: function (XmlHttpRequest, textStatus,
+                                errorThrown) {
+                                layer.msg('系统繁忙!', {
+                                    icon: 5,
+                                    time: 1000
+                                });
+                            },
+                        });
+                    });
+                }
+            });
+
+
+        });
+    </script>
+    <include file="public:img" />
+    <!--/请在上方写此页面业务相关的脚本-->
+    <include file="public:footer" />

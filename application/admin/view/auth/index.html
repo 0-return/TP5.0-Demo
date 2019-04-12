@@ -1,0 +1,112 @@
+﻿<include file="public:top" />
+<include file="public:crumbs" />
+<div class="page-container">
+	<div class="text-c">
+		<form action="{{:url('index')}}" method="get">
+			<input type="hidden" name="sfields" title="要查询的字段" value="title,mca">
+			<input type="text" class="input-text" style="width:250px" placeholder="权限名称" id="reunite" name="reunite">
+			<button type="submit" class="btn btn-success" id="" name=""><i class="Hui-iconfont">&#xe665;</i> 搜权限节点</button>
+		</form>
+	</div>
+	<div class="cl pd-5 bg-1 bk-gray mt-20"> <span class="l"><a href="javascript:;" onclick="datadel()" class="btn btn-danger radius"><i
+				 class="Hui-iconfont">&#xe6e2;</i> 批量删除</a> <a href="javascript:;" onclick="_add('添加权限','{{:url('addByAjax')}}','1000','500')"
+			 class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 添加权限节点</a></span> <span class="r">共有数据：<strong>54</strong>
+			条</span> </div>
+	<table class="table table-border table-bordered table-bg">
+		<thead>
+			<tr>
+				<th scope="col" colspan="100">权限节点</th>
+			</tr>
+			<tr class="text-c">
+				<th width="25"><input type="checkbox" name="" value=""></th>
+				<th width="40">ID</th>
+				<th width="40">父ID</th>
+				<th width="40">图标</th>
+				<th width="100">名称</th>
+				<th width="">控制器/方法</th>
+				<th width="50">是否验证</th>
+				<th width="50">是否菜单</th>
+				<th width="40">状态</th>
+				<th width="100">操作</th>
+			</tr>
+		</thead>
+		<tbody>
+			<volist name="list" id="vo" empty="暂时没有数据">
+				<tr class="text-c">
+					<td><input type="checkbox" value="{{$vo.id}}" name=""></td>
+					<td>{{$vo.id}}</td>
+					<td>{{$vo.pid}}</td>
+					<td><i class="Hui-iconfont">{{$vo.icon}}</i></td>
+					<td style="text-align: left;">{{:str_repeat('——|',$vo.level)}}{{$vo.title}}</td>
+					<td style="text-align: left">{{$vo.mca}}</td>
+					<td>{{$vo['ischeck']?'<span class="label label-success radius">是</span>':'<span class="label label-danger radius">否</span>'}}</td>
+					<td>{{$vo['ismenu']?'<span class="label label-success radius">是</span>':'<span class="label label-danger radius">否</span>'}}</td>
+					<td>
+						<if condition="($vo['status'] == -1)"><span class="label label-danger radius">已删除</span>
+							<elseif condition="$vo['status'] eq 0" /><span class="label label-danger radius">已禁用</span>
+							<else /> <span class="label label-success radius">使用中</span>
+						</if>
+					</td>
+					<td><a title="编辑" href="javascript:;" onclick="_edit('编辑','{{:url('showById')}}','{{$vo.id}}','1000','500')" class="ml-5"
+						 style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a> <a title="删除" href="javascript:;" onclick="_del(this,'{{$vo.id}}')"
+						 class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i></a></td>
+				</tr>
+		</tbody>
+		</volist>
+	</table>
+</div>
+<!--_footer 作为公共模版分离出去-->
+<script type="text/javascript" src="__PUBLICADMIN__lib/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript" src="__PUBLICADMIN__lib/layer/2.4/layer.js"></script>
+<script type="text/javascript" src="__PUBLICADMIN__static/h-ui/js/H-ui.min.js"></script>
+<script type="text/javascript" src="__PUBLICADMIN__static/h-ui.admin/js/H-ui.admin.js"></script>
+<!--/_footer 作为公共模版分离出去-->
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="__PUBLICADMIN__lib/datatables/1.10.0/jquery.dataTables.min.js"></script>
+<script type="text/javascript">
+	/*增加*/
+	function _add(title, url, w, h) {
+		layer_show(title, url, w, h);
+	}
+	/*单独删除*/
+	function _del(e, id) {
+		layer.confirm('确认要删除吗？', function (index) {
+			$.ajax({
+				type: 'POST',
+				url: "{{:url('deleteByAjax')}}",
+				data: {
+					id: id
+				},
+				dataType: 'json',
+				success: function (data) {
+					if (data.code == 10000) {
+						layer.msg(data.msg, {
+							icon: 6,
+							time: 1000
+						});
+						setTimeout('parent.location.reload();', 1000);
+					} else {
+						layer.msg(data.msg, {
+							icon: 6,
+							time: 1000
+						});
+					}
+
+
+				},
+				error: function (data) {
+					alert("系统繁忙");
+					location.reload();
+				},
+			});
+		});
+	}
+	/*编辑*/
+	function _edit(title, url, id, w, h) {
+		layer_show(title, url + '?id=' + id, w, h);
+	}
+</script>
+</body>
+
+</html>

@@ -1,0 +1,284 @@
+﻿<include file="public:top" />
+<title>用户列表</title>
+</head>
+<body>
+<include file="public:crumbs" />
+<div class="page-container">
+
+	<div class="text-c">
+        <form action="{{:url('index')}}" method="get">
+		<input type="hidden" name="sfields" title="要查询的字段" value="username,email,nickname">
+        日期范围：
+		<input type="text" autocomplete="off" name="begintime"  onfocus="WdatePicker({ maxDate:'#F{$dp.$D(\'datemax\')||\'%y-%M-%d\'}' })" id="datemin" class="input-text Wdate" style="width:120px;" name="begintime">
+		-
+		<input type="text" autocomplete="off" name="endtime" onfocus="WdatePicker({ minDate:'#F{$dp.$D(\'datemin\')}',maxDate:'%y-%M-%d' })" id="datemax" class="input-text Wdate" style="width:120px;" name="endtime">
+		<input type="text" class="input-text" style="width:250px" placeholder="输入会员名称、电话、昵称" id="reunite" name="reunite">
+		<button type="submit" class="btn btn-success radius" id="" name=""><i class="Hui-iconfont">&#xe665;</i> 搜用户</button>
+        </form>
+	</div>
+	<div class="cl pd-5 bg-1 bk-gray mt-20">
+        <span class="l"><a href="javascript:;" onclick="datadel()" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a> </span> <span class="r">共有数据：<strong>{{$count}}</strong> 条</span>
+
+        <span class="dropDown l" style="margin-left: 4px;">
+            <a class=" btn btn-primary radius" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"><i class="Hui-iconfont">&#xe681;</i>分类查看</a>
+            <ul class="dropDown-menu menu radius box-shadow">
+                <li><a href="__ADMIN__/Member/index">全部</a></li>
+                <li><a href="__ADMIN__/Member/index?isvip=1">VIP会员</a></li>
+                <li><a href="__ADMIN__/Member/index?isfenpeilayer=1">已分配律师会员</a></li>
+            </ul>
+        </span>
+
+	
+
+    </div>
+	<div class="mt-20">
+	<table class="table table-border table-bordered table-hover table-bg table-sort">
+		<thead>
+			<tr class="text-c">
+				<th >ID</th>
+				<th width="8%">昵称</th>
+				<th >手机</th>
+				<th >vip到期时间</th>
+                <th >专职律师</th>
+                <th >对律师操作</th>
+                <th >性别</th>
+				<th >注册时间</th>
+                <th >版本情况</th>
+				<th >状态</th>
+				<th >在线状态</th>
+				<th width="12%">操作</th>
+			</tr>
+		</thead>
+		<tbody>
+			<volist name="list" id="vo">
+			<tr class="text-c">
+				<td><input type="checkbox" value="{{$vo.id}}" name="check_name"></td>
+				<td>
+					<i class="Hui-iconfont text-primary" style="font-size:14px; cursor:pointer;text-decoration:none;" onclick="_show('用户详情','{{:url('showDetail')}}','{{$vo.id}}','1000','600')">{{$vo.nickname}} </i>
+                </td>
+				<td>{{$vo.username}}</td>
+				<td>
+					<if condition="$vo['isvip'] eq '1'">
+					{{$vo['vipdie_time']|date="Y-m-d H:i:s",###}}
+					<else/>
+					未激活vip
+					</if>
+				</td>
+                <td>
+                   <if condition="$vo['isvip'] eq '1'">
+                   		<if condition="$vo['isfenpeilayer'] eq '0'">
+							<u style="cursor:pointer;text-decoration:none;" class="text-primary" onclick="_lawyer_select('{{$vo.username}}-{{$vo.nickname}}','{{:url('lawyerList')}}','{{$vo.id}}','1000','600')" title="选择律师">选择律师</u>
+                   		<else />
+                   			{{$vo.lawyer}}
+                   		</if>
+                    <else />
+                        未激活vip
+                    </if>
+
+                </td>
+                <td>
+                	<if condition="$vo['isfenpeilayer'] eq '1'">
+							<a style="text-decoration:none" onClick="_lawyer_stop(this,'{{$vo.uid}}','{{$vo.lid}}')" href="javascript:;" title="停用"><i class="Hui-iconfont">&#xe631;</i></a>
+					</if>
+					<a onclick="_lawyer_detail('历史服务','{{:url('Anything')}}','{{$vo.uid}}',1000,600)"><i class="Hui-iconfont">&#xe681;</i></a>
+					
+                </td>
+                <td>
+                    <if condition="$vo['sex'] == 1">
+                        <span >男</span>
+                    <else/>
+                        <span >女</span>
+                    </if>
+                </td>
+				<td>{{:date('Y-m-d',$vo['add_time'])}}</td>
+                <td>
+                    <if condition="$vo['version'] neq ''">
+                        <if condition="$vo['user_type'] == 'android'">
+                            <span>安卓：{{$vo.version}}</span>
+                        <else/>
+                            <if condition="$vo['user_type'] == 'ios'">
+                                <span>苹果：{{$vo.version}}</span>
+                            <else/>
+                                <span>{{$vo.version}}</span>
+                            </if>
+                        </if>
+                    <else/>
+                        暂无
+                    </if>
+                </td>
+				<td class="td-status">
+					<if condition="$vo['status'] == 1">
+						<span class="label label-success radius">已启用</span>
+					<else />
+					   	<span class="label label-defaunt radius">已停用</span>
+					</if>
+				</td>
+
+				<td>
+					<if condition="$vo['online'] == 1">
+						<span class="label label-success radius">在线</span>
+					<else />
+					   	<span class="label label-defaunt radius">离线</span>
+					</if>
+				</td>
+
+
+				<td class="td-manage">
+				
+					<a title="编辑" href="javascript:;" onclick="_edit('会员编辑','{{:url('showById')}}','{{$vo.id}}','1000','600')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a>
+
+					<if condition="$vo['status'] == 1">
+							<a style="text-decoration:none" onClick="_stop(this,'{{$vo.id}}')" href="javascript:;" title="停用"><i class="Hui-iconfont">&#xe631;</i></a>
+						<else />
+						   	<a style="text-decoration:none" onClick="_start(this,{{$vo.id}})" href="javascript:;" title="启用"><i class="Hui-iconfont">&#xe6e1;</i></a>
+					</if>
+
+					<a title="删除" href="javascript:;" onclick="_del(this,'{{$vo.id}}')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i></a>
+					<a title="短信通知" href="javascript:;" onclick="_add('短信通知','{{:url('sendMsg')}}','{{$vo.username}}','1000','600')" class="ml-5" style="text-decoration:none">
+							<i class="Hui-iconfont">&#xe62f;</i></a>
+				</td>
+			</tr>
+			</volist>
+		</tbody>
+		<if condition="$count gt 10">
+		<tbody>
+            <tr class="text-c">
+                <td colspan="16">{{$page}}</td>
+            </tr>
+        </tbody>
+		</if>
+	</table>
+	</div>
+</div>
+<include file="public:footer-style" />
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="__PUBLICADMIN__lib/My97DatePicker/4.8/WdatePicker.js"></script>
+<script type="text/javascript">
+/*用户-添加*/
+function _add(title,url,phone,w,h){
+	layer_show(title, url+"?target="+phone, w, h);
+}
+/*用户-查看*/
+function _show(title,url,id,w,h){
+	layer_show(title,url+'?id='+id,w,h);
+}
+
+
+function _edit(title,url,id,w,h){
+	layer_show(title,url+'?id='+id,w,h);
+}
+
+/*用户-查看*/
+function _lawyer_select(title,url,id,w,h){
+	layer_show(title,url+'?uid='+id,w,h);
+}
+/*用户-停用*/
+function _stop(obj,id){
+	layer.confirm('确认要停用吗？',function(index){
+		$.ajax({
+			type: 'POST',
+			url: '{{:url('forbid')}}',
+			data:{
+				'id':id,
+				'status':'0',
+			},
+			dataType: 'json',
+			success: function(data){
+				if(data.code == 10000) {
+					layer.msg('已停用!',{icon:1,time:1000});
+                    setTimeout('location.replace(location.href);', 1000);
+				}else{
+                    layer.msg('停用失败!',{icon:5,time:1500});
+                }
+			},
+			error:function(data) {
+				console.log(data.msg);
+			},
+		});
+	});
+}
+
+/*用户-启用*/
+function _start(obj,id){
+	layer.confirm('确认要启用吗？',function(index){
+		$.ajax({
+			type: 'POST',
+			url: '{{:url('forbid')}}',
+			data:{
+				'id':id,
+				'status':'1',
+			},
+			dataType: 'json',
+			success: function(data){
+				if(data.code == 10000) {
+					layer.msg('已启用!',{icon: 6,time:1000});
+                    setTimeout('location.replace(location.href);', 1000);
+				}else{
+                    layer.msg('启用失败!',{icon:5,time:1500});
+                }
+			},
+			error:function(data) {
+				console.log(data.msg);
+			},
+		});
+	});
+}
+
+/*律师-停用*/
+function _lawyer_stop(obj,uid,lid){
+	layer.confirm('确认要停用吗？',function(index){
+		$.ajax({
+			type: 'POST',
+			url: '{{:url('lawyerStop')}}',
+			data:{
+				uid: uid,
+				lid: lid,
+            	
+			},
+			dataType: 'json',
+			success: function(data){
+				if(data.code == 10000) {
+					layer.msg('已停用!',{icon:1,time:1000});
+                    setTimeout('location.replace(location.href);', 1000);
+				}else{
+                    layer.msg('停用失败!',{icon:5,time:1500});
+                }
+			},
+			error:function(data) {
+				console.log(data.msg);
+			},
+		});
+	});
+}
+
+function _lawyer_detail(title,url,uid,w,h)
+{
+	layer_show(title,url+'?uid='+uid,w,h);
+}
+
+/*用户-删除*/
+function _del(obj,id){
+	layer.confirm('提示：请不要轻易删除用户，可能会导致数据出错！',function(index){
+		$.ajax({
+			type: 'POST',
+			url: '{{:url('deleteByAjax')}}',
+			data: {'id':id},
+            dataType: 'json',
+            success: function(data){
+                if(data.code == 10000) {
+                    $(obj).parents("tr").remove();
+                    layer.msg(data.msg,{icon:1,time:1500});
+                    setTimeout('location.replace(location.href);', 1500);
+                }else{
+                    layer.msg(data.msg,{icon:5,time:1500});
+                }
+            },
+            error:function(data) {
+                layer.msg('删除出错!',{icon:5,time:1500});
+            },
+		});
+	});
+}
+</script>
+<include file="public:footer" />

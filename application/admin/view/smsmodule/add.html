@@ -1,0 +1,112 @@
+﻿<include file="public:top" />
+</head>
+<body>
+<article class="page-container">
+	<form action="" method="post" class="form form-horizontal" id="form-add">
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2">
+				<span class="c-red">*</span>标题：
+			</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" placeholder="请输入标题" id="title" name="title" null="不能为空" value="">
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2">
+				<span class="c-red">*</span>描述：
+			</label>
+			<div class="formControls col-xs-8 col-sm-9">
+			<textarea id="describe" name="describe" cols="" rows="" class="textarea " placeholder="请输入描述" datatype="*5-200" nullmsg="可为空！"></textarea>
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2">
+				<span class="c-red">*</span>模板号：
+			</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" placeholder="请输入模板号" id="tag" name="code" null="不能为空" value="">
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2">
+				<span class="c-red">*</span>模板变量：
+			</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" placeholder="按照短信模板参数顺序填写,多个请用  | 分隔连接......纯英文字母（可不填！）" id="variable" name="variable"  value="">
+			</div>
+			
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2">
+				<span class="c-red">*</span>状态：
+			</label>
+			<div class="formControls col-xs-8 col-sm-9">
+			<span class="select-box">
+				<select class="select" id="status" name="status" style="width:100px;">
+	                <option value="1" selected>正常</option>
+	                <option value="0">禁用</option>
+	            </select>
+	        </span>
+			</div>
+		</div>
+
+		<div class="row cl">
+			<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+				<button class="btn btn-primary radius" id="sub" type="submit">&nbsp;&nbsp;提交&nbsp;&nbsp;</button>
+                <button onClick="layer_close();" class="btn btn-default radius" type="button">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
+			</div>
+		</div>
+	</form>
+</article>
+
+<include file="public:footer-style" />
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="__PUBLICADMIN__lib/jquery.validation/1.14.0/jquery.validate.js"></script>
+<script type="text/javascript" src="__PUBLICADMIN__lib/jquery.validation/1.14.0/validate-methods.js"></script>
+<script type="text/javascript" src="__PUBLICADMIN__lib/jquery.validation/1.14.0/messages_zh.js"></script>
+<script type="text/javascript">
+$(function(){
+	$("#form-add").validate({
+		rules:{
+			code:{
+				required:true,
+			},
+			describe:{
+				required:true,
+			},
+			title:{
+				required:true,
+			}
+		},
+		onkeyup:false,
+		focusCleanup:true,
+		success:"valid",
+		submitHandler:function(form){
+            $(form).ajaxSubmit({
+                type: 'post',
+                url: "{{:url('addByAjax')}}",
+				beforeSend: function () {
+                    // 禁用按钮防止重复提交
+					$("#sub").css("pointer-events", "none");
+                },
+                success: function(data){
+                    if (data.code == 10000) {
+                        layer.msg(data.msg,{icon:1,time:1000});
+                        setTimeout('parent.location.reload();',1000);
+                    }else{
+                        layer.msg(data.msg,{icon:2,time:1000});
+                    }
+                },
+                error: function(XmlHttpRequest, textStatus, errorThrown){
+                    layer.msg('未知错误!',{icon:5,time:1000});
+                }
+            }); 
+            var index = parent.layer.getFrameIndex(window.name);
+            //parent.layer.close(index);
+        }
+    });
+});
+</script>
+<!--/请在上方写此页面业务相关的脚本-->
+<include file="public:footer" />

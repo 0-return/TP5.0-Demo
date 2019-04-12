@@ -1,0 +1,107 @@
+﻿<include file="public:top" />
+<title>充值记录</title>
+</head>
+<body>
+
+<include file="public:crumbs" />
+<div class="page-container">
+	<form action="{{:url('index')}}" method="get">
+		<input type="hidden" name="sfields" title="要查询的字段" value="out_trade_no,order_no">
+		<div class="text-c"> 日期范围：
+		<input type="text" autocomplete="off" name="begintime"  onfocus="WdatePicker({ maxDate:'#F{$dp.$D(\'logmax\')||\'%y-%M-%d\'}' })" id="logmin" class="input-text Wdate" style="width:120px;">
+		-
+		<input type="text" autocomplete="off" name="endtime" onfocus="WdatePicker({ minDate:'#F{$dp.$D(\'logmin\')}',maxDate:'%y-%M-%d' })" id="logmax" class="input-text Wdate" style="width:120px;">
+		<input type="text" name="reunite" id="reunite"  style="width:250px" class="input-text">
+		<button name="" id="" class="btn btn-success" type="submit"><i class="Hui-iconfont">&#xe665;</i> 搜索</button>
+	</div>
+	</form>
+	<div class="cl pd-5 bg-1 bk-gray mt-20">
+		<span class="l">
+		<a href="javascript:;" onclick="_del()" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a>
+		</span>
+		<span class="r">共有数据：<strong>{{$count}}</strong> 条</span>
+	</div>
+	<table class="table table-border table-bordered table-bg table-hover table-sort">
+		<thead>
+			<tr class="text-c">
+				<th width="25"><input type="checkbox" name="" value=""></th>
+				<th width="50">用户名</th>
+				<th width="">订单编号</th>
+				<th width="">金额</th>
+				<th width="">提交时间</th>
+				<th width="">支付状态</th>
+				<th width="">支付方式</th>
+				<th width="">支付时间</th>
+				<th width="">流水号</th>
+				<th width="70">操作</th>
+			</tr>
+		</thead>
+		<tbody>
+			<volist name="list" id="vo">
+			<tr class="text-c">
+				<td><input type="checkbox" value="{{$vo.id}}" name="id"></td>
+				<td>{{$vo.username}}（{{$vo.nickname}}）</td>
+				<td class="text-l">{{$vo.order_no}}</td>
+				<td class="text-l">{{$vo.total}}</td>
+				<td><neq name="$vo['add_time']" value="">{{$vo.add_time|date="Y-m-d H:i:s",###}}</neq></td>
+				<td>{{$vo.status_cn}}</td>
+				<td>{{$vo.payway_cn}}</td>
+				<td><neq name="$vo['notify_time']" value="">{{$vo.notify_time|date="Y-m-d H:i:s",###}}</neq></td>
+				<td>{{$vo.out_trade_no}}</td>
+				<td>
+					<a title="删除" href="javascript:;" onclick="_del(this,'{{$vo.id}}')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i></a></td>
+			</tr>
+			</volist>
+		</tbody>
+		<if condition="$count gt 10">
+        	<tbody>
+                <tr class="text-c">
+                    <td colspan="13">{{$page}}</td>
+                </tr>
+            </tbody>
+		</if>
+	</table>
+	<div id="pageNav" class="pageNav"></div>
+</div>
+<!--_footer 作为公共模版分离出去-->
+<include file="public:footer-style" />
+<!--/_footer 公共模版分离出去-->
+
+<script type="text/javascript" src="__PUBLICADMIN__lib/My97DatePicker/4.8/WdatePicker.js"></script>
+<script type="text/javascript" src="__PUBLICADMIN__lib/laypage/1.2/laypage.js"></script>
+<script type="text/javascript">
+/*日志-删除*/
+function _del(obj = '',id = ''){
+	if (!id) 
+	{
+		var id = new Array();
+	    $("input[name='id']:checked").each(function(i){
+	        id.push($(this).val());//向数组中添加元素
+	    });
+	    if (id.length < 1) {
+	    	layer.msg('错误：至少选择一项!',{icon:1,time:1000});
+	    	return false;
+	    }
+	}
+	layer.confirm('确认要删除吗？',function(index){
+		$.ajax({
+			type: 'POST',
+			data:{'id':id},
+			url: "{{:url('deleteByajax')}}",
+			dataType: 'json',
+			success: function(data){
+				if(data.code==10000) {
+                    layer.msg(data.msg,{icon:1,time:1500});
+                }else{
+                    layer.msg(data.msg,{icon:5,time:1500});
+                }
+				setTimeout('location.reload();',1000);
+			},
+			error:function(data) {
+				console.log(data.msg);
+			},
+		});		
+	});
+}
+</script>
+<include file="public:footer" />

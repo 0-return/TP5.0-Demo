@@ -1,0 +1,174 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<include file="public:top-style" />
+<title>卡密分类</title>
+</head>
+<body>
+<include file="public:crumbs" />	
+<div class="page-container">
+    <div class="cl pd-5 bg-1 bk-gray mt-20">
+        <span class="dropDown l" style="margin-left: 4px;"><a href="javascript:;" onclick="_add('添加','addByAjax','1200','600')" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 添加</a></span>
+        <span class="r">共有数据：<strong>{{$count}}</strong> 条</span> </div>
+	<div class="mt-20">
+	<table class="table table-border table-bordered table-hover table-bg table-sort">
+        <thead>
+            <tr class="text-c">
+                <th width="15">ID</th>
+                <th width="50">父id</th>
+                <th width="">分类</th>
+                <th width="100">中文描述</th>
+                <th width="100">英文标记</th>
+                <th width="50">状态</th>
+                <th width="50">操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{$advtype}}
+        </tbody>
+        <if condition="$count gt 10">
+        <tbody>
+            <tr class="text-c">
+                <td colspan="100">{{$page}}</td>
+            </tr>
+            </tbody>
+        </if>
+    </table>
+    </div>
+</div>
+<!--_footer 作为公共模版分离出去-->
+<include file="public:footer-style" /><!--/_footer 作为公共模版分离出去-->
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="__PUBLICADMIN__lib/My97DatePicker/4.8/WdatePicker.js"></script>
+<script type="text/javascript" src="__PUBLICADMIN__lib/datatables/1.10.0/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="__PUBLICADMIN__lib/laypage/1.2/laypage.js"></script>
+<script type="text/javascript">
+/*订单-查看*/
+function _show(title,url,id,w,h){
+    layer_show(title,url+'?id='+id,w,h);
+}
+/*用户-添加*/
+function _add(title,url,w,h){
+    layer_show(title,url,w,h);
+}
+function _edit(title,url,id,w,h){
+        layer_show(title,url+'?id='+id,w,h);
+    }	
+/*卡密-停用*/
+function card_stop(obj,id){
+    layer.confirm('销毁之后不能恢复，确认要销毁吗？',function(index){
+        $.ajax({
+            type: 'POST',
+            url: "{{:url('forbid')}}",
+            data:{
+                id: id,
+                status: '0'
+            },
+            dataType: 'json',
+            success: function(data){
+				if(data.code == 10000){
+                    layer.msg(data.msg,{icon: 6,time:1000});
+                    setTimeout('location.reload();',1500);
+                }else{
+                    layer.msg(data.msg,{icon: 6,time:1000});
+                }
+                
+                
+            },
+            error:function(data) {
+                console.log(data.msg);
+            },
+        });     
+    });
+}
+
+/*卡密-启用*/
+function card_start(obj,id){
+    layer.confirm('确认要启用吗？',function(index){
+        $.ajax({
+            type: 'POST',
+            url: "{{:url('forbid')}}",
+            dataType: 'json',
+            data:{
+                id: id,
+                status:'1'
+            },
+            success: function(data){
+				if(data.code == 10000){
+                    layer.msg(data.msg,{icon: 6,time:1000});
+                    setTimeout('location.reload();',1500);
+                }else{
+                    layer.msg(data.msg,{icon: 6,time:1000});
+                }
+                
+            },
+            error:function(data) {
+                console.log(data.msg);
+            },
+        });
+    });
+}
+
+
+/*单独删除*/
+function _del(e,id){
+    layer.confirm('确认要删除吗？',function(index){
+        $.ajax({
+            type: 'POST',
+            url: "{{:url('deleteByAjax')}}",
+            data:{
+                id: id
+            },
+            dataType: 'json',
+            success: function(data){
+                if(data.code == 10000){
+                    layer.msg(data.msg,{icon: 6,time:1000});
+                    setTimeout('location.reload();',1000);
+                }else{
+                    layer.msg(data.msg,{icon: 6,time:1000});
+                }
+            },
+            error:function(data) {
+                alert("系统繁忙");
+                location.reload();
+            },
+        });
+    });
+}
+/*批量删除*/
+function _del_all(){
+    var id_array=new Array();
+    $("input[name='id']:checked").each(function(i){
+        id_array.push($(this).val());//向数组中添加元素
+    });
+    if(id_array.length!=0){
+        $.ajax({
+            type: 'POST',
+            url: "{{:url('deleteByAjax')}}",
+            data:{
+                //商品ID(数组)
+                id: id_array
+            },
+            dataType: 'json',
+            success: function(data){
+                if(data.code == 10000){
+                    layer.msg(data.msg,{icon: 6,time:1000});
+                    setTimeout('location.reload();',1500);
+                }else{
+                    layer.msg(data.msg,{icon: 6,time:1000});
+                }
+            },
+            error:function(data) {
+                alert("系统繁忙");
+                location.reload();
+            },
+        });
+    }else{
+        alert("请至少选择一个商品")
+    }
+}
+
+
+</script> 
+<include file="public:footer" />

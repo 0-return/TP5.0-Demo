@@ -1,0 +1,147 @@
+﻿<include file="public:top" />
+
+<title>基本设置</title>
+</head>
+
+<body>
+	<include file="public:crumbs" />
+	<div class="page-container">
+		<form class="form form-horizontal" id="form-add-data">
+			<input type="hidden" class="hidden-id" name="id" value="{{$vo.id}}">
+			<div id="tab-system" class="HuiTab">
+				<div class="tabBar cl">
+					<span>邮箱设置</span>
+				</div>
+				<div class="tabCon">
+					<div class="row cl">
+						<label class="form-label col-xs-4 col-sm-2">
+							<span class="c-red">*</span>
+							发送模式：</label>
+						<div class="formControls col-xs-8 col-sm-9">
+							<span class="select-box">
+								<select class="select" size="1" name="type" id="type">
+									<option value="smtp.163.com" <eq name="vo.type" value="smtp.163.com">selected</eq>>smtp.163.com</option>
+									<option value="smtp.126.com" <eq name="vo.type" value="smtp.126.com">selected</eq>>smtp.126.com</option>
+									<option value="smtp.qq.com" <eq name="vo.type" value="smtp.qq.com">selected</eq>>smtp.qq.com</option>
+								</select>
+							</span>
+						</div>
+					</div>
+
+					<div class="row cl">
+						<label class="form-label col-xs-4 col-sm-2">
+							<span class="c-red">*</span>
+							SMTP服务器：</label>
+						<div class="formControls col-xs-8 col-sm-9">
+							<span class="select-box">
+								<select class="select" size="1" name="host" id="host">
+									<option value="SMTP">SMTP</option>
+								</select>
+							</span>
+						</div>
+					</div>
+					<div class="row cl">
+						<label class="form-label col-xs-4 col-sm-2">SMTP 端口：</label>
+						<div class="formControls col-xs-8 col-sm-9">
+							<input type="text" class="input-text" value="{{$vo.port}}" id="" name="port">
+						</div>
+					</div>
+					<div class="row cl">
+						<label class="form-label col-xs-4 col-sm-2">邮箱帐号：</label>
+						<div class="formControls col-xs-8 col-sm-9">
+							<input type="text" class="input-text" value="{{$vo.username}}" id="username" name="username">
+						</div>
+					</div>
+					<div class="row cl">
+						<label class="form-label col-xs-4 col-sm-2">邮箱密码：</label>
+						<div class="formControls col-xs-8 col-sm-9">
+							<input type="text" id="password" value="{{$vo.password}}" name="password" class="input-text">
+						</div>
+					</div>
+					<div class="row cl">
+						<label class="form-label col-xs-4 col-sm-2">发件人邮箱：</label>
+						<div class="formControls col-xs-8 col-sm-9">
+							<input type="text" id="from" value="{{$vo.from}}" name="from" class="input-text">
+						</div>
+					</div>
+					<div class="row cl">
+						<label class="form-label col-xs-4 col-sm-2">发件人姓名：</label>
+						<div class="formControls col-xs-8 col-sm-9">
+							<input type="text" id="from" value="{{$vo.name}}" name="name" class="input-text">
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row cl">
+				<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
+					<button class="btn btn-primary radius" type="submit"><i class="Hui-iconfont">&#xe632;</i> 保存</button>
+					<button onClick="layer_close();" class="btn btn-default radius" type="button">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
+				</div>
+			</div>
+		</form>
+	</div>
+
+	<!--_footer 作为公共模版分离出去-->
+	<include file="public:footer-style" />
+	<!--/_footer 作为公共模版分离出去-->
+
+	<!--请在下方写此页面业务相关的脚本-->
+	<script type="text/javascript" src="__PUBLICADMIN__lib/My97DatePicker/4.8/WdatePicker.js"></script>
+	<script type="text/javascript" src="__PUBLICADMIN__lib/jquery.validation/1.14.0/jquery.validate.js"></script>
+	<script type="text/javascript" src="__PUBLICADMIN__lib/jquery.validation/1.14.0/validate-methods.js"></script>
+	<script type="text/javascript" src="__PUBLICADMIN__lib/jquery.validation/1.14.0/messages_zh.js"></script>
+	<script type="text/javascript">
+		$(function () {
+			$('.skin-minimal input').iCheck({
+				checkboxClass: 'icheckbox-blue',
+				radioClass: 'iradio-blue',
+				increaseArea: '20%'
+			});
+			$("#tab-system").Huitab({
+				index: 0
+			});
+		});
+		$(function () {
+			id = $('.hidden-id').val();
+			active = id ? 'updateByAjax' : 'addByajax';
+			$("#form-add-data").validate({
+				onkeyup: false,
+				focusCleanup: true,
+				success: "valid",
+				submitHandler: function (form) {
+					id = $('.hidden-id').val();
+					active = id ? 'updateByAjax' : 'addByajax';
+					$(form).ajaxSubmit({
+						type: 'post',
+						url: "__ADMIN__/mail/" + active,
+						dataType: 'json',
+						success: function (data) {
+							if (data.code == 10000) {
+								layer.msg(data.msg, {
+									icon: 1,
+									time: 1000
+								});
+								setTimeout('location.reload();', 1000);
+							} else {
+								layer.msg(data.msg, {
+									icon: 2,
+									time: 2000
+								});
+							}
+						},
+						error: function (XmlHttpRequest, textStatus, errorThrown) {
+							layer.msg('系统繁忙!', {
+								icon: 5,
+								time: 1000
+							});
+						}
+					});
+					var index = parent.layer.getFrameIndex(window.name);
+				}
+			});
+		});
+	</script>
+	<!--/请在上方写此页面业务相关的脚本-->
+</body>
+
+</html>

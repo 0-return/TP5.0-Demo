@@ -1,0 +1,344 @@
+﻿<include file="public:top" />
+</head>
+
+<body>
+<style type="text/css">
+.box img {
+	width: 50px;
+}
+
+body {
+	position: relative;
+}
+
+.bigImg {
+	position: absolute;
+	width: 600px;
+	height: auto;
+	z-index: 9999
+}
+
+.list_pic {
+	float: left;
+	margin: 1px;
+	position: relative;
+	width: 100px;
+	height: 100px;
+}
+
+.list_pic span {
+	position: absolute;
+	right: 0px;
+	top: 0px;
+}
+
+.list_pic a {
+	text-decoration: none;
+	color: #fff;
+}
+
+.lawBox {
+	position: relative;
+}
+
+.lawList {
+	position: absolute;
+	left: 15px;
+	width: 50%;
+	background: #fff;
+	z-index: 999;
+	background: #f1f1f1;
+}
+
+.lawList li {
+	padding: 2px 0;
+	border-bottom: 1px solid #eaeaea;
+	padding: 0 4px;
+}
+#wrap img{vertical-align: top;cursor: pointer;}
+</style>
+<script>
+function getLaw(tar){
+var name = tar.value;
+if (name) {
+	$.ajax({
+	type: 'POST',
+	url: '{{:url('getLasfirm')}}',
+	dataType: 'json',
+	data:{'reunite':name},
+	success: function(data){
+		if(data.code == 10000){
+			data = data.data;
+			html = '';
+			$('.lawList').html("");
+			for(var i=0;i<data.length;i++)
+			{
+				html += "<li style='cursor:pointer;' data-id="+data[i]['id']+">"+data[i]['name']+"</li>";
+			}
+			$('.lawList').append(html);
+			//点击律师事务所
+			$(".lawList li").on("click",function(){
+				$('.lawfirm_id').val($(this).data('id'));
+				$("#website-company").val($(this).text());
+				$(".lawList").html("");
+			})
+		}
+
+	},
+	error:function(data) {
+		console.log(data.msg);
+	},
+});
+}
+
+}
+</script>
+<div class="page-container">
+<form class="form form-horizontal" autocomplete="off" id="form-industury-edit">
+	<input type="hidden" value="{{$vo.id}}" name="id" />
+	<div id="tab-system" class="HuiTab">
+		<div class="tabCon">
+			<div class="row cl">
+				<label class="form-label col-xs-4 col-sm-2">
+					<span class="c-red">*</span>
+					律师事务所：</label>
+				<div class="formControls col-xs-6 col-sm-7 lawBox">
+					<input type="text" id="website-company" placeholder="输入律师事务所名称" name="company" value="{{$vo.lawfrim_cn}}" class="input-text"
+					 onkeyup="getLaw(this)" />
+					<ul class="lawList">
+						<!-- <li>律师事务所1</li>
+					<li>律师事务所2</li>
+					<li>律师事务所3</li>
+					<li>律师事务所4</li>
+					<li>律师事务所5</li> -->
+					</ul>
+					<input type="hidden" class="lawfirm_id" name="lawfirm_id" value="{{$vo.lawfirm_id}}">
+				</div>
+				<div class="formControls col-xs-2 col-sm-3 lawBox"><span class="c-red">* 输入关键字查询事务所</span></div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-xs-4 col-sm-2">
+					<span class="c-red">*</span>
+					律师姓名：</label>
+				<div class="formControls col-xs-8 col-sm-9">
+					<input type="text" id="website-title" placeholder="真实姓名" value="{{$vo.username}}" name='username' class="input-text">
+				</div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-xs-4 col-sm-2">
+					<span class="c-red">*</span>
+					密码重置：</label>
+				<div class="formControls col-xs-8 col-sm-9">
+					<input type="text" id="website-title" placeholder="重置密码" value="" name='password' class="input-text">
+				</div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-xs-4 col-sm-2">
+					<span class="c-red">*</span>
+					律师性别：</label>
+				<div class="radio-box">
+					<input value="0" type="radio" <if condition="$vo['sex'] eq '0'">checked</if> id="radio-1" name="sex">
+					<label for="radio-1">男</label>
+				</div>
+				<div class="radio-box">
+					<input value="1" type="radio" <if condition="$vo['sex'] eq '1'">checked</if> id="radio-2" name="sex">
+					<label for="radio-2">女</label>
+				</div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-xs-4 col-sm-2">
+					<span class="c-red">*</span>
+					注册地区：</label>
+				<div class="formControls col-xs-8 col-sm-9">
+					<input type="text" id="website-description" placeholder="注册地区" value="{{$vo.province_cn}}{{$vo.city_cn}}{{$vo.area_cn}}" class="input-text">
+				</div>
+			</div>
+
+			<div class="row cl">
+				<label class="form-label col-xs-4 col-sm-2">
+					<span class="c-red">*</span>
+					证件信息：</label>
+				<div class="formControls col-xs-8 col-sm-9">
+					<ul class="lawyer-pics" id="wrap">
+						<volist name="vo.cert" id="cert" key="key">
+							<if condition="$cert neq ''">
+								<li class="list_pic"><img style="width: 100%; height: 100%;" src="{{$vo.weburl}}{{$cert}}" /></li>
+								<else /><span style="width: 100px; height: 20px; background: #F8F8F8; margin-right: 2px; padding: 1px 3px; border: 1px solid #EEEEEE">未上传</span>
+							</if>
+						</volist>
+
+					</ul>
+				</div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-xs-4 col-sm-2">
+					<span class="c-red">*</span>
+					平台抽成：</label>
+				<div class="formControls col-xs-1 col-sm-1">
+					<input type="text" id="website-uploadfile" placeholder="谨慎操作" value="{{$vo.extractrate}}" name='extractrate'
+					 class="input-text">
+				</div>
+				<div class="formControls col-xs-7 col-sm-9"><span>设定的基数为平台扣除的百分比</span></div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-xs-4 col-sm-2">
+					<span class="c-red">*</span>
+					从业年限：</label>
+				<div class="formControls col-xs-1 col-sm-1">
+					<input type="text" id="website-copyright" name='work_time' placeholder="&copy; 2016 H-ui.net" value="{{$vo.work_time}}"
+					 class="input-text">
+				</div>
+				<div class="formControls col-xs-7 col-sm-9"><span>从业时间对律师的排名有影响</span></div>
+			</div>
+			<!--这里要做成联动-->
+			<div class="row cl">
+				<label class="form-label col-xs-4 col-sm-2">
+					<span class="c-red">*</span>
+					审核：</label>
+				<div class="formControls col-xs-2 col-sm-2">
+					<select name="status" style="height: 30px;" class="select">
+						<option value="0" <if condition="$vo['status'] eq '0' or $vo['status'] eq '1'">selected </if>>未上传</option>
+						<option value="2" <if condition="$vo['status'] eq '2'">selected </if>>通过</option>
+						<option value="3" <if condition="$vo['status'] eq '3'">selected </if>>不通过</option>
+
+					</select>
+				</div>
+				<div class="formControls col-xs-3 col-sm-5"><span>律师将根据审核状态才能进行相应操作</span></div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-xs-4 col-sm-2">
+					<span class="c-red">*</span>
+					备注：</label>
+				<div class="formControls col-xs-2 col-sm-2">
+					<select name="content" style="height: 30px;" class="select">
+						<option value="">无</option>
+						<option value="审核资料不合法">审核资料不合法</option>
+						<option value="资料有效期失效">资料有效期失效</option>
+					</select>
+				</div>
+			</div>
+
+			<!-- <div class="row cl">
+				<label class="form-label col-xs-4 col-sm-2">简介：</label>
+				<div class="formControls col-xs-8 col-sm-9"  style="z-index: 1">
+					<script name='introduction' id="editor" type="text/plain" style="width:100%;height:300px;">{{$vo.introduction}}</script>
+				</div>
+			</div> -->
+			<div class="row cl">
+				<label class="form-label col-xs-4 col-sm-2">简介：</label>
+				<div class="formControls col-xs-8 col-sm-9" >
+					<textarea class="textarea" name="introduction" style="width:100%;height:100px; resize: none">{{$vo.introduction}}</textarea>
+					<!-- <script name='introduction' id="editor" type="text/plain" style="width:100%;height:300px;"></script> -->
+				</div>
+			</div>
+			<div class="row cl">
+				<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
+					<button id="save_submit" class="btn btn-primary radius" type="submit"><i class="Hui-iconfont">&#xe632;</i> 保存</button>
+					<button onClick="layer_close();" class="btn btn-default radius" type="button">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
+				</div>
+			</div>
+</form>
+</div>
+<include file="public:footer-style" />
+
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="__PUBLICADMIN__lib/jquery.validation/1.14.0/jquery.validate.js"></script>
+<script type="text/javascript" src="__PUBLICADMIN__lib/jquery.validation/1.14.0/validate-methods.js"></script>
+<script type="text/javascript" src="__PUBLICADMIN__lib/jquery.validation/1.14.0/messages_zh.js"></script>
+<script type="text/javascript" src="__PUBLICADMIN__lib/ueditor/1.4.3/ueditor.config.js"></script>
+<script type="text/javascript" src="__PUBLICADMIN__lib/ueditor/1.4.3/ueditor.all.js"> </script>
+<script type="text/javascript" src="__PUBLICADMIN__lib/ueditor/1.4.3/lang/zh-cn/zh-cn.js"></script>
+<script type="text/javascript" src="__PUBLICADMIN__lib/ueditor/1.4.3/ueditor.all.js"> </script>
+<script type="text/javascript" src="__PUBLICADMIN__lib/preview/preview.js"></script>
+<script type="text/javascript" src="__PUBLICADMIN__lib/preview/preview.css"></script>
+<script type="text/javascript">
+var preview = new Preview({
+	imgWrap: 'wrap' // 指定该容器里的图片点击预览
+})
+
+$(function () {
+
+	$('.delpic').click(function () {
+
+		id = $(this).data('id');
+		p = $(this).data('path');
+		uid = $(this).data('uid');
+		$('.ids_' + id).remove();
+		$.ajax({
+			type: 'POST',
+			url: '__ADMIN__/Lawyer/delFile',
+			data: {
+				"id": p,
+				"uid": uid
+			},
+			success(data) {
+				if (data.code == 11300) {
+					layer.msg('删除成功!', {
+						icon: 1,
+						time: 1000
+					});
+					$('.ids_' + id).remove();
+
+				} else {
+					layer.msg(data.msg, {
+						icon: 5,
+						time: 1000
+					});
+				}
+			}
+		})
+	})
+})
+$(function () {
+	$('.skin-minimal input').iCheck({
+		checkboxClass: 'icheckbox-blue',
+		radioClass: 'iradio-blue',
+		increaseArea: '20%'
+	});
+	$("#tab-system").Huitab({
+		index: 0
+	});
+
+	$("#form-industury-edit").validate({
+		rules: {
+			name: {
+				required: true,
+			},
+		},
+		onkeyup: false,
+		focusCleanup: true,
+		success: "valid",
+		submitHandler: function (form) {
+			$(form).ajaxSubmit({
+				type: 'post',
+				url: "{{:url('updateByAjax')}}",
+				success: function (data) {
+					if (data.code == 10000) {
+						layer.msg('修改成功!', {
+							icon: 1,
+							time: 1000
+						});
+						setTimeout('parent.location.reload();', 1500);
+					} else {
+						layer.msg('修改失败!', {
+							icon: 5,
+							time: 1000
+						});
+					}
+				},
+				error: function (XmlHttpRequest, textStatus, errorThrown) {
+					layer.msg('修改失败!', {
+						icon: 5,
+						time: 1000
+					});
+				},
+			});
+		}
+
+	});
+	var ue = UE.getEditor('editor');
+});
+</script>
+<!--/请在上方写此页面业务相关的脚本-->
+<include file="public:footer" />

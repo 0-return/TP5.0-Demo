@@ -1,0 +1,338 @@
+<include file="public:top" />
+<title>支付宝接口管理</title>
+</head>
+
+<body>
+    <include file="public:crumbs" />
+
+    <div class="page-container">
+        <div id="tab-system" class="HuiTab">
+            <div class="tabBar cl">
+                <span>支付宝设置</span>
+                <span>微信设置</span>
+                <span>短信设置</span>
+            </div>
+
+            <div class="tabCon">
+                <form class="form form-horizontal " id="form-add-data-alipay">
+                    <input type="hidden" class="alipay-hidden-id" name="id" value="{{$list.alipay.id}}">
+                    <input type="hidden" name="type" value="alipay">
+                    <div class="row cl">
+                        <label class="form-label col-xs-4 col-sm-2">
+                            <span class="c-red">*</span>
+                            商户Id：</label>
+                        <div class="formControls col-xs-8 col-sm-9">
+                            <input type="text" id="website-title" placeholder="请填写真实有效的商户id" value="{{$list.alipay.merchant}}"
+                                class="input-text" name="merchant">
+                        </div>
+                    </div>
+                    <div class="row cl">
+                        <label class="form-label col-xs-4 col-sm-2">
+                            <span class="c-red">*</span>
+                            收款支付宝appId：</label>
+                        <div class="formControls col-xs-8 col-sm-9">
+                            <input type="text" id="website-title" placeholder="请填写真实有效的支付宝appid" value="{{$list.alipay.appid}}"
+                                class="input-text" name="appid">
+                        </div>
+                    </div>
+                    <div class="row cl">
+                        <label class="form-label col-xs-4 col-sm-2">
+                            <span class="c-red">*</span>
+                            网关地址(gateway)：</label>
+                        <div class="formControls col-xs-8 col-sm-9">
+                            <input type="text" id="website-Keywords" placeholder="请填写支付宝网关地址" value="https://openapi.alipay.com/gateway.do"
+                                class="input-text" name="gateway">
+                        </div>
+                    </div>
+                    <div class="row cl">
+                        <label class="form-label col-xs-4 col-sm-2">
+                            <span class="c-red">*</span>
+                            回调地址(notify_url)：</label>
+                        <div class="formControls col-xs-8 col-sm-9">
+                            <input type="text" id="website-Keywords" placeholder="请填写支付宝回调地址" value="{{$list.alipay.notify_url}}"
+                                class="input-text" name="notify_url">
+                        </div>
+                    </div>
+
+                    <div class="row cl">
+                        <label class="form-label col-xs-4 col-sm-2">
+                            <span class="c-red">*</span>
+                            商户邮箱(seller_email):</label>
+                        <div class="formControls col-xs-8 col-sm-9">
+                            <input type="text" id="website-description" placeholder="请填写商户邮箱" value="{{$list.alipay.email}}"
+                                class="input-text" name="email">
+                        </div>
+                    </div>
+
+                    <div class="row cl">
+                        <label class="form-label col-xs-4 col-sm-2">
+                            <span class="c-red">*</span>
+                            支付宝私钥(rsaPrivateKey):</label>
+                        <div class="formControls col-xs-8 col-sm-9">
+                            <textarea id="website-description" placeholder="请填写支付宝私钥" class="textarea" name="rsaprivatekey">{{$list.alipay.rsaprivatekey}}</textarea>
+                        </div>
+                    </div>
+                    <div class="row cl">
+                        <label class="form-label col-xs-4 col-sm-2">
+                            <span class="c-red">*</span>
+                            支付宝公钥(rsaPublicKey):</label>
+                        <div class="formControls col-xs-8 col-sm-9">
+                            <textarea id="website-description" placeholder="请填写支付宝公钥" class="textarea" name="rsapublickey">{{$list.alipay.rsapublickey}}</textarea>
+                        </div>
+                    </div>
+
+                    <div class="row cl">
+                        <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
+                            <button class="btn btn-primary radius" type="submit"><i class="Hui-iconfont">&#xe632;</i>
+                                保存</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!-------------------------------------------------------------------------------------------------------->
+            <div class="tabCon">
+                <form class="form form-horizontal form-add-data" id="form-add-data-wxpay">
+                    <input type="hidden" class="wxpay-hidden-id" name="id" value="{{$list.wxpay.id}}">
+                    <input type="hidden" name="type" value="wxpay">
+                    <div class="row cl">
+                        <label class="form-label col-xs-4 col-sm-2">
+                            <span class="c-red">*</span>
+                            商户Id：</label>
+                        <div class="formControls col-xs-8 col-sm-9">
+                            <input type="text" id="website-title" placeholder="请填写真实有效的appid" value="{{$list.wxpay.merchant}}"
+                                class="input-text" name="merchant">
+                        </div>
+                    </div>
+                    <div class="row cl">
+                        <label class="form-label col-xs-4 col-sm-2">
+                            <span class="c-red">*</span>
+                            公众号名称：</label>
+                        <div class="formControls col-xs-8 col-sm-9">
+                            <input type="text" id="website-Keywords" placeholder="公众号名称" value="{{$list.wxpay.title}}"
+                                class="input-text" name="title">
+                        </div>
+                    </div>
+                    <div class="row cl">
+                        <label class="form-label col-xs-4 col-sm-2">
+                            <span class="c-red">*</span>
+                            公众号key：</label>
+                        <div class="formControls col-xs-8 col-sm-9">
+                            <input type="text" id="website-title" placeholder="公众号key" value="{{$list.wxpay.appkey}}"
+                                class="input-text" name="appkey">
+                        </div>
+                    </div>
+                    <div class="row cl">
+                        <label class="form-label col-xs-4 col-sm-2">
+                            <span class="c-red">*</span>
+                            身份标识(appId)：</label>
+                        <div class="formControls col-xs-5 col-sm-7">
+                            <input type="text" id="website-title" placeholder="公众号身份标识 请通过修改公众号信息来保存" value="{{$list.wxpay.appid}}"
+                                class="input-text" name="appid">
+                        </div>
+                        <div class="formControls col-xs-3 col-sm-2">多个appid用逗号(,)隔开</div>
+                    </div>
+                    <div class="row cl">
+                        <label class="form-label col-xs-4 col-sm-2">
+                            <span class="c-red">*</span>
+                            身份密钥(appSecret)：</label>
+                        <div class="formControls col-xs-8 col-sm-9">
+                            <textarea id="website-Keywords" placeholder="公众平台API(参考文档API 接口部分)的权限获取所需密钥Key 请通过修改公众号信息来保存"
+                                class="textarea" name="secret">{{$list.wxpay.secret}}</textarea>
+                        </div>
+                    </div>
+                    <div class="row cl">
+                        <label class="form-label col-xs-4 col-sm-2">
+                            <span class="c-red">*</span>
+                            网关地址(gateway)：</label>
+                        <div class="formControls col-xs-8 col-sm-9">
+                            <input type="text" id="website-Keywords" placeholder="请填写支付宝网关地址" value="{{$list.wxpay.gateway}}"
+                                class="input-text" name="gateway">
+                        </div>
+                    </div>
+                    <div class="row cl">
+                        <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
+                            <button class="btn btn-primary radius" type="submit"><i class="Hui-iconfont">&#xe632;</i>
+                                保存</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!-------------------------------------------------------------------------------------------------------->
+            <div class="tabCon">
+                <form class="form form-horizontal" id="form-add-data-sms">
+                    <input type="hidden" class="alsms-hidden-id" name="id" value="{{$list.sms.id}}">
+                    <input type="hidden" name="type" value="sms">
+                    <div class="row cl">
+                        <label class="form-label col-xs-4 col-sm-2">
+                            <span class="c-red">*</span>
+                            公司名称：</label>
+                        <div class="formControls col-xs-8 col-sm-9">
+                            <input type="text" id="website-title" placeholder="控制在25个字、50个字节以内" value="{{$list.sms.title}}"
+                                class="input-text" name="title">
+                        </div>
+                    </div>
+                    <div class="row cl">
+                        <label class="form-label col-xs-4 col-sm-2">
+                            <span class="c-red">*</span>
+                            网关地址(gateway)：</label>
+                        <div class="formControls col-xs-8 col-sm-9">
+                            <input type="text" id="website-Keywords" placeholder="请填写支付宝网关地址" value="{{$list.sms.gateway}}"
+                                class="input-text" name="gateway">
+                        </div>
+                    </div>
+                    <div class="row cl">
+                        <label class="form-label col-xs-4 col-sm-2">
+                            <span class="c-red">*</span>
+                            App Key：</label>
+                        <div class="formControls col-xs-8 col-sm-9">
+                            <input type="text" id="website-Keywords" placeholder="短信平台申请的App Key" value="{{$list.sms.appid}}"
+                                class="input-text" name="appid">
+                        </div>
+                    </div>
+                    <div class="row cl">
+                        <label class="form-label col-xs-4 col-sm-2">
+                            <span class="c-red">*</span>
+                            App Secret：</label>
+                        <div class="formControls col-xs-8 col-sm-9">
+                            <input type="text" id="website-description" placeholder="短信平台申请的App Secret" value="{{$list.sms.secret}}"
+                                class="input-text" name="secret">
+                        </div>
+                    </div>
+                    <div class="row cl">
+                        <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
+                            <button class="btn btn-primary radius" type="submit"><i class="Hui-iconfont">&#xe632;</i>
+                                保存</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!--_footer 作为公共模版分离出去-->
+        <include file="public:footer-style" />
+
+        <!--/_footer 作为公共模版分离出去-->
+
+        <!--请在下方写此页面业务相关的脚本-->
+        <script type="text/javascript" src="__PUBLICADMIN__lib/My97DatePicker/4.8/WdatePicker.js"></script>
+        <script type="text/javascript" src="__PUBLICADMIN__lib/jquery.validation/1.14.0/jquery.validate.js"></script>
+        <script type="text/javascript" src="__PUBLICADMIN__lib/jquery.validation/1.14.0/validate-methods.js"></script>
+        <script type="text/javascript" src="__PUBLICADMIN__lib/jquery.validation/1.14.0/messages_zh.js"></script>
+        <script type="text/javascript">
+            $(function () {
+                $('.skin-minimal input').iCheck({
+                    checkboxClass: 'icheckbox-blue',
+                    radioClass: 'iradio-blue',
+                    increaseArea: '20%'
+                });
+                $("#tab-system").Huitab({
+                    index: 0
+                });
+                $("#form-add-data-alipay").validate({
+                    onkeyup: false,
+                    focusCleanup: true,
+                    success: "valid",
+                    submitHandler: function (form) {
+                        id = $('.alipay-hidden-id').val();
+                        active = id ? 'updateByAjax' : 'addByajax';
+                        $(form).ajaxSubmit({
+                            type: 'post',
+                            url: "{{:url('" + active + "')}}",
+                            success: function (data) {
+                                if (data.code == 10000) {
+                                    layer.msg(data.msg, {
+                                        icon: 1,
+                                        time: 1000
+                                    });
+                                    setTimeout('location.reload();', 1500);
+                                } else {
+                                    layer.msg(data.msg, {
+                                        icon: 5,
+                                        time: 1000
+                                    });
+                                }
+                            },
+                            error: function (XmlHttpRequest, textStatus, errorThrown) {
+                                layer.msg('修改失败!', {
+                                    icon: 5,
+                                    time: 1000
+                                });
+                            },
+                        });
+                    }
+
+                });
+
+                $("#form-add-data-wxpay").validate({
+                    onkeyup: false,
+                    focusCleanup: true,
+                    success: "valid",
+                    submitHandler: function (form) {
+                        id = $('.wxpay-hidden-id').val();
+                        active = id ? 'updateByAjax' : 'addByajax';
+                        $(form).ajaxSubmit({
+                            type: 'post',
+                            url: "{{:url('" + active + "')}}",
+                            success: function (data) {
+                                if (data.code == 10000) {
+                                    layer.msg(data.msg, {
+                                        icon: 1,
+                                        time: 1000
+                                    });
+                                    setTimeout('location.reload();', 1500);
+                                } else {
+                                    layer.msg(data.msg, {
+                                        icon: 5,
+                                        time: 1000
+                                    });
+                                }
+                            },
+                            error: function (XmlHttpRequest, textStatus, errorThrown) {
+                                layer.msg('修改失败!', {
+                                    icon: 5,
+                                    time: 1000
+                                });
+                            },
+                        });
+                    }
+
+                });
+
+                $("#form-add-data-sms").validate({
+                    onkeyup: false,
+                    focusCleanup: true,
+                    success: "valid",
+                    submitHandler: function (form) {
+                        id = $('.alsms-hidden-id').val();
+                        active = id ? 'updateByAjax' : 'addByajax';
+                        $(form).ajaxSubmit({
+                            type: 'post',
+                            url: "{{:url('" + active + "')}}",
+                            success: function (data) {
+                                if (data.code == 10000) {
+                                    layer.msg(data.msg, {
+                                        icon: 1,
+                                        time: 1000
+                                    });
+                                    setTimeout('location.reload();', 1500);
+                                } else {
+                                    layer.msg(data.msg, {
+                                        icon: 5,
+                                        time: 1000
+                                    });
+                                }
+                            },
+                            error: function (XmlHttpRequest, textStatus, errorThrown) {
+                                layer.msg('修改失败!', {
+                                    icon: 5,
+                                    time: 1000
+                                });
+                            },
+                        });
+                    }
+
+                });
+            });
+        </script>
+        <!--/请在上方写此页面业务相关的脚本-->
+        <include file="public:footer" />

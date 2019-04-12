@@ -1,0 +1,219 @@
+﻿<include file="public:top" />
+<title>律所编辑</title>
+</head>
+<body>
+<style type="text/css">
+    .box img{width: 50px;}
+    body{position: relative;}
+    .bigImg{position: absolute; width: 600px; height: auto; z-index: 9999}
+    .list_pic{float: left; margin: 1px; position: relative;;}
+	.list_pic span{position: absolute; right: 0px; top: 0px;}
+	.list_pic a{ text-decoration: none; color: #fff; }
+	.lawBox{position: relative;}
+	.lawList{position: absolute;left: 15px;width: 50%;background: #fff;z-index: 999;background: #f1f1f1;}
+	.lawList li{padding: 2px 0;border-bottom: 1px solid #eaeaea; padding: 0 4px;}
+</style>
+<script>
+	function getLaw(tar){
+		var name = tar.value;
+		if (name) {
+			$.ajax({
+			type: 'POST',
+			url: '{{:url('getLasfirm')}}',
+			dataType: 'json',
+			data:{'reunite':name},
+			success: function(data){
+				if(data.code == 10000){
+					data = data.data;
+					html = '';
+					$('.lawList').html("");
+					for(var i=0;i<data.length;i++)
+					{
+						html += "<li style='cursor:pointer;' data-id="+data[i]['id']+">"+data[i]['name']+"</li>";
+					}
+					$('.lawList').append(html);
+					//点击律师事务所
+					$(".lawList li").on("click",function(){
+						$('.lawfirm_id').val($(this).data('id'));
+						$("#website-company").val($(this).text());
+						$(".lawList").html("");
+					})
+				}
+
+			},
+			error:function(data) {
+				console.log(data.msg);
+			},
+		});
+		}
+
+	}
+</script>
+<div class="page-container">
+	<form class="form form-horizontal" autocomplete="off" id="form-industury-edit">
+	<input type="hidden" value="{{$vo.id}}" name="id"/>
+		<div id="tab-system" class="HuiTab">
+			<div class="tabCon">
+				<div class="row cl">
+					<label class="form-label col-xs-4 col-sm-2">
+						<span class="c-red">*</span>
+						名称：</label>
+					<div class="formControls col-xs-6 col-sm-7 lawBox">
+						<input type="text" id="website-company" placeholder="输入律师事务所名称" name="name" value="{{$vo.name}}" class="input-text" onkeyup="getLaw(this)" />
+						<ul class="lawList">
+							<!-- <li>律师事务所1</li>
+							<li>律师事务所2</li>
+							<li>律师事务所3</li>
+							<li>律师事务所4</li>
+							<li>律师事务所5</li> -->
+						</ul>
+					
+					</div>
+					<div class="formControls col-xs-2 col-sm-3 lawBox"><span class="c-red">* 输入关键字查询事务所</span></div>
+				</div>
+				<div class="row cl">
+					<label class="form-label col-xs-3 col-sm-2"><span class="c-red">*</span>地区选择：</label>
+					<div class="formControls col-xs-7 col-sm-9" >
+						<div id="distpicker3">
+						  <select name="province_cn" class="select-box" style="width: 100px;"></select>
+						  <select name="city_cn" class="select-box" style="width: 100px;"></select>
+						  <select name="area_cn" class="select-box" style="width: 100px;"></select>
+						</div>
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="form-label col-xs-4 col-sm-2">
+						<span class="c-red">*</span>
+						电话：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" id="website-description" placeholder="电话" value="{{$vo.tel}}" name="tel"  class="input-text">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="form-label col-xs-4 col-sm-2">
+						<span class="c-red">*</span>
+						邮箱：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" id="website-description" placeholder="邮箱" value="{{$vo.email}}" name="email"  class="input-text">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="form-label col-xs-4 col-sm-2">
+						<span class="c-red">*</span>
+						传真：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" id="website-description" placeholder="传真" value="{{$vo.fax}}" name="fax"  class="input-text" name="fax">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="form-label col-xs-4 col-sm-2">
+						<span class="c-red">*</span>
+						编号：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" id="website-description" placeholder="编号" value="{{$vo.number}}" name="number"  class="input-text">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="form-label col-xs-4 col-sm-2">
+						<span class="c-red">*</span>
+						负责人：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" id="website-description" placeholder="负责人" value="{{$vo.person}}" name="person"  class="input-text">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="form-label col-xs-4 col-sm-2">
+						<span class="c-red">*</span>
+						抽成率：</label>
+					<div class="formControls col-xs-1 col-sm-2">
+						<input type="text" id="website-description" placeholder="抽成率" value="{{$vo.extractrate}}" name="extractrate"  class="input-text">
+					</div>
+					<div class="formControls col-xs-7 col-sm-8">
+						<span>%</span>
+					</div>
+				</div>
+
+				
+				<div class="row cl">
+					<label class="form-label col-xs-4 col-sm-2">
+						<span class="c-red">*</span>
+						状态：</label>
+					<div class="formControls col-xs-2 col-sm-2">
+						
+							<select name="status" class="select-box">
+							<option value="1" <if condition="$vo['status'] eq 1">selected</if>>正常</option>
+							<option value="0" <if condition="$vo['status'] eq 0">selected</if>>禁用</option>
+						</select>
+						
+					</div>
+				</div>
+		<div class="row cl">
+			<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
+				<button id="save_submit" class="btn btn-primary radius" type="submit"><i class="Hui-iconfont">&#xe632;</i> 保存</button>
+				<button class="btn btn-default radius" type="button">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
+			</div>
+		</div>
+	</form>
+</div>
+<include file="public:footer-style" />
+
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="__PUBLICADMIN__lib/My97DatePicker/4.8/WdatePicker.js"></script>
+<script type="text/javascript" src="__PUBLICADMIN__lib/jquery.validation/1.14.0/jquery.validate.js"></script>
+<script type="text/javascript" src="__PUBLICADMIN__lib/jquery.validation/1.14.0/validate-methods.js"></script>
+<script type="text/javascript" src="__PUBLICADMIN__lib/jquery.validation/1.14.0/messages_zh.js"></script>
+<!--地区插件-->
+<script type="text/javascript" src="__PUBLICADMIN__lib/jQueryDistpicker20160621/js/distpicker.data.js"></script>
+<script type="text/javascript" src="__PUBLICADMIN__lib/jQueryDistpicker20160621/js/distpicker.js"></script>
+<script type="text/javascript" src="__PUBLICADMIN__lib/jQueryDistpicker20160621/js/main.js"></script>
+<script type="text/javascript">
+$("#distpicker3").distpicker({
+  province: "{{$vo.province_cn}}",
+  city: "{{$vo.city_cn}}",
+  district: "{{$vo.area_cn}}"
+});
+
+$(function(){
+	$('.skin-minimal input').iCheck({
+		checkboxClass: 'icheckbox-blue',
+		radioClass: 'iradio-blue',
+		increaseArea: '20%'
+	});
+	$("#tab-system").Huitab({
+		index:0
+	});
+
+	$("#form-industury-edit").validate({
+		rules:{
+			name:{
+				required:true,
+			},
+		},
+		onkeyup:false,
+		focusCleanup:true,
+		success:"valid",
+		submitHandler:function(form){
+			$(form).ajaxSubmit({
+				type: 'post',
+				url: "{{:url('updateByAjax')}}",
+				success: function(data){
+                    if (data.code == 10000) {
+                        layer.msg(data.msg,{icon:1,time:1000});
+                        setTimeout('parent.location.reload();',1500);
+                    }else{
+                        layer.msg(data.msg,{icon:5,time:1000});
+                     }
+                },
+                error: function(XmlHttpRequest, textStatus, errorThrown){
+                    layer.msg('修改失败!',{icon:5,time:1000});
+                },
+			});
+		}
+
+	});
+});
+
+</script>
+<!--/请在上方写此页面业务相关的脚本-->
+<include file="public:footer" />

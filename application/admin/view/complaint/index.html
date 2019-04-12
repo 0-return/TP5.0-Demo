@@ -1,0 +1,157 @@
+<include file="public:top" />
+<title>投诉管理</title>
+</head>
+<body>
+<include file="public:crumbs" />
+<div class="page-container">
+
+    <div class="cl pd-5 bg-1 bk-gray mt-20">
+        <span class="l"><a href="javascript:;" onclick="_del()" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a> </span> <span class="r">共有数据：<strong>{{$count}}</strong> 条</span>
+    </div>
+    <div class="mt-20">
+        <table class="table table-border table-bordered table-bg table-hover table-sort table-responsive">
+            <thead>
+                <tr class="text-c">
+                    <th width="15"><input type="checkbox" name="" value=""></th>
+                    <th width="20">用户</th>
+                    <th width="20">律师</th>
+                    <th width="50">投诉类型</th>
+                    <th width="50">反馈内容</th>
+                    <!-- <th width="50">图片</th> -->
+                    <th width="50">用户手机号</th>
+                    
+                    <th width="25">来源</th>
+                    <th width="55">反馈时间</th>
+                    <th width="15">状态</th>
+                    <th width="25">操作</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                <volist name="list" id="vo">
+                <tr class="text-c">
+                    <td><input type="checkbox" value="{{$vo.id}}" name="id"></td>
+                    <td title="用户">{{$vo.uname}}</td>
+                    <td title="律师">{{$vo.lname}}</td>
+                    <td title="投诉类型">
+                    <notempty name="vo['uname']">{{$vo.uname}}<notempty name="vo['lname']"> 投诉 {{$vo.lname}}<else/> 反馈 平台</notempty></notempty>
+                   
+                    </td>
+                    <td title="反馈建议内容">{{$vo.content}}</td>
+                    <td title="用户手机号">{{$vo.phone}}</td>
+
+                    <td class="来源">
+                        <if condition="$vo['tag'] == 'user'">
+                            <span >用户端</span>
+                        <else />
+                            <span >律师端</span>
+                        </if>
+                    </td>
+                    <td title="反馈建议时间">{{$vo.add_time|date="Y-m-d H:i:s",###}}</td>
+                    <td class="td-status">
+                        <if condition="$vo['status'] == 1">
+                            <span class="label label-success radius">已通过</span>
+                        <else />
+                            <span class="label label-defaunt radius">未通过</span>
+                        </if>
+                    </td>
+                    <td class="f-14 td-manage">
+                        
+                        <if condition="$vo['auth'] eq '0'">
+                            <if condition="$vo['mark'] eq 1">
+                                <a style="text-decoration:none" onClick="_show('投诉详情',"{{:url('showById')}}","{{$vo.id}}","1200","600')}}','{{$vo.id}}','{{$vo.uid}}','{{$vo.lid}}','1000','600')" href="javascript:;" title="投诉详情"><i class="Hui-iconfont">&#xe622;</i></a>
+                            </if>
+                            <else/>
+                                <a style="text-decoration:none" onClick="_show('投诉详情','{{:url('showById')}}','{{$vo.id}}','{{$vo.uid}}','{{$vo.lid}}','1000','600')" href="javascript:;" title="投诉详情"><i class="Hui-iconfont">&#xe622;</i>
+                            </a>
+                        </if>
+                    
+                    <if condition="$vo['status'] eq 1">
+                        <a style="text-decoration:none" onClick="_edit(this,{{$vo.id}},0)" href="javascript:;" title="停用"><i class="Hui-iconfont">&#xe631;</i></a>
+                    <else />
+                        <a style="text-decoration:none" onClick="_edit(this,{{$vo.id}},1)" href="javascript:;" title="启用"><i class="Hui-iconfont">&#xe6e1;</i></a>
+                    </if>
+                        <a style="text-decoration:none" class="ml-5" onClick="_del(this,{{$vo.id}})" href="javascript:;" title="删除"><i class="Hui-iconfont">&#xe6e2;</i></a></td>
+                </tr>
+                </volist>
+            </tbody>
+            <if condition="$count gt 10">
+                <tbody>
+                <tr class="text-c">
+                    <td colspan="100">{{$page}}</td>
+                </tr>
+                </tbody>
+            </if>
+        </table>
+    </div>
+</div>
+<!--_footer 作为公共模版分离出去-->
+<include file="public:footer-style" />
+<!--/_footer 作为公共模版分离出去-->
+<script type="text/javascript" src="__PUBLICADMIN__lib/My97DatePicker/4.8/WdatePicker.js"></script>
+<script type="text/javascript" src="__PUBLICADMIN__lib/laypage/1.2/laypage.js"></script>
+<script type="text/javascript">
+
+function _show(title,url,id,uid,lid,w,h)
+{
+    layer_show(title,url+"?id="+id+'&uid='+uid+'&lid='+lid,w,h);
+}
+function _edit(obj = '',id = '',status = '')
+{
+    $.ajax({
+        type: 'POST',
+        url: "{{:url('updateByajax')}}",
+        data:{
+            //商品ID
+            id: id,
+            status:status,
+        },
+        dataType: 'json',
+        success: function(data){
+            if(data.code == 10000){
+                layer.msg(data.msg,{icon: 6,time:1000});
+                setTimeout('location.reload();',1500);
+            }else{
+                layer.msg(data.msg,{icon: 6,time:1000});
+            }
+        },
+        error:function(data) {
+            console.log(data.msg);
+        },
+    });
+}
+/*评论-删除*/
+function _del(obj = '',id = ''){
+    if (!id) 
+    {
+        var id = new Array();
+        $("input[name='id']:checked").each(function(i){
+            id.push($(this).val());//向数组中添加元素
+            
+        });
+        if (id.length < 1) {layer.msg('删除错误：至少选择一项!',{icon:5,time:1500});}
+    }
+    layer.confirm('确认要删除吗？',function(index){
+        $.ajax({
+            type: 'POST',
+            url: "{{:url('deleteByajax')}}",
+            dataType: 'json',
+            data:{'id':id},
+            success: function(data){
+                $(obj).parents("tr").remove();
+                if(data.code == 10000){
+                    layer.msg(data.msg,{icon:1,time:1000});
+                }else{
+                    layer.msg(data.msg,{icon:1,time:1000});
+                }
+                setTimeout('location.reload();',1000);
+
+            },
+            error:function(data) {
+                console.log(data.msg);
+            },
+        });
+    });
+}
+</script>
+<include file="public:footer" />

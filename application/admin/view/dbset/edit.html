@@ -1,0 +1,107 @@
+<include file="public:top" />
+</head>
+
+<body>
+    <article class="page-container">
+        <form action="" method="post" class="form form-horizontal" id="form-edit-data">
+            <input type="hidden" name="id" value="{{$vo.id}}">
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-3">
+                    <span class="c-red">*</span>角色名称：
+                </label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <input type="text" class="input-text" placeholder="请输入角色名称" id="title" name="title" null="不能为空"
+                        value="{{$vo.title}}">
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-3">
+                    <span class="c-red">*</span>角色状态：
+                </label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <span class="select-box">
+
+                        <select class="select " id="status" name="status">
+                            <option value="1" <if condition="$vo.status eq 1">selected</if>>正常</option>
+                            <option value="0" <if condition="$vo.status eq 0">selected</if>>禁用</option>
+                            <option value="-1" <if condition="$vo.status eq -1">selected</if>>删除</option>
+                        </select>
+                    </span>
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-3">角色排序：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <input type="text" class="input-text" placeholder="请填写数字" id="sort" name="sort" value="{{$vo.sort}}">
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-3">备注：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <input type="text" class="input-text" placeholder="请填写备注" id="content" name="content" value="{{$vo.content}}">
+                </div>
+            </div>
+            <div class="row cl">
+                <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+                    <button class="btn btn-primary radius" id="sub" type="submit">&nbsp;&nbsp;提交&nbsp;&nbsp;</button>
+                    <button class="btn btn-default radius" type="button">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
+                </div>
+            </div>
+        </form>
+    </article>
+
+    <!--_footer 作为公共模版分离出去-->
+    <include file="public:footer-style" />
+    <!--/_footer 作为公共模版分离出去-->
+
+    <!--请在下方写此页面业务相关的脚本-->
+    <script type="text/javascript" src="__PUBLICADMIN__lib/jquery.validation/1.14.0/jquery.validate.js"></script>
+    <script type="text/javascript" src="__PUBLICADMIN__lib/jquery.validation/1.14.0/validate-methods.js"></script>
+    <script type="text/javascript" src="__PUBLICADMIN__lib/jquery.validation/1.14.0/messages_zh.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            $("#form-edit-data").validate({
+                rules: {
+                    name: {
+                        required: true,
+                    },
+                    status: {
+                        required: true,
+                    },
+                },
+                onkeyup: false,
+                focusCleanup: true,
+                success: "valid",
+                submitHandler: function (form) {
+                    $(form).ajaxSubmit({
+                        type: 'post',
+                        url: "{{:url('updateByAjax')}}",
+                        success: function (data) {
+                            if (data.code == 10000) {
+                                layer.msg(data.msg, {
+                                    icon: 1,
+                                    time: 500
+                                });
+                                setTimeout('parent.location.reload();', 500);
+                            } else {
+                                layer.msg(data.msg, {
+                                    icon: 2,
+                                    time: 500
+                                });
+                            }
+                        },
+                        error: function (XmlHttpRequest, textStatus, errorThrown) {
+                            layer.msg('未知错误!', {
+                                icon: 5,
+                                time: 1000
+                            });
+                        }
+                    });
+                    var index = parent.layer.getFrameIndex(window.name);
+                    //parent.layer.close(index);
+                }
+            });
+        });
+    </script>
+    <!--/请在上方写此页面业务相关的脚本-->
+    <include file="public:footer" />

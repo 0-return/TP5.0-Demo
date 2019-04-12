@@ -1,0 +1,234 @@
+﻿<include file="public:top" />
+</head>
+<body>
+<style type="text/css">
+
+    .lawBox{position: relative;}
+    .lawList{position: absolute;left: 15px;width: 90%;background: #fff;z-index: 999;background: #f1f1f1;}
+    .lawList li{padding: 2px 0;border-bottom: 1px solid #eaeaea; padding: 0 4px;}
+</style>
+<div class="page-container">
+    <div id="tab-system" class="HuiTab">
+        <div class="tabBar cl">
+            <span>群发</span>
+            <!-- <span>单发</span> -->
+            <span>自定义</span>
+        </div>
+        <div class="tabCon">
+        <!--群发-->
+        <form class="form form-horizontal" id="sms-add-s">
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2">
+                    <span class="c-red">*</span>接收端：
+                </label>
+                <div class="formControls col-xs-8 col-sm-9">
+
+                <span class="select-box">
+                    <select class="select" id="send_type" name="send_type">
+                        <option value="1" >用户端</option>
+                        <option value="2" >律师端</option> 
+                        <option value="3" >所有端</option> 
+                    </select>
+                    </span>
+                </div>
+            </div>
+            <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-2">
+                <span class="c-red">*</span>短信类型：
+            </label>
+            <div class="formControls col-xs-8 col-sm-9">
+            <span class="select-box">
+                <select class="select" id="code_type" name="code_type" >
+                    <volist name="list" id="vo">
+                        <option value="{{$vo.id}}">{{$vo.title}} &nbsp; --{{$vo.variable}} </option>
+                    </volist>
+                </select>
+                </span>
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-2">
+                <span class="c-red">*</span>模板描述：
+            </label>
+            <div class="formControls col-xs-8 col-sm-9">
+            <textarea id="describe" name="describe" cols="" rows="" class="textarea " readonly='readonly'></textarea>
+            </div>
+        </div>
+        
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-2">
+                <span class="c-red">*</span>变量描述：
+            </label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <input type="text" class="input-text" placeholder="按照短信模板变量顺序填写,多个请用  | 分隔连接......（无对应变量可不填！）" id="content" name="content"  value="">
+            </div>
+        </div>
+
+        <div class="row cl">
+            <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+                <button class="btn btn-primary radius" id="sub" type="submit">&nbsp;&nbsp;提交&发送&nbsp;&nbsp;</button>
+                <button onClick="layer_close();" class="btn btn-default radius" type="button">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
+            </div>
+        </div>
+    </form>
+    </div>
+
+
+    <!--自定义-->
+    <div class="tabCon">
+        <form class="form form-horizontal" id="sms-add-diy">
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2">
+                    <span class="c-red">*</span>接收端：
+                </label>
+                <div class="formControls col-xs-8 col-sm-9">
+
+                <span class="select-box">
+                    <select class="select" id="send_type" name="send_type">
+                        <option value="1" >用户端</option>
+                        <option value="2" >律师端</option> 
+                        <option value="3" >所有端</option> 
+                    </select>
+                    </span>
+                </div>
+            </div>
+            <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-2">
+                <span class="c-red">*</span>短信类型：
+            </label>
+            <div class="formControls col-xs-8 col-sm-9">
+            <span class="select-box">
+                <select class="select" id="code_type" name="code_type" >
+                    <volist name="list" id="vo">
+                        <option value="{{$vo.id}}">{{$vo.title}} &nbsp; --{{$vo.variable}} </option>
+                    </volist>
+                </select>
+                </span>
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-2">
+                <span class="c-red">*</span>模板描述：
+            </label>
+            <div class="formControls col-xs-8 col-sm-9">
+            <textarea id="describe" name="describe" cols="" rows="" class="textarea " readonly='readonly'></textarea>
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-2">
+                <span class="c-red">*</span>会员手机：
+            </label>
+            <div class="formControls col-xs-8 col-sm-9">
+            <textarea id="describe" name="target"  rows="6" placeholder="多个手机号，用英文（,）分隔" class="textarea "></textarea>
+            </div>
+        </div>
+        
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-2">
+                <span class="c-red">*</span>变量描述：
+            </label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <input type="text" class="input-text" placeholder="按照短信模板变量顺序填写,多个请用  | 分隔连接......（无对应变量可不填！）" id="content" name="content"  value="">
+            </div>
+        </div>
+
+
+
+        <div class="row cl">
+            <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+                <button class="btn btn-primary radius" id="sub" type="submit">&nbsp;&nbsp;提交&发送&nbsp;&nbsp;</button>
+                <button onClick="layer_close();" class="btn btn-default radius" type="button">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
+            </div>
+        </div>
+        </div>
+    </form>
+    </div>
+</div>
+
+<include file="public:footer-style" />
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="__PUBLICADMIN__lib/My97DatePicker/4.8/WdatePicker.js"></script>
+<script type="text/javascript" src="__PUBLICADMIN__lib/jquery.validation/1.14.0/jquery.validate.js"></script>
+<script type="text/javascript" src="__PUBLICADMIN__lib/jquery.validation/1.14.0/validate-methods.js"></script>
+<script type="text/javascript" src="__PUBLICADMIN__lib/jquery.validation/1.14.0/messages_zh.js"></script>
+
+<script type="text/javascript">
+$("#tab-system").Huitab({
+        index:0
+    });
+$(function(){
+  $("#sms-add-s").validate({
+
+    rules:{
+      code_type:{
+        required:true,
+      },
+    },
+      messages: {
+        code_type: {
+          required: "请选择短信模板",
+        },
+      },
+    onkeyup:false,
+    focusCleanup:true,
+    success:"valid",
+    submitHandler:function(form){
+            $(form).ajaxSubmit({
+                type: 'post',
+                url: "{{:url('Anything')}}",
+                dataType:'json',
+                success: function(data){
+                    if (data.code == 10000) {
+                        layer.msg(data.msg,{icon:1,time:2000});
+                        setTimeout('parent.location.reload();',2000);
+                    }else{
+                        layer.msg(data.msg,{icon:2,time:2000});
+                    }
+                },
+                error: function(XmlHttpRequest, textStatus, errorThrown){
+                    layer.msg('系统繁忙!',{icon:5,time:1000});
+                }
+            }); 
+        }
+    });
+  });
+$(function(){
+  $("#sms-add-diy").validate({
+
+    rules:{
+      code_type:{
+        required:true,
+      },
+    },
+      messages: {
+        code_type: {
+          required: "请选择短信模板",
+        },
+      },
+    onkeyup:false,
+    focusCleanup:true,
+    success:"valid",
+    submitHandler:function(form){
+            $(form).ajaxSubmit({
+                type: 'post',
+                url: "{{:url('Anything')}}",
+                dataType:'json',
+                success: function(data){
+                    if (data.code == 10000) {
+                        layer.msg(data.msg,{icon:1,time:1000});
+                        setTimeout('parent.location.reload();',1000);
+                    }else{
+                        layer.msg(data.msg,{icon:2,time:2000});
+                    }
+                },
+                error: function(XmlHttpRequest, textStatus, errorThrown){
+                    layer.msg('系统繁忙!',{icon:5,time:1000});
+                }
+            }); 
+        }
+    });
+  });
+</script>
+<!--/请在上方写此页面业务相关的脚本-->
+<include file="public:footer" />

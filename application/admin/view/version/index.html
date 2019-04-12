@@ -1,0 +1,116 @@
+<include file="public:top" />
+<title>APP管理</title>
+</head>
+
+<body>
+  <include file="public:crumbs" />
+  <div class="pd-20">
+    <form action="{{:url('index')}}" method="get">
+      <input type="hidden" name="sfields" title="要查询的字段" value="title,version,content">
+      <div class="text-c"> 日期范围：
+        <input type="text" autocomplete="off" name="begintime" onfocus="WdatePicker({maxDate:'#F{$dp.$D(\'datemax\')||\'%y-%M-%d\'}'})" id="datemin" class="input-text Wdate"
+          style="width:120px;">
+        -
+        <input type="text" autocomplete="off" name="endtime" onfocus="WdatePicker({minDate:'#F{$dp.$D(\'datemin\')}',maxDate:'%y-%M-%d'})" id="datemax"
+          class="input-text Wdate" style="width:120px;">
+        <input type="text" class="input-text" style="width:250px" placeholder="APP名称,版本号,备注" id="reunite" name="reunite"><button
+          type="submit" class="btn btn-success" id="" name=""><i class="icon-search"></i> 搜版本</button>
+
+      </div>
+    </form>
+    <div class="cl pd-5 bg-1 bk-gray mt-20">
+      <span class="l"><a href="javascript:;" onclick="datadel()" class="btn btn-danger radius"><i class="icon-trash"></i>
+          批量删除</a>
+        <a href="javascript:;" onclick="_add('添加app','__ADMIN__/version/addByAjax','1000','500')" class="btn btn-primary radius"><i
+            class="icon-plus"></i> 添加APP</a></span>
+      <span class="r">共有数据：<strong>{{$count}}</strong> 条</span>
+    </div>
+    <table class="table table-border table-bordered table-hover table-bg table-sort">
+      <thead>
+        <tr class="text-c">
+          <th width="25"><input type="checkbox" name="" value=""></th>
+          <th width="40">ID</th>
+          <th width="50">平台</th>
+          <th width="100">APP名称</th>
+          <th width="50">版本号</th>
+          <th width="50">强制安装</th>
+          <th width="">下载地址(点击复制)</th>
+          <th width="">备注</th>
+          <th width="40">状态</th>
+          <th width="100">操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        <volist name="list" id="vo" empty="暂时没有数据">
+          <tr class="text-c">
+            <td><input type="checkbox" value="1" name=""></td>
+            <td>{{$vo.id}}</td>
+            <td>{{$vo.system}}</td>
+            <td>{{$vo.title}}</td>
+            <td>{{$vo.version}}</td>
+            <td>{{$vo['update_install']?'<span class="label label-success radius">是</span>':'<span class="label label-danger radius">否</span>'}}</td>
+            <td><a href="javascript:;" onclick="copy('{{$vo.id}}');" class="copy_{{$vo.id}}">{{$vo.download}}</a></td>
+            <td>{{$vo.content}}</td>
+            <td>{{$vo['status']?'<span class="label label-success radius">正常</span>':'<span class="label label-danger radius">禁用</span>'}}</td>
+            <td class="f-14 user-manage"><a onClick="user_stop(this,'{{$vo.id}}')" href="javascript:;" title="停用"><i
+                  class="icon-hand-down"></i></a> <a title="编辑" href="javascript:;" onclick="_edit('编辑','__ADMIN__/version/showById','{{$vo.id}}','1000','500')"
+                class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a> <a title="删除" href="javascript:;"
+                onclick="_del(this,'{{$vo.id}}')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i></a></td>
+          </tr>
+        </volist>
+      </tbody>
+    </table>
+  </div>
+  <!--_footer 作为公共模版分离出去-->
+  <include file="public:footer-style" />
+  <!--/_footer 作为公共模版分离出去-->
+
+  <!--请在下方写此页面业务相关的脚本-->
+  <script type="text/javascript" src="__PUBLICADMIN__lib/My97DatePicker/4.8/WdatePicker.js"></script>
+  <script type="text/javascript" src="__PUBLICADMIN__lib/datatables/1.10.0/jquery.dataTables.min.js"></script>
+  <script type="text/javascript" src="__PUBLICADMIN__lib/laypage/1.2/laypage.js"></script>
+  <script type="text/javascript">
+    /*增加*/
+    function _add(title, url, w, h) {
+      layer_show(title, url, w, h);
+    }
+    /*单独删除*/
+    function _del(e, id) {
+      layer.confirm('确认要删除吗？', function (index) {
+        $.ajax({
+          type: 'POST',
+          url: "__ADMIN__/version/deleteByAjax",
+          data: {
+            id: id
+          },
+          dataType: 'json',
+          success: function (data) {
+            if (data.code == 10000) {
+              layer.msg(data.msg, {
+                icon: 6,
+                time: 1000
+              });
+            } else {
+              layer.msg(data.msg, {
+                icon: 6,
+                time: 1000
+              });
+            }
+            setTimeout(function () {
+              window.location.reload();
+            }, 1000);
+
+          },
+          error: function (data) {
+            alert("系统繁忙");
+            location.reload();
+          },
+        });
+      });
+    }
+    /*编辑*/
+    function _edit(title, url, id, w, h) {
+      layer_show(title, url + '?id=' + id, w, h);
+    }
+  </script>
+  <include file="public:footer" />

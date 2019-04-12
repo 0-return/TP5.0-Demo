@@ -1,0 +1,96 @@
+<include file="public:top" />
+<title>订单列表</title>
+</head>
+<body>
+ <include file="public:crumbs" />
+<div class="page-container">
+
+    <div class="text-c">
+        <form action="{{:url('memberHistoryOrder')}}" method="get" autocomplete="off">
+        <input type="hidden" name="sfields" title="要查询的字段" value="nickname,phone,order_no">
+        日期范围：
+        <input type="hidden" name="uid" value="{{$uid}}">
+        <input type="text" onfocus="WdatePicker({ maxDate:'#F{$dp.$D(\'datemax\')||\'%y-%M-%d\'}' })" id="datemin" class="input-text Wdate" style="width:120px;" name="begintime">
+        -
+        <input type="text" onfocus="WdatePicker({ minDate:'#F{$dp.$D(\'datemin\')}',maxDate:'%y-%M-%d' })" id="datemax" class="input-text Wdate" style="width:120px;" name="endtime">
+        <input type="text" class="input-text" style="width:250px" placeholder="输入会员昵称、电话" id="reunite" name="reunite">
+        <button type="submit" class="btn btn-success radius" id="" name=""><i class="Hui-iconfont">&#xe665;</i> 搜用户</button>
+
+        </form>
+    </div>
+    <div class="cl pd-5 bg-1 bk-gray mt-20">
+        <span class="dropDown l" style="margin-left: 4px;">
+            <a class=" btn btn-danger radius" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"> 导出EXCEL</a>
+            <ul class="dropDown-menu menu radius box-shadow">
+                <li><a onClick="exportData('数据导出','{{$uid}}')" >导出当前</a></li>
+            </ul>
+        </span>
+        <span class="r">共有数据：<strong>{{$count}}</strong> 条</span>
+    </div>
+    <div class="mt-20">
+    <table class="table table-border table-bordered table-hover table-bg table-sort">
+        <thead>
+            <tr class="text-c">
+                <th width="50">名称</th>
+                <th width="50">执行律师</th>
+                <th width="50">预留电话</th>
+                <th width="50">订单编号</th>
+                <th width="50">订单标题</th>
+                <th width="50">金额/加急费</th>
+                <th width="50">支付方式</th>
+                <th width="50">订单状态</th>
+                <th width="50">下单时间</th>
+            </tr>
+        </thead>
+        <tbody>
+            <volist name="list" id="vo">
+                <tr class="text-c">
+                    <td>{{$vo.nickname}}</td>
+                    <td>{{$vo.lawyer}}</td>
+                    <td>{{$vo.phone}}</td>
+                    <td>{{$vo.order_no}}</td>
+                    <td>{{$vo.title}}</td>
+                    <td>￥{{$vo.total}} <if condition="$vo['urgent'] == '1'">/￥{{$vo.urgenttotal}}</if></td>
+                    <td>{{$vo.payway_cn}}</td>
+                    <td>{{$vo.status_cn}}</td>
+                    <td>{{$vo.add_time|date="Y-m-d H:i:s",###}}</td>
+                </tr>
+            </volist>
+        </tbody>
+        <if condition="$count gt 30">
+        <tbody>
+            <tr class="text-c">
+                <td colspan="16">{{$showpage}}</td>
+            </tr>
+        </tbody>
+        </if>
+    </table>
+    </div>
+</div>
+<include file="public:footer-style" />
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="__PUBLICADMIN__lib/My97DatePicker/4.8/WdatePicker.js"></script>
+
+<script type="text/javascript">
+
+/*用户-查看*/
+function order_show(title,url,w,h){
+    layer_show(title,url,w,h);
+}
+function exportData(title,uid){
+
+$.ajax({
+    type:"get",
+    url:"{{:url('memberHistoryOrder')}}",
+    data:{'uid':uid,'do':'export'},
+    success:function(data){
+        document.location.href = data.url;
+    },
+    error:function(){
+        layer.msg('导出失败!',{icon:2,time:2000});
+    }
+    });
+}
+</script>
+<include file="public:footer" />

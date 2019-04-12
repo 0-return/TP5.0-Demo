@@ -1,0 +1,170 @@
+﻿<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+<title>管理平台</title>
+<script type="text/javascript" src="__PUBLICADMIN__lib/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript" src="__PUBLICADMIN__lib/bootstrap-3.3.7/dist/js/bootstrap.min.js"></script>
+<link href="__PUBLICADMIN__lib/bootstrap-3.3.7/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+<script language="JavaScript">
+    if (window != top)
+    top.location.href = location.href;
+</script>
+
+<script>
+/**
+* note:背景
+* auth:YW
+* date:2018/08/20
+*/
+var URL = '{{:url('\Verfiy')}}?rnd='+Math.random();
+  bg = new Array(2); //设定图片数量，如果图片数为3，这个参数就设为2，依次类推
+  bg[0] = '#00a0e9'; //显示的图片路径，可用http://
+  bg[1] = '#0075a9';
+  bg[2] = '#6d58d4';
+  bg[3] = '#2e8f5b';
+  index = Math.floor(Math.random() * bg.length);
+  document.write("<body style='background:"+bg[index]+"'>");
+/**
+* note:返回顶部窗口
+* auth:YW
+* date:2018/08/20
+*/
+$(function () { $("[data-toggle='tooltip']").tooltip();});
+  function change_code(obj){
+  $("#code").attr("src",URL+Math.random());
+  return false;
+}
+/**
+* note:重置窗口
+* auth:YW
+* date:2018/08/20
+*/
+function resize_window(){
+  $("#left").height($(window).height()-50);
+  $("#right").height($(window).height()-50).width($(window).width()-181);
+}
+$(function(){
+  resize_window();
+  $(window).resize(function(){
+    resize_window();
+  })
+
+  $('dd > a').click(function(){
+    $('dd > a').removeClass('cur');
+    $(this).addClass('cur');
+  })
+})
+/**
+* note:验证
+* auth:YW
+* date:2018/08/20
+*/
+$(function(){
+  $("#login").submit(function(){
+    //鐢ㄦ埛鍚嶉獙璇�
+    if ($("input[name='username']").val().trim()=='') {
+      alert('请输入用户名');
+      $("input[name='username']").focus();
+      return false;
+    }
+
+    //瀵嗙爜楠岃瘉
+    if ($("input[name='password']").val().trim()=='') {
+      alert('请输入密码');
+      $("input[name='password']").focus();
+      return false;
+    }
+
+    //楠岃瘉鐮侀獙璇�
+    if ($("input[name='code']").val().trim()=='') {
+      alert('请输入验证码');
+      $("input[name='code']").focus();
+      return false;
+    }
+
+    return true;
+  })
+})
+</script>
+
+<title>后台登录 - 管理系统</title>
+</head>
+<style type="text/css">
+
+  body{font-family: Microsoft YaHei;float: left;width: 100%;height: 100%;}
+  table,th,td{border:solid 0px #dcdcdc;background: none;padding:10px 6px;color: #fff;}
+  table a{color: #333;}
+  .input{line-height: 34px;border: 1px solid #eee;text-indent: 10px;color: #888;float: left;}
+  .file{float: left;margin: 8px 0 0 0;height: auto;}
+  .radio{margin: 3px;float: left;}
+  .checkbox{float: left;}
+  input{height: 34px;}
+  input[type="radio"]{margin-top: 9px;height: auto;}
+  input[type="checkbox"]{margin-top: 0px;}
+  label{margin-bottom: 0;font-weight: normal;color: #888;}
+  img{border:none; vertical-align: middle;}
+  .len100{width:100px;}
+  .len150{width:159px;}
+  .len200{width:200px;}
+  .len250{width:250px;}
+  .len300{width:300px;}
+  .len350{width:350px;}
+  .len400{width:400px;}
+  .len500{width:500px;}
+  th{width:80px; font-size: 14px;}
+  #top{background:url("/Public/Common/Images/logo-w.png") no-repeat center top;height:60px;margin-top: 150px;}
+  div.login{background: rgba(255,255,255,0.5);width:600px;padding:50px 80px 30px;margin:0px auto;margin-top:30px;}
+  .title{font-size:16px;height: 35px;}
+  .left{width:280px;}
+  #code{float: left;height: 34px;margin-left: 5px;border: 1px solid #fff;}
+  .input {line-height：34px; border：1px solid #eee; text-indent：10px; color：＃888; float：left;}
+</style>
+<body>
+
+<a href="javascript:;" >
+  <div id="top"><p></p></div>
+</a>
+<div class="login">
+<form action="{{:url('\login')}}" method="post" id="login">
+  <table border="1" width="100%">
+    <tr>
+    <th style="text-align:right;">用户帐号:</th>
+      <td><input type="username" name="username" class="input len300" value="{{:cookie('data')['username']}}"></td>
+    </tr><tr><th style="text-align:right;">管理密码:</th>
+      <td><input type="password" class="input len300" name="password" value="{{:cookie('data')['password']}}"></td></tr>
+    <tr><th style="text-align:right;">填写验证:</th>
+    <td>
+    <input type="code" class="input len150 fl" name="code" value=""/><img src="{{:url('\Verfiy')}}" onclick="this.src='{{:url('\Verfiy')}}?rnd='+Math.random();" id="code" kasperskylab_antibanner="on" style="width: 135px; ">
+    </td>
+    </tr>
+    <tr>
+      <th style="text-align:right;">记住密码:</th>
+      <td colspan="2">
+        <div class="check-box">
+          <input type="checkbox" id="checkbox-1" name="check" checked="true" value="true">
+        </div>
+    </td>
+    </tr>
+    <tr>
+      <th>&nbsp;</th>
+      <td colspan="2">
+      <input type="submit" class="btn btn-danger" value="登录" style="width:120px;"/>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2" style="padding-left:104px;color:#333;font-size:13px;line-height:24px;"></td>
+    </tr>
+  </table>
+</form>
+</div>
+<script type="text/javascript" src="__PUBLICADMIN__lib/jquery.validation/1.14.0/jquery.validate.js"></script>
+<script type="text/javascript" src="__PUBLICADMIN__lib/jquery.validation/1.14.0/validate-methods.js"></script>
+<script type="text/javascript" src="__PUBLICADMIN__lib/jquery.validation/1.14.0/messages_zh.js"></script>
+<script type="text/javascript">
+
+</script>
+</body>
+</html>

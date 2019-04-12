@@ -1,0 +1,17 @@
+<include file="public:top" />
+<title>公告列表</title>
+</head>
+<body>
+<article class="page-container">
+    <div>
+		<div>{{$vo.content}}</div>
+	</div>
+</article>
+<!--_footer 作为公共模版分离出去-->
+<include file="public:footer-style" /><!--/_footer 作为公共模版分离出去-->
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="__PUBLICADMIN__lib/My97DatePicker/4.8/WdatePicker.js"></script>
+<!--<script type="text/javascript" src="__PUBLICADMIN__lib/datatables/1.10.0/jquery.dataTables.min.js"></script>-->
+<script type="text/javascript" src="__PUBLICADMIN__lib/laypage/1.2/laypage.js"></script>
+
+<include file="public:footer" />

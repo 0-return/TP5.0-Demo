@@ -1,0 +1,185 @@
+﻿<include file="public:top" />
+
+<title>基本设置</title>
+</head>
+
+<body>
+	<include file="public:crumbs" />
+	<div class="page-container">
+
+		<div id="tab-system" class="HuiTab">
+			<div class="tabBar cl">
+				<span>基本设置</span>
+			</div>
+			<div class="tabCon">
+				<form class="form form-horizontal" id="form-add-data">
+					<input type="hidden" class="hidden-id" name="id" value="{{$vo.id}}">
+					<div class="row cl">
+						<label class="form-label col-xs-4 col-sm-2">
+							<span class="c-red">*</span>
+							网站域名：</label>
+						<div class="formControls col-xs-8 col-sm-9">
+							<input type="text" id="weburl" name="weburl" placeholder="控制在25个字、50个字节以内" value="{{$vo.weburl}}" class="input-text">
+						</div>
+					</div>
+					<div class="row cl">
+						<label class="form-label col-xs-4 col-sm-2">
+							<span class="c-red">*</span>
+							网站名称：</label>
+						<div class="formControls col-xs-8 col-sm-9">
+							<input type="text" id="web_name" name="web_name" placeholder="控制在25个字、50个字节以内" value="{{$vo.web_name}}" class="input-text">
+						</div>
+					</div>
+					<div class="row cl">
+						<label class="form-label col-xs-4 col-sm-2">
+							<span class="c-red">*</span>
+							系统超时：</label>
+						<div class="formControls col-xs-8 col-sm-9">
+							<input type="text" id="timeout" name="timeout" placeholder="控制在25个字、50个字节以内" value="{{$vo.timeout}}" class="input-text">
+						</div>
+					</div>
+					<div class="row cl">
+						<label class="form-label col-xs-4 col-sm-2">
+							<span class="c-red">*</span>
+							关键词：</label>
+						<div class="formControls col-xs-8 col-sm-9">
+							<input type="text" id="keywords" name="keywords" placeholder="5个左右,8汉字以内,用英文,隔开" value="{{$vo.keywords}}" class="input-text">
+						</div>
+					</div>
+					<div class="row cl">
+						<label class="form-label col-xs-4 col-sm-2">
+							<span class="c-red">*</span>
+							描述：</label>
+						<div class="formControls col-xs-8 col-sm-9">
+							<input type="text" id="describe" name="describe" placeholder="空制在80个汉字，160个字符以内" value="{{$vo.describe}}" class="input-text">
+						</div>
+					</div>
+					<!-- <div class="row cl">
+					<label class="form-label col-xs-4 col-sm-2">
+						<span class="c-red">*</span>
+						css、js、images路径配置：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" id="website-static" placeholder="默认为空，为相对路径" value="" class="input-text">
+					</div>
+				</div> -->
+					<div class="row cl">
+						<label class="form-label col-xs-4 col-sm-2">
+							<span class="c-red">*</span>
+							上传目录配置：</label>
+						<div class="formControls col-xs-8 col-sm-9">
+							<input type="text" id="upload" name="upload" placeholder="默认为Upload" value="{{$vo.upload}}" class="input-text">
+						</div>
+					</div>
+					<div class="row cl">
+						<label class="form-label col-xs-4 col-sm-2">
+							<span class="c-red">*</span>
+							底部版权信息：</label>
+						<div class="formControls col-xs-8 col-sm-9">
+							<input type="text" id="copyright" name="copyright" placeholder="&copy; 2016 H-ui.net" value="{{$vo.copyright}}"
+							 class="input-text">
+						</div>
+					</div>
+					<div class="row cl">
+						<label class="form-label col-xs-4 col-sm-2">备案号：</label>
+						<div class="formControls col-xs-8 col-sm-9">
+							<input type="text" id="code" name="code" placeholder="京ICP备00000000号" value="{{$vo.code}}" class="input-text">
+						</div>
+					</div>
+					<div class="row cl">
+						<label class="form-label col-xs-4 col-sm-2">电话：</label>
+						<div class="formControls col-xs-8 col-sm-9">
+							<input type="text" id="tel" name="tel" placeholder="028-8888888" value="{{$vo.tel}}" class="input-text">
+						</div>
+					</div>
+					<div class="row cl">
+						<label class="form-label col-xs-4 col-sm-2">QQ：</label>
+						<div class="formControls col-xs-8 col-sm-9">
+							<input type="text" id="qq" name="qq" placeholder="123456" value="{{$vo.qq}}" class="input-text">
+						</div>
+					</div>
+					<div class="row cl">
+						<label class="form-label col-xs-4 col-sm-2">邮箱：</label>
+						<div class="formControls col-xs-8 col-sm-9">
+							<input type="text" id="mail" name="mail" placeholder="Y644503680@163.com" value="{{$vo.mail}}" class="input-text">
+						</div>
+					</div>
+					<div class="row cl">
+						<label class="form-label col-xs-4 col-sm-2">统计代码：</label>
+						<div class="formControls col-xs-8 col-sm-9">
+							<textarea class="textarea"></textarea>
+						</div>
+					</div>
+					<div class="row cl">
+						<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
+							<button class="btn btn-primary radius" type="submit"><i class="Hui-iconfont">&#xe632;</i> 保存</button>
+							<button onClick="layer_close();" class="btn btn-default radius" type="button">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
+						</div>
+					</div>
+				</form>
+			</div>
+
+		</div>
+	</div>
+
+	<!--_footer 作为公共模版分离出去-->
+	<include file="public:footer-style" />
+	<!--/_footer 作为公共模版分离出去-->
+
+	<!--请在下方写此页面业务相关的脚本-->
+	<script type="text/javascript" src="__PUBLICADMIN__lib/My97DatePicker/4.8/WdatePicker.js"></script>
+	<script type="text/javascript" src="__PUBLICADMIN__lib/jquery.validation/1.14.0/jquery.validate.js"></script>
+	<script type="text/javascript" src="__PUBLICADMIN__lib/jquery.validation/1.14.0/validate-methods.js"></script>
+	<script type="text/javascript" src="__PUBLICADMIN__lib/jquery.validation/1.14.0/messages_zh.js"></script>
+	<script type="text/javascript">
+		$(function () {
+			$('.skin-minimal input').iCheck({
+				checkboxClass: 'icheckbox-blue',
+				radioClass: 'iradio-blue',
+				increaseArea: '20%'
+			});
+			$("#tab-system").Huitab({
+				index: 0
+			});
+		});
+		$(function () {
+
+			$("#form-add-data").validate({
+				onkeyup: false,
+				focusCleanup: true,
+				success: "valid",
+				submitHandler: function (form) {
+					id = $('.hidden-id').val();
+					active = id ? 'updateByAjax' : 'addByajax';
+					$(form).ajaxSubmit({
+						type: 'post',
+						url: "__ADMIN__/website/" + active,
+						dataType: 'json',
+						success: function (data) {
+							if (data.code == 10000) {
+								layer.msg(data.msg, {
+									icon: 1,
+									time: 1000
+								});
+							} else {
+								layer.msg(data.msg, {
+									icon: 2,
+									time: 2000
+								});
+							}
+						},
+						error: function (XmlHttpRequest, textStatus, errorThrown) {
+							layer.msg('系统繁忙!', {
+								icon: 5,
+								time: 1000
+							});
+						}
+					});
+					var index = parent.layer.getFrameIndex(window.name);
+				}
+			});
+		});
+	</script>
+	<!--/请在上方写此页面业务相关的脚本-->
+</body>
+
+</html>

@@ -1,0 +1,121 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+<include file="Public:top_style" />
+<title>律师管理</title>
+</head>
+<body>
+<div class="page-container">
+	<form class="form form-horizontal" id="form-industury-edit">
+	<input type="hidden" value="{{$vo.id}}" name="id"/>
+	
+		<div id="tab-system" class="HuiTab">
+			<div class="tabCon">
+				<div class="row cl">
+					<label class="form-label col-xs-3 col-sm-2">
+						<span class="c-red">*</span>
+						退款额度：</label>
+					<div class="formControls col-xs-9 col-sm-9">
+						<if condition = "$vo['payway'] eq coin">
+							法币
+						<else/>
+							余额
+						</if>
+						<span class="c-red">[ {{$vo.total}} ]</span> 注意退款方式，按照退款方式填写退款数额！</span>
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="form-label col-xs-3 col-sm-2">
+						<span class="c-red">*</span>
+						订单编号：</label>
+					<div class="formControls col-xs-9 col-sm-9">
+						<input type="text" id="website-title" placeholder="订单编号" value="{{$vo.order_no}}" name='order_no' class="input-text">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="form-label col-xs-3 col-sm-2">
+						<span class="c-red">*</span>
+						退款方式：</label>
+					
+						<div class="formControls col-xs-9 col-sm-9">
+						<span class="select-box">
+							<select class="select " name="refund_type">
+								<option value = "coin">退款到法币</option>
+								<option value = "wallet">退款到余额</option>
+							</select>
+						</span>
+					</div>
+					
+				</div>
+				<div class="row cl">
+					<label class="form-label col-xs-3 col-sm-2">
+						<span class="c-red">*</span>
+						退款金额：</label>
+						<div class="formControls col-xs-9 col-sm-9">
+							<input type="text" id="website-title" placeholder="退款到余额最大值￥{{$vo.total_to_meony}} 或者 退款到法币最大值{{$vo.total}}" value="" name='refund_total' class="input-text">
+						</div>
+
+				</div>
+
+			</div>
+		</div>
+		<div class="row cl">
+			<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
+				<button id="save_submit" class="btn btn-primary radius" type="submit"><i class="Hui-iconfont">&#xe632;</i> 确认</button>
+				<button onClick="layer_close();" class="btn btn-default radius" type="button">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
+			</div>
+		</div>
+	</form>
+</div>
+<include file="Public:footer_style" />
+
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="{{$Think.const.ADMIN}}lib/My97DatePicker/4.8/WdatePicker.js"></script>
+<script type="text/javascript" src="{{$Think.const.ADMIN}}lib/jquery.validation/1.14.0/jquery.validate.js"></script>
+<script type="text/javascript" src="{{$Think.const.ADMIN}}lib/jquery.validation/1.14.0/validate-methods.js"></script>
+<script type="text/javascript" src="{{$Think.const.ADMIN}}lib/jquery.validation/1.14.0/messages_zh.js"></script>
+<script type="text/javascript">
+$(function(){
+	$('.skin-minimal input').iCheck({
+		checkboxClass: 'icheckbox-blue',
+		radioClass: 'iradio-blue',
+		increaseArea: '20%'
+	});
+	$("#tab-system").Huitab({
+		index:0
+	});
+
+	$("#form-industury-edit").validate({
+		rules:{
+			refund_total:{
+				required:true,
+			},
+		},
+		onkeyup:false,
+		focusCleanup:true,
+		success:"valid",
+		submitHandler:function(form){
+			$(form).ajaxSubmit({
+				type: 'post',
+				url: "__MODULE__/Payback/back",
+				success: function(data){
+					// alert(data);
+                    if (data.code == 10000) {
+                        layer.msg(data.msg,{icon:1,time:1000});
+                        setTimeout('parent.location.reload();',1500);
+                    }else{
+                        layer.msg(data.msg,{icon:5,time:2000});
+                     }
+                },
+                error: function(XmlHttpRequest, textStatus, errorThrown){
+                    layer.msg('修改失败!',{icon:5,time:1000});
+                },
+			});
+		}
+
+	});
+});
+</script>
+<!--/请在上方写此页面业务相关的脚本-->
+<include file="Public:footer" />

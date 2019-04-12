@@ -1,0 +1,137 @@
+﻿<include file="public:top" />
+<title>订单管理</title>
+</head>
+<body>
+<div class="page-container">
+	<form class="form form-horizontal" id="form-order-edit">
+	<input type="hidden" value="{{$vo.id}}" name="id"/>
+		<div id="tab-system" class="HuiTab">
+
+			<div class="row cl">
+
+					<label class="form-label col-xs-4 col-sm-2">
+						<span class="c-red">*</span>
+						提示：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+
+						<p>订单状态请根据情况进行处理，涉及到用户金额，用户购买商品，以免导致严重的后果。</p>
+
+					</div>
+				</div>
+				<div class="row cl">
+
+					<label class="form-label col-xs-4 col-sm-2">
+						<span class="c-red">*</span>
+						订单编号：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+
+						<input type="text" readonly="true" id="website-title" placeholder="订单编号" value="{{$vo.order_no}}" name='order_no' class="input-text" readonly="readonly">
+
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="form-label col-xs-4 col-sm-2">
+						<span class="c-red">*</span>
+						订单备注：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" id="" placeholder="订单备注" value="{{$vo.content}}" name='content' class="input-text">
+					</div>
+				</div>
+		</div>
+		<div class="row cl">
+			<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
+				<button id="save_submit" class="btn btn-primary radius" type="submit"><i class="Hui-iconfont">&#xe632;</i> 保存</button>
+				<button onClick="layer_close();" class="btn btn-default radius" type="button">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
+			</div>
+		</div>
+	</form>
+</div>
+<include file="public:footer-style" />
+
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="__PUBLICADMIN__lib/My97DatePicker/4.8/WdatePicker.js"></script>
+<script type="text/javascript" src="__PUBLICADMIN__lib/jquery.validation/1.14.0/jquery.validate.js"></script>
+<script type="text/javascript" src="__PUBLICADMIN__lib/jquery.validation/1.14.0/validate-methods.js"></script>
+<script type="text/javascript" src="__PUBLICADMIN__lib/jquery.validation/1.14.0/messages_zh.js"></script>
+<script type="text/javascript" src="__PUBLICADMIN__lib/ueditor/1.4.3/ueditor.config.js"></script>
+<script type="text/javascript" src="__PUBLICADMIN__lib/ueditor/1.4.3/ueditor.all.js"> </script>
+<script type="text/javascript" src="__PUBLICADMIN__lib/ueditor/1.4.3/lang/zh-cn/zh-cn.js"></script>
+<script type="text/javascript">
+$(function(){
+	$('.skin-minimal input').iCheck({
+		checkboxClass: 'icheckbox-blue',
+		radioClass: 'iradio-blue',
+		increaseArea: '20%'
+	});
+	$("#tab-system").Huitab({
+		index:0
+	});
+
+	$("#form-order-edit").validate({
+
+		onkeyup:false,
+		focusCleanup:true,
+		success:"valid",
+		submitHandler:function(form){
+			$(form).ajaxSubmit({
+                type: 'post',
+                url: "{{:url('updateByAjax')}}",
+                success: function(data){
+                    if (data.code == 10000) {
+                        layer.msg(data.msg,{icon:1,time:1000});
+                        setTimeout('parent.location.reload();',1500);
+                    }else{
+                        layer.msg(data.msg,{icon:5,time:1000});
+                     }
+                },
+                error: function(XmlHttpRequest, textStatus, errorThrown){
+                    layer.msg('系统繁忙!',{icon:5,time:1000});
+                },
+            });
+		}
+
+	});
+
+	$('#status').change(function(){
+		status = $(this).val();
+		switch(status){
+		case '0'://未付款
+			$("#ustatus").empty().append("<option value='0'>未接单</option>");
+			break;
+		case '1'://已付款
+			$("#ustatus").empty().append("<option value='0'>未接单</option>");
+			$("#ustatus").append("<option value='1'>接单中</option>");
+			break;
+		case '2'://待发货
+			$("#ustatus").empty().append("<option value='1'>接单中</option>");
+			break;
+		case '3'://已发货，待评价
+			$("#ustatus").empty().append("<option value='2'>已完成</option>");
+			break;
+		case '4'://已完结，已评价
+			$("#ustatus").empty().append("<option value='2'>已完成</option>");
+			break;
+		case '5'://取消订单
+			$("#ustatus").empty().append("<option value='0'>未接单</option>");
+			break;
+		case '-3'://退款完成
+			$("#ustatus").empty().append("<option value='2'>已完成</option>");
+			break;
+		case '-2'://申请退款
+			$("#ustatus").empty().append("<option value='2'>已完成</option>");
+			break;
+		case '-1'://逻辑删除
+			$("#ustatus").empty().append("<option value='0'>未接单</option>");
+			$("#ustatus").append("<option value='2'>已完成</option>");
+			break;
+		default:
+			break;
+	}
+	})
+
+});
+
+</script>
+<!--/请在上方写此页面业务相关的脚本-->
+<include file="public:footer" />

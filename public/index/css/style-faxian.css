@@ -1,0 +1,353 @@
+/*
+<!--
+
+* 17素材vip建站专区模块代码
+* 详尽信息请看官网：http://www.17sucai.com/pins/vip
+*
+* Copyright , 温州易站网络科技有限公司版权所有
+*
+* 请尊重原创，未经允许请勿转载。
+* 在保留版权的前提下可应用于个人或商业用途
+
+-->
+*/
+html,body {
+    color: #333;
+    margin: 0;
+    height: 100%;
+    font-family: "Myriad Set Pro","Helvetica Neue",Helvetica,Arial,Verdana,sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-weight: normal;
+}
+
+* {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+a {
+    text-decoration: none;
+    color: #000;
+}
+
+a, label, button, input, select {
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+img {
+    border: 0;
+}
+
+body {
+    background: #fff;
+    color: #666;
+}
+
+html, body, div, dl, dt, dd, ol, ul, li, h1, h2, h3, h4, h5, h6, p, blockquote, pre, button, fieldset, form, input, legend, textarea, th, td {
+    margin: 0;
+    padding: 0;
+}
+
+a {
+    text-decoration: none;
+    color: #08acee;
+}
+
+button {
+    outline: 0;
+}
+
+img {
+    border: 0;
+}
+
+button,input,optgroup,select,textarea {
+    margin: 0;
+    font: inherit;
+    color: inherit;
+    outline: none;
+}
+
+li {
+    list-style: none;
+}
+
+a {
+    color: #666;
+}
+
+.clearfix::after {
+    clear: both;
+    content: ".";
+    display: block;
+    height: 0;
+    visibility: hidden;
+}
+
+.clearfix {
+}
+
+/* 必要布局样式css */
+.aui-flexView {
+    width: 100%;
+    height: 100%;
+    margin: 0 auto;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
+    -ms-flex-direction: column;
+    flex-direction: column;
+}
+
+.aui-scrollView {
+    width: 100%;
+    height: 100%;
+    -webkit-box-flex: 1;
+    -webkit-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    position: relative;
+    margin-top: 0;
+}
+
+.aui-navBar {
+    height: 44px;
+    position: relative;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    z-index: 1002;
+    background: #3888ff;
+}
+
+.aui-navBar:after {
+    content: '';
+    position: absolute;
+    z-index: 2;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    border-bottom: 1px solid #3888fe;
+    -webkit-transform: scaleY(0.5);
+    transform: scaleY(0.5);
+    -webkit-transform-origin: 0 100%;
+    transform-origin: 0 100%;
+}
+
+.aui-navBar-item {
+    height: 44px;
+    min-width: 25%;
+    -webkit-box-flex: 0;
+    -webkit-flex: 0 0 25%;
+    -ms-flex: 0 0 25%;
+    flex: 0 0 25%;
+    padding: 0 0.9rem;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
+    font-size: 0.7rem;
+    white-space: nowrap;
+    overflow: hidden;
+    color: #a0a0a0;
+    position: relative;
+}
+
+.aui-navBar-item:first-child {
+    -webkit-box-ordinal-group: 2;
+    -webkit-order: 1;
+    -ms-flex-order: 1;
+    order: 1;
+    margin-right: -25%;
+    font-size: 0.9rem;
+    font-weight: bold;
+}
+
+.aui-navBar-item:last-child {
+    -webkit-box-ordinal-group: 4;
+    -webkit-order: 3;
+    -ms-flex-order: 3;
+    order: 3;
+    -webkit-box-pack: end;
+    -webkit-justify-content: flex-end;
+    -ms-flex-pack: end;
+    justify-content: flex-end;
+}
+
+.aui-center {
+    -webkit-box-ordinal-group: 3;
+    -webkit-order: 2;
+    -ms-flex-order: 2;
+    order: 2;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: center;
+    -webkit-justify-content: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
+    height: 44px;
+    width: 50%;
+    margin-left: 25%;
+}
+
+.aui-center-title {
+    text-align: center;
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    display: block;
+    text-overflow: ellipsis;
+    font-size: 0.95rem;
+    color: #fff;
+}
+
+.icon {
+    width: 20px;
+    height: 20px;
+    display: block;
+    border: none;
+    float: left;
+    background-size: 20px;
+    background-repeat: no-repeat;
+}
+
+.icon-return {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAYAAAA6/NlyAAAEVklEQVRoQ+XaW8hmUxzH8e8vkkKIJMo5uVPjlFMOjWIoE2a4mHKlZnIjKeQ0Q44prpzdTriRGcOo0aAccr5ziAskknI+hf761Xpr97b249lrH9931vXez16fZ+3Db/3XErtY01LyRsR+kn5s0+clATYUeA04HPgTeFbS+hL45MERscJA4LAK8FfgLEnvN0VPGhwRJwMvAAdkYA9IunbZgCPiTOAp4JAM6gdg5bIZ4Yi4BtgI7JvBfgNslnRd09H18ZO7pSPieuAmYJ8M6FvgDkkPlWAnB46IR4B1wF4Z0NfA7ZIeK8VOChwRLwLnAntkQJ8AV0t6uQ12MuCIeB44H9gtA/oKuFjSB22xo4NToNgJHJ95nwTwObBG0oddYEcFJ6whTk+L27/A62lkW0XJxT88yls6Io4EtgPHZrB/AX5mnaQ6xY4ywhFxIuAX1IEZ7C8pM6/rAzs4OCJOBbbUYH8CnpN0ZVfPa+53BrulI8KQ+4CDMh35ziMraU2f2MFGOCIcA28D9q4JFA9LurNv7CDgiLgZcFzMYZ2LN0l6dAhs7+CI2JbS054Z0GfAPZKeHArbKzgidvjTAuyeAX0KXNFVemryh3X+0kqB4mngvJrZ2BfA6i7T02jghHXZxcFicXNUfDNNAjqLik2wnd7SEbE/8C5wVKYT/6T0dEZfgWJeeCe3dESc4NAAHJq58B+An9mzx8Z2MsIRcUqKih7hxe1nwFM/z2U7z8Xzjmr1uFYjnAptzwAHZy7uQttOSZeWdKyvc4rBcxTatkm6qq+Ol/5uETgi/GJ6D/CKwOLm2tNdbQptpZh5zisFbwJuzVzAk4Bb2hba5ul46TGl4Bs8iplg4c/Pq5JWlnao7/NKwb6VP6p5WTlgbJe0qu/Ol/x+EdgXSpULf3tzSyELBbiTpvI5WvhzisEJ7W/vWzW1KR/ypSuSU0K3Aie0b2/XjI+oucU8DVw7xswo15/W4Ap61gzpe+ACSc7ao7ZOwAuC/5kDeyHsEkmeMY3WOgWn0fYC9jlArsrh77RLOsWrf23/qc7BCT2rjuVy7EZJD7btfMn5vYATelal0ui7Jd1b0uk25/QGTmjXou+vKbz/BuyQtLoNoOm5vYIT+vRUHMhtTPEWpK2S1jbteOnxvYMTetZunL/TetJlQwSUQcAJ7SnlS8AxmdFxFP0YOK1v9GDgSkCpWxM2+m3vBOgTPSi4gn4HOLqmbu2C3+V91a0HB1dS2ax9HU5lq/rI36OB02h7F4BTWW7njicdGyR5yaazNio4oWftzfJIO5V1tro4OjihZ+2+6zR/TwKc0L3tr6w+D5MBJ/RFwON9FvYnBU7oWUs33uWzRZL3Yxa1yYETetbi3O/AK5IuLBFPEpzQLhC+ARyXgXmk10va3BQ9WXAllXlJJ7fm7P0hNy4rcAW9FfA0c2GAPMIrJDmcNGqTHuGqJCKeSDuCvAzrMOI/oXFbMuDGspoTdjnwf4kYXkxmsWJ7AAAAAElFTkSuQmCC');
+}
+
+.divHeight {
+    background: #f4f6f7;
+    width: 100%;
+    height: 10px;
+    position: relative;
+}
+
+.divHeight:after {
+    content: '';
+    position: absolute;
+    z-index: 0;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    border-top: 1px solid #dcdcdc;
+    -webkit-transform: scaleY(0.5);
+    transform: scaleY(0.5);
+    -webkit-transform-origin: 0 0;
+    transform-origin: 0 0;
+}
+
+.divHeight:before {
+    content: '';
+    position: absolute;
+    z-index: 2;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    border-bottom: 1px solid #dcdcdc;
+    -webkit-transform: scaleY(0.5);
+    transform: scaleY(0.5);
+    -webkit-transform-origin: 0 100%;
+    transform-origin: 0 100%;
+}
+
+.aui-list-flex {
+    padding: 15px;
+    position: relative;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+    color: #000000;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+.aui-list-flex-hd {
+    margin-right: .8em;
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+}
+
+.aui-list-flex-hd img {
+    width: 100%;
+    max-height: 100%;
+    vertical-align: top;
+}
+
+.aui-list-flex-bd {
+    -webkit-box-flex: 1;
+    -webkit-flex: 1;
+    flex: 1;
+    min-width: 0;
+    font-size: 0.9rem;
+}
+
+.aui-list-flex-fr {
+    text-align: right;
+    color: #808080;
+    padding-right: 13px;
+    position: relative;
+    font-size: 0.8rem;
+}
+
+.aui-list-flex-fr:after {
+    content: " ";
+    display: inline-block;
+    height: 8px;
+    width: 8px;
+    border-width: 2px 2px 0 0;
+    border-color: #C8C8CD;
+    border-style: solid;
+    -webkit-transform: matrix(0.71, 0.71, -0.71, 0.71, 0, 0);
+    transform: matrix(0.71, 0.71, -0.71, 0.71, 0, 0);
+    position: relative;
+    top: -2px;
+    position: absolute;
+    top: 50%;
+    margin-top: -4px;
+    right: 2px;
+    border-radius: 2px;
+}
+
+.aui-list-flex-bd em {
+    color: #fff;
+    font-weight: normal;
+    font-size: 0.7rem;
+    font-style: normal;
+    background: #ff3b67;
+    padding: 0.1rem 0.2rem;
+}
+
+.aui-list-flex-bd .aui-circle {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 100%;
+    padding: 0;
+    display: inline-block;
+}

@@ -1,0 +1,104 @@
+<include file="public:top" />
+<title>系统消息管理</title>
+</head>
+<body>
+<include file="public:crumbs" />
+<div class="page-container">
+
+    <div class="cl pd-5 bg-1 bk-gray">
+        <span class="l">
+            <a href="javascript:;" onclick="delData()" class="btn btn-danger radius">
+                <i class="Hui-iconfont">&#xe6e2;</i> 批量删除
+            </a>
+            <a class="btn btn-primary radius" href="javascript:;" onclick="_add('发布消息','{{:url('addByajax')}}','1000','600')">
+                <i class="Hui-iconfont">&#xe600;</i> 发布消息
+            </a>
+        </span>
+        <span class="r">共有数据：<strong>{{$count}}</strong> 条</span>
+    </div>
+    <table class="table table-border table-sort table-bordered table-hover table-bg">
+        <thead>
+            <tr>
+                <th scope="col" colspan="11">系统消息列表</th>
+            </tr>
+            <tr class="text-c">
+                <th><input type="checkbox" value="" name=""></th>
+                <th >ID</th>
+                <th >接收端</th>
+                <th >消息内容</th>
+                <th>发布时间</th>
+                <th >操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            <volist name="list" id="vo">
+                <tr class="text-c">
+                    <td><input type="checkbox" value="{{$vo.id}}" name="id"></td>
+                    <td>{{$vo.id}}</td>
+                    <td>{{$vo.toport}}</td>
+                    <td>{{$vo.content}}</td>
+                    <td>{{$vo.add_time|date="Y-m-d H:i:s",###}}</td>
+                    <td class="f-14 td-manage">
+                    <a style="text-decoration:none" class="ml-5" onClick="_del(this,'{{$vo.id}}')" href="javascript:;" title="删除"><i class="Hui-iconfont">&#xe6e2;</i></a></td>
+                </tr>
+            </volist>
+        </tbody>
+        <if condition="$count gt 10">
+        <tfoot>
+            <tr class="list-page">
+                <td colspan="10">{{$page}}</td>
+            </tr>
+        </tfoot>
+        </if>
+    </table>
+</div>
+<include file="public:footer-style" />
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="__PUBLICADMIN__lib/My97DatePicker/4.8/WdatePicker.js"></script>
+<script type="text/javascript">
+/*添加*/
+function _add(title,url,w,h){
+    layer_show(title,url,w,h);
+}
+
+/*编辑*/
+function _edit(title,url,id,w,h){
+    layer_show(title,url,w,h);
+}
+
+
+/*删除*/
+function _del(obj = '',id = ''){
+    if (!id) 
+    {
+        var id = new Array();
+        $("input[name='id']:checked").each(function(i){
+            id.push($(this).val());//向数组中添加元素
+        });
+    }
+    
+    layer.confirm('删除须谨慎，确认要删除吗？',function(index){
+        $.ajax({
+            type: 'POST',
+            url: '{{:url('deleteByajax')}}',
+            dataType: 'json',
+            data:{'id':id},
+            success: function(data){
+                if(data.code == 10000){
+                    layer.msg(data.msg,{icon:1,time:1000});
+                    $(obj).parents("tr").remove();
+                }else{
+                    layer.msg(data.msg,{icon:1,time:1000});
+                }
+                setTimeout('location.reload();',1500);
+            },
+            error:function(data) {
+                console.log(data.msg);
+            },
+        });
+    });
+}
+
+</script>
+<include file="public:footer" />

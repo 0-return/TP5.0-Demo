@@ -1,0 +1,324 @@
+﻿<include file="public:top" />
+
+<title>基本设置</title>
+</head>
+
+<body>
+<include file="public:crumbs" />
+<div class="page-container">
+	<div id="tab-system" class="HuiTab">
+		<div class="tabBar cl">
+			<span>律师参数设置</span>
+			<span>用户参数设置</span>
+			<span>公共参数设置</span>
+		</div>
+		<!--律师端-->
+		<form class="form form-horizontal" id="form-lawyer-data">
+		<input type="hidden" class="hidden-id" name="id" value="{{$assist.id}}">
+			<div class="tabCon">
+				
+				<div class="row cl">
+					<label class="form-label col-xs-4 col-sm-2">
+					<span class="c-red">*</span>
+					接单上限：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+					<input type="text" id="orders" name="orders" placeholder="律师同一时间接单数量" value="{{$assist.orders}}" class="input-text">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="form-label col-xs-4 col-sm-2">
+					<span class="c-red">*</span>
+					法币提余额比例：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+					<input type="text" id="expcoin" name="expcoin" placeholder="律师提现到余额的手续费" value="{{$assist.expcoin}}" class="input-text">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="form-label col-xs-4 col-sm-2">
+					<span class="c-red">*</span>
+					余额提现金比例：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+					<input type="text" id="expwallet" name="expwallet" placeholder="律师提现到支付宝，微信，或者银行卡的手续费" value="{{$assist.expwallet}}" class="input-text">
+					</div>
+				</div>
+				<div class="row cl">
+					<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
+					<button class="btn btn-primary radius" type="submit"><i class="Hui-iconfont">&#xe632;</i> 保存</button>
+					<button onClick="layer_close();" class="btn btn-default radius" type="button">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
+					</div>
+				</div>
+			</div>
+		</form>
+		<!--用户端-->
+		<form class="form form-horizontal" id="form-user-data">
+		<input type="hidden" class="hidden-id" name="id" value="{{$assist.id}}">
+			<div class="tabCon">
+				<div class="row cl">
+					<label class="form-label col-xs-4 col-sm-2">
+					<span class="c-red">*</span>
+					注册送法币：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+					<input type="text" id="reg_coin" name="reg_coin" placeholder="用户注册赠送的法币数量" value="{{$assist.reg_coin}}" class="input-text">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="form-label col-xs-4 col-sm-2">
+					<span class="c-red">*</span>
+					注册送余额：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+					<input type="text" id="reg_wallet" name="reg_wallet" placeholder="用户注册赠送的金额数量" value="{{$assist.reg_wallet}}" class="input-text">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="form-label col-xs-4 col-sm-2">
+					<span class="c-red">*</span>
+					签到奖励：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+					<input type="text" id="sign" name="sign" placeholder="用户签到奖励" value="{{$assist.sign}}" class="input-text">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="form-label col-xs-4 col-sm-2">
+					<span class="c-red">*</span>
+					充值送法币：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+					<input type="text" id="rec_coin" name="rec_coin" placeholder="用户充值赠送的法币数量" value="{{$assist.rec_coin}}" class="input-text">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="form-label col-xs-4 col-sm-2">
+					<span class="c-red">*</span>
+					充值送金额：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+					<input type="text" id="rec_wallet" name="rec_wallet" placeholder="用户充值赠送的金额数量" value="{{$assist.rec_wallet}}" class="input-text">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="form-label col-xs-4 col-sm-2">
+					<span class="c-red">*</span>
+					快速咨询价格统一设置：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+					<input type="text" id="quick_price" name="quick_price" placeholder="默认价格" value="{{$assist.quick_price}}" class="input-text">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="form-label col-xs-4 col-sm-2">
+					<span class="c-red">*</span>
+					图文咨询价格统一设置：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+					<input type="text" id="doc_price" name="doc_price" placeholder="默认价格" value="{{$assist.doc_price}}" class="input-text">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="form-label col-xs-4 col-sm-2">
+					<span class="c-red">*</span>
+					文书服务价格统一设置：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+					<input type="text" id="itext_price" name="itext_price" placeholder="默认价格" value="{{$assist.itext_price}}" class="input-text">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="form-label col-xs-4 col-sm-2">
+					<span class="c-red">*</span>
+					留言咨询价格统一设置：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+					<input type="text" id="question_price" name="question_price" placeholder="默认价格" value="{{$assist.question_price}}" class="input-text">
+					</div>
+				</div>
+				<div class="row cl">
+					<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
+					<button class="btn btn-primary radius" type="submit"><i class="Hui-iconfont">&#xe632;</i> 保存</button>
+					<button onClick="layer_close();" class="btn btn-default radius" type="button">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
+					</div>
+				</div>
+
+			</div>
+		</form>
+		<!--后台-->
+		<form class="form form-horizontal" id="form-other-data">
+		<input type="hidden" class="hidden-id" name="id" value="{{$config.id}}">
+			<div class="tabCon">
+				<div class="row cl">
+					<label class="form-label col-xs-4 col-sm-2">
+					<span class="c-red">*</span>
+					律师注册开关：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+					<select class="select-box" name="is_reigster_lawyer">
+							<option value='0' <if condition="$config['is_reigster_lawyer'] eq '0'">selected</if>>关</option>
+							<option value='1' <if condition="$config['is_reigster_lawyer'] eq '1'">selected</if>>开</option>
+						</select>
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="form-label col-xs-4 col-sm-2">
+					<span class="c-red">*</span>
+					用户注册开关：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+					<select class="select-box" name="is_reigster_member">
+							<option value='0' <if condition="$config['is_reigster_member'] eq '0'">selected</if>>关</option>
+							<option value='1' <if condition="$config['is_reigster_member'] eq '1'">selected</if>>开</option>
+						</select>
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="form-label col-xs-4 col-sm-2">
+					<span class="c-red">*</span>
+					短信开关：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+					<select class="select-box" name="sms">
+							<option value='0' <if condition="$config['sms'] eq '0'">selected</if>>关</option>
+							<option value='1' <if condition="$config['sms'] eq '1'">selected</if>>开</option>
+						</select>
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="form-label col-xs-4 col-sm-2">
+					<span class="c-red">*</span>
+					卡密激活开关：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+					<select class="select-box" name="card">
+							<option value='0' <if condition="$config['card'] eq '0'">selected</if>>关</option>
+							<option value='1' <if condition="$config['card'] eq '1'">selected</if>>开</option>
+						</select>
+					</div>
+				</div>
+				
+				<div class="row cl">
+					<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
+					<button class="btn btn-primary radius" type="submit"><i class="Hui-iconfont">&#xe632;</i> 保存</button>
+					<button onClick="layer_close();" class="btn btn-default radius" type="button">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
+					</div>
+				</div>
+
+			</div>
+		</form>
+
+	</div>
+</div>
+
+<!--_footer 作为公共模版分离出去-->
+<include file="public:footer-style" />
+<!--/_footer 作为公共模版分离出去-->
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="__PUBLICADMIN__lib/My97DatePicker/4.8/WdatePicker.js"></script>
+<script type="text/javascript" src="__PUBLICADMIN__lib/jquery.validation/1.14.0/jquery.validate.js"></script>
+<script type="text/javascript" src="__PUBLICADMIN__lib/jquery.validation/1.14.0/validate-methods.js"></script>
+<script type="text/javascript" src="__PUBLICADMIN__lib/jquery.validation/1.14.0/messages_zh.js"></script>
+<script type="text/javascript">
+$(function () {
+	$('.skin-minimal input').iCheck({
+		checkboxClass: 'icheckbox-blue',
+		radioClass: 'iradio-blue',
+		increaseArea: '20%'
+	});
+	$("#tab-system").Huitab({
+		index: 0
+	});
+});
+$(function () {
+	$("#form-lawyer-data").validate({
+		onkeyup: false,
+		focusCleanup: true,
+		success: "valid",
+		submitHandler: function (form) {
+			$(form).ajaxSubmit({
+				type: 'post',
+				url: "{{:url('assist')}}",
+				dataType: 'json',
+				success: function (data) {
+					if (data.code == 10000) {
+						layer.msg(data.msg, {
+							icon: 1,
+							time: 1000
+						});
+					} else {
+						layer.msg(data.msg, {
+							icon: 2,
+							time: 2000
+						});
+					}
+				},
+				error: function (XmlHttpRequest, textStatus, errorThrown) {
+					layer.msg('系统繁忙!', {
+						icon: 5,
+						time: 1000
+					});
+				}
+			});
+			var index = parent.layer.getFrameIndex(window.name);
+		}
+	});
+});
+$(function () {
+	$("#form-user-data").validate({
+		onkeyup: false,
+		focusCleanup: true,
+		success: "valid",
+		submitHandler: function (form) {
+			$(form).ajaxSubmit({
+				type: 'post',
+				url: "{{:url('assist')}}",
+				dataType: 'json',
+				success: function (data) {
+					if (data.code == 10000) {
+						layer.msg(data.msg, {
+							icon: 1,
+							time: 1000
+						});
+					} else {
+						layer.msg(data.msg, {
+							icon: 2,
+							time: 2000
+						});
+					}
+				},
+				error: function (XmlHttpRequest, textStatus, errorThrown) {
+					layer.msg('系统繁忙!', {
+						icon: 5,
+						time: 1000
+					});
+				}
+			});
+			var index = parent.layer.getFrameIndex(window.name);
+		}
+	});
+});
+$(function () {
+	$("#form-other-data").validate({
+		onkeyup: false,
+		focusCleanup: true,
+		success: "valid",
+		submitHandler: function (form) {
+			$(form).ajaxSubmit({
+				type: 'post',
+				url: "{{:url('config')}}",
+				dataType: 'json',
+				success: function (data) {
+					if (data.code == 10000) {
+						layer.msg(data.msg, {
+							icon: 1,
+							time: 1000
+						});
+					} else {
+						layer.msg(data.msg, {
+							icon: 2,
+							time: 2000
+						});
+					}
+				},
+				error: function (XmlHttpRequest, textStatus, errorThrown) {
+					layer.msg('系统繁忙!', {
+						icon: 5,
+						time: 1000
+					});
+				}
+			});
+			var index = parent.layer.getFrameIndex(window.name);
+		}
+	});
+});
+</script>
+<!--/请在上方写此页面业务相关的脚本-->
+</body>
+</html>

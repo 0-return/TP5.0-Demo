@@ -1,0 +1,108 @@
+<include file="public:top" />
+</head>
+<body>
+<div class="cl pd-20" style=" background-color:#5bacb6">
+	<img style="border-radius: 50%;" class="avatar size-XL l" onerror="this.style = 'display:none;'" src="{{$vo.weburl}}{{$vo.face}}">
+	<dl style="margin-left:80px; color:#fff">
+		<dt>
+			<span class="f-18">{{$vo.username}}</span>
+			<span class="f-18">{{$vo['online']?'<span class="label label-success radius">在线</span>':'<span class="label label-danger radius">不在线</span>'}}</span>
+		</dt>
+    <dd class="pt-10 f-12" style="margin-left:0">星级：{{$vo.star}} 咨询数：{{$vo['history_order_count']?$vo['history_order_count']:'0'}} 好评率：{{$vo.praiserate}}%</dd>
+		<dd class="pt-10 f-12" style="margin-left:0">
+      法币：
+      <a href="javascript:;" style="text-decoration:none;" onclick="cal(this,{{$vo.uid}},'setDec','coin');"><i class="Hui-iconfont">&#xe6a1;</i></a> 
+      <input placeholder="{{$vo.coin}}" style="width: 60px" class="input-text radius size-MINI point" type="text" name="point" value=""> 
+      <a href="javascript:;" style="text-decoration:none" onclick="cal(this,{{$vo.uid}},'setInc','coin');"><i class="Hui-iconfont">&#xe600;</i></a>
+      </dd>
+		<dd class="pt-10 f-12" style="margin-left:0">
+    金额：
+    <a href="javascript:;" style="text-decoration:none" onclick="cal(this,{{$vo.uid}},'setDec','wallet');"><i class="Hui-iconfont">&#xe6a1;</i></a> 
+    <input placeholder="{{$vo.wallet}}" style="width: 60px" class="input-text radius size-MINI wallet" type="text" name="integral" value=""> 
+    <a href="javascript:;" style="text-decoration:none" onclick="cal(this,{{$vo.uid}},'setInc','wallet');"><i class="Hui-iconfont">&#xe600;</i></a>
+    </dd>
+	</dl>
+</div>
+<div class="pd-20">
+	<article class="page-container">
+		<form class="form form-horizontal" id="form-change-money">
+	<div class="row cl">
+      <label class="form-label col-xs-4 col-sm-2">地区：</label>
+      <div class="formControls col-xs-8 col-sm-9">
+		  <input type="text" class="input-text" autocomplete="off" value="{{$vo.area}}">
+        
+      </div>
+    </div>
+    <div class="row cl">
+      <label class="form-label col-xs-4 col-sm-2">行业：</label>
+      <div class="formControls col-xs-8 col-sm-9">
+      <input type="text" class="input-text" autocomplete="off" value="{{$vo.industry_cn}}">
+        
+      </div>
+    </div>
+	<div class="row cl">
+      <label class="form-label col-xs-4 col-sm-2">微信：</label>
+      <div class="formControls col-xs-8 col-sm-9">
+		  <input type="text" class="input-text" autocomplete="off" value="{{$vo.weixin}}">
+        
+      </div>
+    </div>
+			<div class="row cl">
+      <label class="form-label col-xs-4 col-sm-2">支付宝账号：</label>
+      <div class="formControls col-xs-8 col-sm-9">
+		  <input type="text" class="input-text" autocomplete="off" value="{{$vo.bankcard}}">
+        
+      </div>
+    </div>
+	<div class="row cl">
+      <label class="form-label col-xs-4 col-sm-2">邮箱：</label>
+      <div class="formControls col-xs-8 col-sm-9">
+		  <input type="text" class="input-text" autocomplete="off" value="{{$vo.email}}">
+        
+      </div>
+    </div>
+
+		</form>
+	</article>
+</div>
+<include file="public:footer-style" />
+<script type="text/javascript" src="__PUBLICADMIN__lib/jquery.validation/1.14.0/jquery.validate.js"></script>
+<script type="text/javascript" src="__PUBLICADMIN__lib/jquery.validation/1.14.0/validate-methods.js"></script>
+<script type="text/javascript" src="__PUBLICADMIN__lib/jquery.validation/1.14.0/messages_zh.js"></script>
+<script type="text/javascript">
+
+function cal(e,id,gettype,amount){
+
+    if (gettype == 'setInc') 
+    {
+        number = $(e).prev().val();
+    }else{
+        number = $(e).next().val();
+    }
+    if (!number) {
+        layer.msg('请输入参数!',{icon:5,time:1500});
+    }else{
+        $.ajax({
+        type: 'POST',
+        url: '{{:url('_calByAjax')}}',
+        data: {'uid':id,'active':gettype,'number':number,'field':amount},
+        dataType: 'json',
+        success: function(data){
+            if(data.code == 10000) {
+                layer.msg(data.msg,{icon:1,time:1500});
+                setTimeout('location.reload();',1500);
+            }else{
+                layer.msg(data.msg,{icon:5,time:1500});
+            }
+        },
+        error:function(data) {
+            layer.msg('系统繁忙!',{icon:5,time:1500});
+        },
+    });
+    }
+    
+}
+
+
+</script>
+<include file="public:footer" />

@@ -1,0 +1,235 @@
+<include file="public:top" />
+<title>支付接口设置</title>
+</head>
+<body>
+<include file="public:crumbs" />
+<div class="page-container">
+    
+        <div id="tab-system" class="HuiTab">
+            <div class="tabBar cl">
+                <span>支付宝支付</span>
+                <span>微信支付</span>
+                <span>...</span>
+            </div>
+            <!--阿里短信-->
+            <form class="form form-horizontal" id="form-alipay-edit" method="post">
+            <input type="hidden" name="id" value="{{$vo.alipay.id}}">
+            <div class="tabCon">
+                <div class="row cl">
+                    <label class="form-label col-xs-4 col-sm-2">
+                        <span class="c-red">*</span>
+                        公司名称：</label>
+                    <div class="formControls col-xs-8 col-sm-9">
+                        <input type="text" id="website-title" placeholder="控制在25个字、50个字节以内" value="{{$vo.alipay.title}}" class="input-text" name="title">
+                    </div>
+                </div>
+                <div class="row cl">
+                    <label class="form-label col-xs-4 col-sm-2">
+                        <span class="c-red">*</span>
+                        网关地址(gateway)：</label>
+                    <div class="formControls col-xs-8 col-sm-9">
+                        <input type="text" id="website-Keywords" placeholder="请填写支付宝网关地址" value="{{$vo.alipay.gateway}}" class="input-text" name="gateway">
+                    </div>
+                </div>
+                <div class="row cl">
+                    <label class="form-label col-xs-4 col-sm-2">
+                        <span class="c-red">*</span>
+                        Appid：</label>
+                    <div class="formControls col-xs-8 col-sm-9">
+                        <input type="text" id="website-Keywords" placeholder="Appid" value="{{$vo.alipay.app_id}}" class="input-text" name="app_id">
+                    </div>
+                </div>
+                <div class="row cl">
+                    <label class="form-label col-xs-4 col-sm-2">
+                        <span class="c-red">*</span>
+                        商户号：</label>
+                    <div class="formControls col-xs-8 col-sm-9">
+                        <input type="text" id="website-description" placeholder="App Secret" value="{{$vo.alipay.merchant}}" class="input-text" name="merchant">
+                    </div>
+                </div>
+                <div class="row cl">
+                    <label class="form-label col-xs-4 col-sm-2">
+                        <span class="c-red">*</span>
+                        私钥：</label>
+                    <div class="formControls col-xs-8 col-sm-9">
+                        <input type="text" id="website-description" placeholder="rsaprivatekey" value="{{$vo.alipay.rsaprivatekey}}" class="input-text" name="rsaprivatekey">
+                    </div>
+                </div>
+                <div class="row cl">
+                    <label class="form-label col-xs-4 col-sm-2">
+                        <span class="c-red">*</span>
+                        公钥：</label>
+                    <div class="formControls col-xs-8 col-sm-9">
+                        <input type="text" id="website-description" placeholder="rsapublickey" value="{{$vo.alipay.rsapublickey}}" class="input-text" name="rsapublickey">
+                    </div>
+                </div>
+                <div class="row cl">
+                    <label class="form-label col-xs-4 col-sm-2">
+                        <span class="c-red">*</span>状态：
+                    </label>
+                    <div class="formControls col-xs-7 col-sm-9">
+                        <span class="select-box">
+                            <select class="select" id="status" name="status">
+                                <option value="1" <if condition="$vo['alipay']['status'] eq '1'">selected</if>>正常</option>
+                                <option value="0" <if condition="$vo['alipay']['status'] eq '0'">selected</if>>禁用</option>
+                                <option value="-1" <if condition="$vo['alipay']['status'] eq '-1'">selected</if>>删除</option>
+                            </select>
+                            </span>
+                    </div>
+                </div>
+                <div class="row cl">
+                    <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
+                        <button  class="btn btn-primary radius" type="submit"><i class="Hui-iconfont">&#xe632;</i> 保存</button>
+                    </div>
+                </div>
+            </div>
+            </form>
+            <!--聚合短信-->
+            <form class="form form-horizontal" id="form-wxpay-edit" method="post">
+            <input type="hidden" name="id" value="{{$vo.wxpay.id}}">
+            <div class="tabCon">
+                <div class="row cl">
+                    <label class="form-label col-xs-4 col-sm-2">
+                        <span class="c-red">*</span>
+                        公司名称：</label>
+                    <div class="formControls col-xs-8 col-sm-9">
+                        <input type="text" id="website-title" placeholder="控制在25个字、50个字节以内" value="{{$vo.wxpay.title}}" class="input-text" name="title">
+                    </div>
+                </div>
+                <div class="row cl">
+                    <label class="form-label col-xs-4 col-sm-2">
+                        <span class="c-red">*</span>
+                        网关地址(gateway)：</label>
+                    <div class="formControls col-xs-8 col-sm-9">
+                        <input type="text" id="website-Keywords" placeholder="请填写支付宝网关地址" value="{{$vo.wxpay.gateway}}" class="input-text" name="gateway">
+                    </div>
+                </div>
+                <div class="row cl">
+                    <label class="form-label col-xs-4 col-sm-2">
+                        <span class="c-red">*</span>
+                        Appid：</label>
+                    <div class="formControls col-xs-8 col-sm-9">
+                        <input type="text" id="website-Keywords" placeholder="Appid" value="{{$vo.wxpay.app_id}}" class="input-text" name="app_id">
+                    </div>
+                </div>
+                <div class="row cl">
+                    <label class="form-label col-xs-4 col-sm-2">
+                        <span class="c-red">*</span>
+                        商户号：</label>
+                    <div class="formControls col-xs-8 col-sm-9">
+                        <input type="text" id="website-description" placeholder="App Secret" value="{{$vo.wxpay.merchant}}" class="input-text" name="merchant">
+                    </div>
+                </div>
+                <!-- <div class="row cl">
+                    <label class="form-label col-xs-4 col-sm-2">
+                        <span class="c-red">*</span>
+                        App Key：</label>
+                    <div class="formControls col-xs-8 col-sm-9">
+                        <input type="text" id="website-description" placeholder="App Key" value="{{$vo.wxpay.app_key}}" class="input-text" name="app_key">
+                    </div>
+                </div> -->
+                <div class="row cl">
+                    <label class="form-label col-xs-4 col-sm-2">
+                        <span class="c-red">*</span>
+                        App Secret：</label>
+                    <div class="formControls col-xs-8 col-sm-9">
+                        <input type="text" id="website-description" placeholder="App Secret" value="{{$vo.wxpay.app_secret}}" class="input-text" name="app_secret">
+                    </div>
+                </div>
+                <div class="row cl">
+                    <label class="form-label col-xs-4 col-sm-2">
+                        <span class="c-red">*</span>状态：
+                    </label>
+                    <div class="formControls col-xs-7 col-sm-9">
+                        <span class="select-box">
+                            <select class="select" id="status" name="status">
+                                <option value="1" <if condition="$vo['wxpay']['status'] eq '1'">selected</if>>正常</option>
+                                <option value="0" <if condition="$vo['wxpay']['status'] eq '0'">selected</if>>禁用</option>
+                                <option value="-1" <if condition="$vo['wxpay']['status'] eq '-1'">selected</if>>删除</option>
+                            </select>
+                            </span>
+                    </div>
+                </div>
+                <div class="row cl">
+                    <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
+                        <button  class="btn btn-primary radius" type="submit"><i class="Hui-iconfont">&#xe632;</i> 保存</button>
+                    </div>
+                </div>
+            </div>
+            </form>
+            
+            
+        
+    </form>
+</div>
+<!--_footer 作为公共模版分离出去-->
+<include file="public:footer-style" />
+<script type="text/javascript" src="__PUBLICADMIN__lib/jquery.validation/1.14.0/jquery.validate.js"></script>
+<script type="text/javascript" src="__PUBLICADMIN__lib/jquery.validation/1.14.0/validate-methods.js"></script>
+<script type="text/javascript" src="__PUBLICADMIN__lib/jquery.validation/1.14.0/messages_zh.js"></script>
+<script type="text/javascript">
+$(function(){
+    $("#tab-system").Huitab({
+        index:0
+    });
+    $("#form-alipay-edit").validate({
+        rules:{
+            title:{
+                required:true,
+            },
+        },
+        onkeyup:false,
+        focusCleanup:true,
+        success:"valid",
+        submitHandler:function(form){
+            $(form).ajaxSubmit({
+                type: 'post',
+                url: "{{:url('index')}}",
+                success: function(data){
+                    if (data.code == 10000) {
+                        layer.msg(data.msg,{icon:1,time:1000});
+                        setTimeout('location.reload();',1500);
+                    }else{
+                        layer.msg(data.msg,{icon:5,time:1000});
+                     }
+                },
+                error: function(XmlHttpRequest, textStatus, errorThrown){
+                    layer.msg('系统繁忙!',{icon:5,time:1000});
+                },
+            });
+        }
+    });
+
+    $("#form-wxpay-edit").validate({
+        rules:{
+            name:{
+                required:true,
+            },
+        },
+        onkeyup:false,
+        focusCleanup:true,
+        success:"valid",
+        submitHandler:function(form){
+            $(form).ajaxSubmit({
+                type: 'post',
+                url: "{{:url('index')}}",
+                success: function(data){
+                    if (data.code == 10000) {
+                        layer.msg(data.msg,{icon:1,time:1000});
+                        setTimeout('location.reload();',1500);
+                    }else{
+                        layer.msg(data.msg,{icon:5,time:1000});
+                     }
+                },
+                error: function(XmlHttpRequest, textStatus, errorThrown){
+                    layer.msg('系统繁忙!',{icon:5,time:1000});
+                },
+            });
+        }
+
+    });
+});
+
+</script>
+<!--/请在上方写此页面业务相关的脚本-->
+<include file="public:footer" />

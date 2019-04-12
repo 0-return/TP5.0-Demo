@@ -1,0 +1,49 @@
+<include file="public:top" />
+<title>聊天列表</title>
+</head>
+<body>
+
+<include file="public:crumbs" />
+<div class="pd-20">
+<style type="text/css">
+    body{ background: #F0EFF5 }
+    .obj{ padding: 0 5px; margin: 5px 0;}
+    .obj .time{ color: #D1D1D2 }
+    .obja p{ text-align: left;}
+    .objb p{ text-align: right;}
+    .content{border: 1px solid #D1D1D2; font-size: 14px; border-radius: 5px; background: #fff ;padding: 15px 5px; margin: 5px 0;}
+</style>
+<article class="page-container">
+	<div >
+      <ul>
+        <volist name="list" id="vo">
+          <if condition="$vo['mark'] eq 1">
+          <li class="obj objb">
+            <if condition="$vo['content_type'] eq 'pic'">
+            <img class="content" style="clear: both; display: block; margin:auto;" src="{{$vo.content}}">
+            <else/>
+            <p>{{$vo.add_time|date="Y-m-d H:i:s",###}} 用户 </p><p class="content" >{{$vo.content}}</p>
+            </if>
+          </li>
+          <else/>
+          <li class="obj obja">
+            <if condition="$vo['content_type'] eq 'pic'">
+            <img class="content" style="clear: both; display: block; margin:auto;" src="{{$vo.content}}">
+            <else/>
+            <i class="Hui-iconfont text-primary" style="color:#FA862D;font-size:14px; cursor:pointer;text-decoration:none;">律师 {{$vo.add_time|date="Y-m-d H:i:s",###}}</i><p class="content" style="  background: #5EC175; color: #fff">{{$vo.content}}</p>
+            </if>
+          </li>
+          </if>
+        </volist>
+        
+      </ul>
+      </div>
+  </article>
+</div>
+<!--_footer 作为公共模版分离出去-->
+<include file="public:footer-style" /><!--/_footer 作为公共模版分离出去-->
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="__PUBLICADMIN__lib/My97DatePicker/4.8/WdatePicker.js"></script>
+<!--<script type="text/javascript" src="__PUBLICADMIN__lib/datatables/1.10.0/jquery.dataTables.min.js"></script>-->
+<script type="text/javascript" src="__PUBLICADMIN__lib/laypage/1.2/laypage.js"></script>
+<include file="public:footer" />

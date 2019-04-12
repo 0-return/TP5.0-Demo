@@ -1,0 +1,100 @@
+<include file="public:top" />
+
+<head>
+    <include file="public:top-style" />
+    <link rel="stylesheet" href="__PUBLICADMIN__/static/zTree/css/zTreeStyle.css" type="text/css">
+</head>
+
+<body>
+    <div>
+        <fieldset>
+            <legend>配置权限</legend>
+            <form>
+                <ul id="tree" class="ztree"></ul>
+                <div>
+                    <input class="btn btn-primary radius" id="sub" type="button" value="&nbsp;&nbsp;提交&nbsp;&nbsp;">
+                    <button class="btn btn-default radius" type="button">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
+                </div>
+            </form>
+        </fieldset>
+    </div>
+</body>
+<include file="public:footer-style" />
+<script type="text/javascript" src="__PUBLICADMIN__static/zTree/js/jquery.ztree.core.min.js"></script>
+<script type="text/javascript" src="__PUBLICADMIN__static/zTree/js/jquery.ztree.excheck.min.js"></script>
+<script type="text/javascript">
+    $(function () {
+        var setting = {
+            check: {
+                enable: true
+            },
+            view: {
+                showLine: false,
+                showIcon: false,
+                dblClickExpand: false
+            },
+            data: {
+                simpleData: {
+                    enable: true,
+                    pIdKey: 'pid',
+                    idKey: 'id'
+                },
+                key: {
+                    name: 'title'
+                }
+            }
+        };
+
+        var zNodes = {{$menu}};
+        $.fn.zTree.init($("#tree"), setting, zNodes);
+        var zTree = $.fn.zTree.getZTreeObj("tree");
+        zTree.setting.check.chkboxType = {
+            "Y": "ps",
+            "N": "ps"
+        };
+
+        $("#sub").click(function () {
+            // 提交到方法 默认为本身
+            var treeObj = $.fn.zTree.getZTreeObj("tree");
+            nodes = treeObj.getCheckedNodes(true);
+            //checked = "";
+            var arr = [];
+            for (var i = 0; i < nodes.length; i++) {
+                //checked += nodes[i].id + ",";
+                arr.push(nodes[i].id);
+            }
+            //var arr = $.makeArray( nodes );
+            var id = "{{$vo.id}}";
+
+            $.ajax({
+                type: 'post',
+                data: {
+                    'rules': arr,
+                    'id': id
+                },
+                url: "__ADMIN__/role/updateByAjax",
+                success: function (data) {
+                    if (data.code == 10000) {
+                        layer.msg(data.msg, {
+                            icon: 1,
+                            time: 1000
+                        });
+                        setTimeout('parent.location.reload();', 1000);
+                    } else {
+                        layer.msg(data.msg, {
+                            time: 1000,
+                            icon: 2
+                        });
+                    }
+                },
+                error: function (XmlHttpRequest, textStatus, errorThrown) {
+                    layer.msg('未知错误!', {
+                        time: 1000,
+                        icon: 5
+                    });
+                }
+            });
+        });
+    });
+</script>
+<include file="public:footer" />

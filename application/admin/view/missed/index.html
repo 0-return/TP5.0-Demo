@@ -1,0 +1,201 @@
+<include file="public:top" />
+<title>订单列表</title>
+</head>
+<body>
+
+<include file="public:crumbs" />
+<div class="page-container">
+	<div class="text-c">
+		<form action="{{:url('index')}}" method="get">
+		<input type="hidden" name="sfields" title="要查询的字段" value="order_no,title">
+		<button onclick="removeIframe()" class="btn btn-primary radius">关闭选项卡</button>
+		日期范围：
+		<input type="text" autocomplete="off" name="begintime" autocomplete="off" onfocus="WdatePicker({ maxDate:'#F{$dp.$D(\'logmax\')||\'%y-%M-%d\'}' })" id="logmin" class="input-text Wdate" style="width:120px;">
+		-
+		<input type="text" autocomplete="off" name="endtime" autocomplete="off" onfocus="WdatePicker({ minDate:'#F{$dp.$D(\'logmin\')}',maxDate:'%y-%M-%d' })" id="logmax" class="input-text Wdate" style="width:120px;">
+		<input type="text" name="reunite" id="reunite" placeholder=" 订单编号，描述等" style="width:250px" class="input-text">
+		<button name="" id="" class="btn btn-success" type="submit"><i class="Hui-iconfont">&#xe665;</i> 搜订单</button>
+			</form>
+	</div>
+	<div class="cl pd-5 bg-1 bk-gray mt-20">
+		<span class="l"><a href="javascript:;" onclick="_del()" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a> </span>
+
+		<span class="dropDown l" style="margin-left: 4px;">
+			<a class=" btn btn-danger radius" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"> 分类查看</a>
+			<ul class="dropDown-menu menu radius box-shadow select-menu">
+				<li><a href="{{:url('index')}}">全部</a></li>
+				<li><a href="{{:url('index')}}?payway=wallet">余额支付</a></li>
+				<li><a href="{{:url('index')}}?payway=coin">法币支付</a></li>
+				<li><a href="{{:url('index')}}?payway=alipay">支付宝支付</a></li>
+				<li><a href="{{:url('index')}}?payway=wxpay">微信支付</a></li>
+
+			</ul>
+		</span>
+
+		
+		<span class="r">共有数据：<strong>{{$count}}</strong> 条</span> </div>
+	<div class="mt-20">
+		<table class="table table-border table-bordered table-bg table-hover table-sort table-responsive">
+			<thead>
+
+				<tr class="text-c">
+					<th width="25"><input type="checkbox" name="" value=""></th>
+					<th width="150">订单编号</th>
+					<th width="120">订单类别</th>
+					<th width="90">会员名称</th>
+					<th width="">订单信息</th>
+					<th width="120">下单时间</th>
+					<th width="150">下单地区</th>
+					<th width="80">金额</th>
+					<th width="80">付款金额</th> 
+					<th width="120">下单时间</th>
+					<th width="60">订单状态</th>
+					<th width="90">操作</th>
+
+				</tr>
+			</thead>
+			<tbody>
+				<volist name="list" id="vo">
+				<tr class="text-c">
+					<td><input type="checkbox" value="{{$vo.id}}" name="id"></td>
+					<td title="订单编号" >{{$vo.order_no}}</td>
+					<td title="订单类别" >{{$vo['type']?'找律师':'快速咨询'}}/{{$vo.goods_type_en}}</td>
+					<td title="会员名称">{{$vo.username}}</td>
+					<td title="订单信息">{{$vo.title}}</td>
+					<td title="订单信息">{{$vo.add_time}}</td>
+					<td title="订单信息">{{$vo.province_cn}}{{$vo.city_cn}}{{$vo.area_cn}}</td>
+					<td title="订单金额"></td>
+					<td title="支付金额"></td>
+					<td title="下单时间">{{$vo.add_time|date="Y-m-d H:i:s",###}}</td>
+					<td title="订单状态">{{$vo.status_cn}}</td>
+					<td class="f-14 td-manage">
+					
+					 <a style="text-decoration:none" class="ml-5" onClick="_del(this,'{{$vo.id}}')" href="javascript:;" title="删除"><i class="Hui-iconfont">&#xe6e2;</i></a></td>
+				</tr>
+				</volist>
+			</tbody>
+			<if condition="$count gt 100">
+			<tbody>
+				<tr class="text-c">
+					<td colspan="100">{{$page}}</td>
+				</tr>
+				</tbody>
+			</if>
+		</table>
+	</div>
+</div>
+<!--_footer 作为公共模版分离出去-->
+<include file="public:footer-style" /><!--/_footer 作为公共模版分离出去-->
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="__PUBLICADMIN__lib/My97DatePicker/4.8/WdatePicker.js"></script>
+<!--<script type="text/javascript" src="__PUBLICADMIN__lib/datatables/1.10.0/jquery.dataTables.min.js"></script>-->
+<script type="text/javascript" src="__PUBLICADMIN__lib/laypage/1.2/laypage.js"></script>
+<script type="text/javascript">
+/*订单-查看*/
+function _show(title,url,id,w,h){
+    layer_show(title,url,w,h);
+}
+/*订单-编辑*/
+function _edit(title,url,id,w,h){
+    layer_show(title,url,w,h);
+}
+/*订单-删除*/
+function _del(obj = '',id = ''){
+	if (!id) 
+	{
+		var id = new Array();
+	    $("input[name='id']:checked").each(function(i){
+	        id.push($(this).val());//向数组中添加元素
+	    });
+	    if (id.length < 1) {
+	    	layer.msg('错误：至少选择一项!',{icon:1,time:1000});
+	    	return false;
+	    }
+	}
+	
+	layer.confirm('确认要删除吗？',function(index){
+		$.ajax({
+			type: 'POST',
+			url: "{{:url('deleteByAjax')}}",
+			dataType: 'json',
+			data:{'id':id},
+			success: function(data){
+				$(obj).parents("tr").remove();
+				if(data.code == 10000){
+					layer.msg(data.msg,{icon:1,time:1000});
+				}else{
+					layer.msg(data.msg,{icon:1,time:1000});
+				}
+				setTimeout('location.reload();',1000);
+
+			},
+			error:function(data) {
+				console.log(data.msg);
+			},
+		});
+	});
+}
+
+/*订单-发货*/
+function _deliver(obj,id){
+
+	layer.confirm('确认要发货吗？',function(index){
+		$.ajax({
+			type: 'POST',
+			url: "{{:url('updateByAjax')}}",
+			dataType: 'json',
+			data:{
+				id: id,
+            	deliver:'1'
+			},
+			success: function(data){
+				if(data.code == 10000){
+					layer.msg(data.msg,{icon:1,time:1000});
+				}else{
+					layer.msg(data.msg,{icon:1,time:1000});
+				}
+				setTimeout('location.reload();',1000);
+
+			},
+			error:function(data) {
+				console.log(data.msg);
+			},
+		});
+	});
+}
+
+/*批量删除*/
+function _del_all(){
+    var id_array=new Array();
+    $("input[name='id']:checked").each(function(i){
+        id_array.push($(this).val());//向数组中添加元素
+    });
+    if(id_array.length!=0){
+        $.ajax({
+            type: 'POST',
+            url: "{{:url('deleteByAjax')}}",
+            data:{
+                //商品ID(数组)
+                id: id_array
+            },
+            dataType: 'json',
+            success: function(data){
+                if(data.code == 10000){
+                    layer.msg(data.msg,{icon: 6,time:1000});
+                    setTimeout('location.reload();',1500);
+                }else{
+                    layer.msg(data.msg,{icon: 6,time:1000});
+                }
+            },
+            error:function(data) {
+                alert("系统繁忙");
+                location.reload();
+            },
+        });
+    }else{
+        alert("请至少选择一条记录")
+    }
+}
+
+</script>
+<include file="public:footer" />

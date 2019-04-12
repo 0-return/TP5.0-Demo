@@ -1,0 +1,231 @@
+﻿<include file="public:top" />
+<title>律师列表</title>
+</head>
+<body>
+<include file="public:crumbs" />
+<div class="page-container">
+	<div class="text-c">
+		<form action="{{:url('index')}}" method="get">
+		<input type="hidden" name="sfields" title="要查询的字段" value="username,describe,content">
+		<button onclick="removeIframe()" class="btn btn-primary radius">关闭选项卡</button>
+		日期范围：
+		<input type="text" autocomplete="off" name="begintime" onfocus="WdatePicker({ maxDate:'#F{$dp.$D(\'logmax\')||\'%y-%M-%d\'}' })" id="logmin" class="input-text Wdate" style="width:120px;">
+		-
+		<input type="text" autocomplete="off" name="endtime" onfocus="WdatePicker({ minDate:'#F{$dp.$D(\'logmin\')}',maxDate:'%y-%M-%d' })" id="logmax" class="input-text Wdate" style="width:120px;">
+		<input type="text" name="reunite" id="" placeholder="姓名，描述，内容" style="width:250px" class="input-text">
+		<button name="" id="" class="btn btn-success" type="submit"><i class="Hui-iconfont">&#xe665;</i> 搜索</button>
+		</form>
+	</div>
+	<div class="cl pd-5 bg-1 bk-gray mt-20">
+		<span class="l"><a href="javascript:;" onclick="_del()" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a> </span>
+		<span class="dropDown l" style="margin-left: 4px;">
+			<a class=" btn btn-primary radius" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"> 分类查看</a>
+			<ul class="dropDown-menu menu radius box-shadow">
+
+				<li><a href="{{:url('index')}}">全部</a></li>
+				<li><a href="{{:url('index')}}?status=2">已审核</a></li>
+				<li><a href="{{:url('index')}}?status=1">待审核</a></li>
+				<li><a href="{{:url('index')}}?status=0">未审核</a></li>
+			</ul>
+		</span>
+	
+		<span class="r">共有数据：<strong>{{$count}}</strong> 条</span>
+
+
+	</div>
+	<div class="mt-20">
+		<table class="table table-border table-bordered table-bg table-hover table-sort table-responsive">
+			<thead>
+				<tr class="text-c">
+					<th ><input type="checkbox" name="" value=""></th>
+					<th >操作人</th>
+					<th >ip地址</th>
+                    <th width="120">控制器</th>
+					<th >描述</th>
+					<th >操作时间</th>
+					<th >操作类型（点击复制）</th>
+					<th width="15%">操作</th>
+
+				</tr>
+			</thead>
+			<tbody>
+				<volist name="list" id="vo">
+				<tr class="text-c">
+					<td><input type="checkbox" value="{{$vo.id}}" name="id"></td>
+					<td title="操作人">{{$vo.username}}</td>
+					<td title="ip地址">{{$vo.ip}}</td>
+                    <td style="text-align: left;">{{$vo.mca}}</td>
+					<td title="描述" style="text-align: left;">{{$vo.describe}}</td>
+					<td title="操作时间">{{:date('Y-m-d',$vo['addtime'])}}</td>
+					<td title="操作类型"><textarea rows="1" cols="70" onclick="copy('{{$vo.id}}');" class="copy_{{$vo.id}}">{{$vo.content}}</textarea></td>
+					<td class="f-14 td-manage">
+					<a style="text-decoration:none" class="ml-5" onClick="_del(this,'{{$vo.id}}')" href="javascript:;" title="删除"><i class="Hui-iconfont">&#xe6e2;</i></a></td>
+				</tr>
+				</volist>
+			</tbody>
+			<if condition="$count gt 10">
+			<tbody>
+				<tr class="text-c">
+					<td colspan="100">{{$page}}</td>
+				</tr>
+				</tbody>
+			</if>
+		</table>
+	</div>
+</div>
+<include file="public:footer-style" />
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="__PUBLICADMIN__lib/My97DatePicker/4.8/WdatePicker.js"></script>
+<script type="text/javascript" src="__PUBLICADMIN__lib/jquery.validation/1.14.0/jquery.validate.js"></script>
+<script type="text/javascript" src="__PUBLICADMIN__lib/jquery.validation/1.14.0/validate-methods.js"></script>
+<script type="text/javascript" src="__PUBLICADMIN__lib/jquery.validation/1.14.0/messages_zh.js"></script>
+<script type="text/javascript">
+
+/*增加*/
+function _add(title,url,w,h){
+  layer_show(title,url,w,h);
+}
+
+/*单独删除*/
+function _del(obj = '',id = ''){
+    if (!id) 
+    {
+        var id = new Array();
+        $("input[name='id']:checked").each(function(i){
+            id.push($(this).val());//向数组中添加元素
+        });
+    }
+    layer.confirm('确认要删除吗？',function(index){
+        $.ajax({
+            type: 'POST',
+            url: "{{:url('deleteByAjax')}}",
+            data:{
+                id: id
+            },
+            dataType: 'json',
+            success: function(data){
+                if(data.code == 10000){
+                    layer.msg(data.msg,{icon: 6,time:1000});
+                }else{
+                    layer.msg(data.msg,{icon: 6,time:1000});
+                }
+                setTimeout(function(){window.location.reload();},1000);
+
+            },
+            error:function(data) {
+                alert("系统繁忙");
+                location.reload();
+            },
+        });
+    });
+}
+
+/*编辑*/
+function _edit(title,url,id,w,h){
+    layer_show(title,url+'?id='+id,w,h);
+}
+
+function _show(title,url,id,w,h){
+	layer_show(title,url+'?id='+id,w,h);
+}
+
+/*律师-推荐*/
+function is_top(obj,id){
+    $.ajax({
+        type: 'POST',
+        url: "{{:url('forbid')}}",
+        data:{
+            id: id,
+            is_top:'1'
+        },
+        dataType: 'json',
+        success: function(data){
+            if(data.code == 10000){
+                layer.msg(data.msg,{icon: 6,time:1000});
+                setTimeout('location.reload();',1500);
+            }else{
+                layer.msg(data.msg,{icon: 5,time:1000});
+            }
+            
+        },
+        error:function(data) {
+            alert("系统繁忙");
+            location.reload();
+        },
+    });
+}
+
+/*律师-取消推荐*/
+function nois_top(obj,id){
+    $.ajax({
+        type: 'POST',
+        url: "{{:url('forbid')}}",
+        data:{
+            //商品ID
+            id: id,
+            is_top:'0'
+        },
+        dataType: 'json',
+        success: function(data){
+            if(data.code == 10000){
+                layer.msg(data.msg,{icon: 6,time:1000});
+                setTimeout('location.reload();',1500);
+            }else{
+                layer.msg(data.msg,{icon: 5,time:1000});
+            }
+        },
+        error:function(data) {
+            console.log(data.msg);
+        },
+    });
+}
+
+/*批量导入手机*/
+function Import_tel(types,mark){
+	if(mark) {
+		 $.ajax({
+                type: 'POST',
+                url: '__MODULE__/Sms/Import',
+                data: {'mark': mark,'sendobj':types},
+                dataType: 'json',
+                success: function (data) {
+					if (data.code == 10000) {
+						layer.msg(data.msg, {icon: 1, time: 1500});
+					} else {
+                        layer.msg(data.msg, {icon: 5, time: 1500});
+                    }
+                },
+                error: function (data) {
+                    layer.msg('导入出错!', {icon: 5, time: 1500});
+                },
+		});
+	}else{
+		var tel_array=new Array();
+		$("input[name='check_name']:checked").each(function(i){
+			tel_array.push($(this).val());//向数组中添加元素
+		});
+		if(tel_array.length!=0){
+            $.ajax({
+                type: 'POST',
+                url: '__MODULE__/Sms/Import',
+                data: {'tels': tel_array,'sendobj':types},
+                dataType: 'json',
+                success: function (data) {
+				<!-- alert(data.data); -->
+					if (data.code == 10000) {
+						layer.msg(data.msg, {icon: 1, time: 1500});
+					} else {
+                        layer.msg(data.msg, {icon: 5, time: 1500});
+                    }
+                },
+                error: function (data) {
+                    layer.msg('导入出错!', {icon: 5, time: 1500});
+                },
+            });
+		}else{
+			layer.msg('至少选中一条数据!',{icon:5,time:1500});
+		}
+	}
+}
+</script>
+<include file="public:footer" />

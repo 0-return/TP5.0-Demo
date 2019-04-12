@@ -1,0 +1,249 @@
+<include file="public:top" />
+<title>律所管理</title>
+</head>
+<link rel="stylesheet" type="text/css" href="__PUBLICADMIN__lib/tagSelect/tagSelect.css">
+<body>
+
+<div class="filter">
+<div class="box">
+<div class="title-h">按条件筛选 <span class="r">共有数据：<strong class="jl">{{$count}}</strong> 条</span></div>
+<dl style="margin-top: 15px;">
+<dt>地区选择</dt>
+  <dd>
+    <div data-toggle="distpicker" id="distpicker" data-autoselect="3">
+      <select style="width: 100px;" rel="province_cn" name="province_cn" id="province_cn" class="province select-box"></select>
+      <select style="width: 100px;" rel="city_cn" name="city_cn" id="city_cn" class="city select-box"></select>
+      <select style="width: 100px;" rel="area_cn" name="area_cn" id="area_cn" class="area select-box"></select>
+    </div>
+  </dd>
+</dl>
+<dl>
+  <dt>行业选择</dt>
+  <dd>
+    <a href="#" rel="" name="industryid" class="all on">全部</a>
+    <volist name="gt" id="gt">
+      <a href="#" rel="{{$gt.id}}" name="industryid" class="sx_child">{{$gt.name}}</a>
+    </volist>
+  </dd>
+</dl>
+<dl>
+  <dt>年限选择</dt>
+    <dd>
+      <a href="#" rel="" name="work_time" class="all on">全部</a>
+      <volist name="yr" id="yr">
+        <a href="#" rel="{{$yr}}" name="work_time" class="sx_child">{{$yr}}年</a>
+      </volist>
+  </dd>
+</dl>
+<dl>
+  <dt>星级选择</dt>
+    <dd>
+      <a href="#" rel="" name="star" class="all on">全部</a>
+      <volist name="st" id="st">
+        <a href="#" rel="{{$st}}" name="star" class="sx_child">{{$st}}星</a>
+      </volist>
+  </dd>
+</dl>
+</div>
+</div>
+<div class="page-container">
+
+    <style type="text/css">
+        .box-list li{ width: 145px; height: 200px; margin: 1px 5px; text-align: center; float: left; background: #F5FAFE; }
+        .box-list li .title{ display: inline-block; width: 40px; text-align: left; font-size: 12px;}
+        .box-list li .star{ display: inline-block; width: 60px; text-align: left; font-size: 12px;}
+        .box-list li .delete{ cursor: pointer; width: 40px; }
+        .box-list li img{ height: 180px;}
+    </style>
+    <div class="mt-10">
+        <div class="box">
+        <div class="box-list">
+            <ul>
+            <volist name="list" id="vo">
+                <li>
+                    <label onclick="_lawyer_start(this,{{$vo.id}},{{$v.uid}})"><span><img src="{{$vo.weburl}}{{$vo.face}}" width="100%" ></span>
+                    <p>
+                    <span class="title l">{{$vo.username|substr=0,12}}</span>
+                    <span class="star l"> {{$vo.star}}星</span>
+                    <span onclick="_del(this,{{$vo.id}})" class="delete r">{{$vo.work_time}}年</span></p>
+                    </label>
+                </li>
+            </volist>
+            </ul>
+        </div>
+    </div>
+    <div style="clear: both;">
+        <if condition="$count gt 10">
+        <tfoot>
+            <tr class="list-page">
+                <td colspan="10">{{$page}}</td>
+            </tr>
+        </tfoot>
+        </if>
+    </div>
+  </div>
+</div>
+</body>
+
+<include file="public:footer-style" />
+<!-- <script type="text/javascript" src="__PUBLICADMIN__lib/tagSelect/tagSelect.js"></script> -->
+<!--地区插件-->
+<script type="text/javascript" src="__PUBLICADMIN__lib/jQueryDistpicker20160621/js/distpicker.data.js"></script>
+<script type="text/javascript" src="__PUBLICADMIN__lib/jQueryDistpicker20160621/js/distpicker.js"></script>
+<script type="text/javascript" src="__PUBLICADMIN__lib/jQueryDistpicker20160621/js/main.js"></script>
+<script type="text/javascript" src="__PUBLICADMIN__js/common.js"></script>
+<script type="text/javascript">
+
+//访问地址
+var url = window.location.href;
+province_cn = getUrlParam(url,'province_cn');
+city_cn = getUrlParam(url,'city_cn');
+area_cn = getUrlParam(url,'area_cn');
+//默认地区
+$("#distpicker").distpicker({
+  province: province_cn,
+  city: city_cn,
+  district: area_cn,
+});
+
+
+function SelectTag(t) {
+    this.child = t.child || ".sx_child",
+    this.province = t.province || ".province",
+    this.city = t.city || ".city",
+    this.area = t.area || ".area",
+    this.sex = t.sex || ".sex",
+    this.over = t.over || "on",
+    this.all = t.all || ".all",
+    this.init()
+}
+
+$.extend(SelectTag.prototype, {
+    init: function() {
+        var t = this;
+        t._bindEvent(),
+        t._select()
+    },
+    _bindEvent: function() {
+        var t = this;
+        $(t.child).click(function(e) {
+            e.preventDefault();
+            var i = url,
+            n = $(this).attr("rel"),
+            r = $(this).attr("name");
+            $(this).hasClass(t.over) || (window.location.href = t._changeURLPar(i, r, n))
+        }),
+        $(t.all).click(function(e) {
+            e.preventDefault();
+            var i = url,
+            n = $(this).attr("name");
+            $("[name=" + n + "]").removeClass(t.over),
+            $(this).addClass(t.over),
+            window.location.href = t._delUrlPar(i, n)
+        }),$(t.province).change(function(e){
+            e.preventDefault();
+            var i = url,
+            n = $(this).val();
+            r = $(this).attr('name');
+            url = t._changeURLPar(i, r, n);
+            window.location.href = url;
+        }),$(t.city).change(function(e){
+            e.preventDefault();
+            var i = url,
+            n = $(this).val();
+            r = $(this).attr('name');
+            url = t._changeURLPar(i, r, n);
+            window.location.href = url;
+        }),$(t.area).change(function(e){
+            e.preventDefault();
+            var i = url,
+            n = $(this).val();
+            r = $(this).attr('name');
+            url = t._changeURLPar(i, r, n);
+            window.location.href = url;
+        })
+    },
+    _delUrlPar: function(t, e) {
+        var n = "";
+        if (t.indexOf("?") == -1) return t;
+        n = t.substr(t.indexOf("?") + 1);
+        var r = "",
+        a = "";
+        if (n.indexOf("&") != -1) {
+            r = n.split("&");
+            for (i in r) r[i].split("=")[0] != e && (a = a + r[i].split("=")[0] + "=" + r[i].split("=")[1] + "&");
+            return t.substr(0, t.indexOf("?")) + "?" + a.substr(0, a.length - 1)
+        }
+        return r = n.split("="),
+        r[0] == e ? t.substr(0, t.indexOf("?")) : t
+    },
+    _changeURLPar: function(t, e, i) {
+        var n = this,
+        r = e + "=([^&]*)",
+        a = e + "=" + i,
+        s = encodeURI(n._getQueryString(e));
+        return t.match(r) ? t = t.replace(s, i) : t.match("[?]") ? t + "&" + a: t + "?" + a
+    },
+    _getQueryString: function(t) {
+        var e = new RegExp("(^|&)" + t + "=([^&]*)(&|$)", "i"),
+        i = window.location.search.substr(1).match(e);
+        return null != i ? decodeURI(i[2]) : null
+    },
+    _select: function() {
+        var t = this,
+        e = url;
+        $(t.child).each(function() {
+            var i = $(this).attr("name") + "=" + $(this).attr("rel"),
+            n = new RegExp(encodeURI(i), "g");
+            if (n.test(e)) {
+                $(this).addClass(t.over);
+                var r = $(this).attr("name");
+                $("[name=" + r + "]").eq(0).removeClass(t.over)
+            } else $(this).removeClass(t.over)
+        })
+    }
+});
+
+$(function(){
+      new SelectTag({
+          child : ".sx_child",    //所有筛选范围内的子类
+          over : 'on',            //选中状态样式名称
+          all : ".all"
+      });
+  })
+$("#distpicker2").distpicker({
+  province: '---- 所在省 ----',
+  city: '---- 所在市 ----',
+  district: '---- 所在区 ----'
+});
+
+/*用户-编辑*/
+function _lawyer_start(obj,lid,uid){
+  layer.confirm('提示：确定要分配当前律师给这个用户吗？',function(index){
+    $.ajax({
+      type: 'POST',
+      url: '{{:url('lawyerStart')}}',
+      data: {
+        'id':uid,
+        'lid':lid,
+        'uid':uid,
+      },
+            dataType: 'json',
+            success: function(data){
+                if(data.code == 10000) {
+                    $(obj).parents("tr").remove();
+                    layer.msg(data.msg,{icon:1,time:1500});
+                    setTimeout('location.replace(location.href);', 1500);
+                }else{
+                    layer.msg(data.msg,{icon:5,time:1500});
+                }
+            },
+            error:function(data) {
+                layer.msg('分配出错!',{icon:5,time:1500});
+            },
+    });
+  });
+}
+
+</script>
+<include file="public:footer" />

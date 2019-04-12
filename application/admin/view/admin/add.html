@@ -1,0 +1,174 @@
+<include file="public:top" />
+<div class="pd-20">
+  <div class="Huiform">
+    <form method="post" class="form form-horizontal" id="form-add-data">
+
+      <div class="row cl">
+        <label class="form-label col-xs-3 col-sm-2">
+          <span class="c-red">*</span>角色：
+        </label>
+        <div class="formControls col-xs-7 col-sm-9">
+          <span class="select-box">
+            <select class="select" id="roleid" name="roleid">
+              <volist name="list" id="vo">
+                <option value="{{$vo.id}}">{{$vo.name}}</option>
+              </volist>
+            </select>
+          </span>
+        </div>
+      </div>
+
+      <div class="row cl">
+        <label class="form-label col-xs-3 col-sm-2">
+          <span class="c-red">*</span>昵称：
+        </label>
+        <div class="formControls col-xs-7 col-sm-9">
+          <input type="text" class="input-text" placeholder="请输入昵称" id="nickname" name="nickname" null="不能为空" value="">
+        </div>
+      </div>
+      <div class="row cl">
+        <label class="form-label col-xs-3 col-sm-2">
+          <span class="c-red">*</span>性别：
+        </label>
+        <div class="formControls col-xs-7 col-sm-9">
+          <span class="select-box">
+            <select class="select" id="sex" name="sex">
+              <option value="1" selected>男</option>
+              <option value="0">女</option>
+            </select>
+          </span>
+        </div>
+      </div>
+      <div class="row cl">
+        <label class="form-label col-xs-3 col-sm-2">
+          <span class="c-red">*</span>账号：
+        </label>
+        <div class="formControls col-xs-7 col-sm-9">
+          <input type="text" class="input-text" placeholder="请输入账号" id="username" name="username" null="不能为空" value="">
+        </div>
+      </div>
+      <div class="row cl">
+        <label class="form-label col-xs-3 col-sm-2">
+          <span class="c-red">*</span>密码：
+        </label>
+        <div class="formControls col-xs-7 col-sm-9">
+          <input type="password" class="input-text" placeholder="请输入密码" id="password" name="password" null="不能为空" value="">
+        </div>
+      </div>
+      <div class="row cl">
+        <label class="form-label col-xs-3 col-sm-2">排序：</label>
+        <div class="formControls col-xs-7 col-sm-9">
+          <input type="text" class="input-text" placeholder="请填写数字" id="sort" name="sort" value="99">
+        </div>
+      </div>
+      <div class="row cl">
+        <label class="form-label col-xs-3 col-sm-2">
+          <span class="c-red">*</span>状态：
+        </label>
+        <div class="formControls col-xs-7 col-sm-9">
+          <span class="select-box">
+            <select class="select" id="status" name="status">
+              <option value="1" selected>正常</option>
+              <option value="0">禁用</option>
+              <option value="-1">删除</option>
+              <option value="2">审核</option>
+            </select>
+          </span>
+        </div>
+      </div>
+      <div class="row cl">
+        <label class="form-label col-xs-3 col-sm-2">备注：</label>
+        <div class="formControls col-xs-7 col-sm-9">
+          <input type="text" class="input-text" value="" placeholder="请填写备注" id="content" name="content">
+        </div>
+      </div>
+      <div class="row cl">
+        <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+          <button class="btn btn-primary radius" id="sub" type="submit">&nbsp;&nbsp;提交&nbsp;&nbsp;</button>
+          <button class="btn btn-default radius" type="button">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<include file="public:footer-style" />
+<script type="text/javascript" src="__PUBLICADMIN__lib/jquery.validation/1.14.0/jquery.validate.js"></script>
+<script type="text/javascript" src="__PUBLICADMIN__lib/jquery.validation/1.14.0/validate-methods.js"></script>
+<script type="text/javascript" src="__PUBLICADMIN__lib/jquery.validation/1.14.0/messages_zh.js"></script>
+<script type="text/javascript">
+  //$(".Huiform").Validform(); 
+  $(function () {
+    $('.skin-minimal input').iCheck({
+      checkboxClass: 'icheckbox-blue',
+      radioClass: 'iradio-blue',
+      increaseArea: '20%'
+    })
+  });
+
+  $(function () {
+    $("#form-add-data").validate({
+
+      rules: {
+        username: {
+          required: true,
+          minlength: 2
+        },
+        password: {
+          required: true,
+          minlength: 6
+        },
+        status: {
+          required: true
+        }
+      },
+      messages: {
+
+        username: {
+          required: "请输入账号",
+          minlength: "账号必需由两个字母组成"
+        },
+        password: {
+          required: "请输入密码",
+          minlength: "密码长度不能小于 6 个字母"
+        },
+
+        email: "请输入一个正确的邮箱",
+        agree: "请接受我们的声明",
+        topic: "请选择两个主题"
+      },
+      onkeyup: false,
+      focusCleanup: true,
+      success: "valid",
+      submitHandler: function (form) {
+        $(form).ajaxSubmit({
+          type: 'post',
+          url: "{{:url('addByAjax')}}",
+          dataType: 'json',
+          success: function (data) {
+            if (data.code == 10000) {
+              layer.msg(data.msg, {
+                icon: 1,
+                time: 1000
+              });
+              setTimeout('parent.location.reload();', 1000);
+            } else {
+              layer.msg(data.msg, {
+                icon: 2,
+                time: 2000
+              });
+            }
+          },
+          error: function (XmlHttpRequest, textStatus, errorThrown) {
+            layer.msg('系统繁忙!', {
+              icon: 5,
+              time: 1000
+            });
+          }
+        });
+        var index = parent.layer.getFrameIndex(window.name);
+      }
+    });
+  });
+</script>
+<include file="public:footer" />
