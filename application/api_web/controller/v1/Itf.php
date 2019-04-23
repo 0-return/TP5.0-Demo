@@ -4,7 +4,7 @@
  * Cser Administrator
  * Time 17:59
  */
-namespace app\lapi\controller\v3;
+namespace app\api_web\controller\v1;
 interface Itf{
 
     public function add();          //添加

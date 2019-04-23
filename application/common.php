@@ -8,7 +8,6 @@
 // +----------------------------------------------------------------------
 // | Author: 流年 <liu21st@gmail.com>
 // +----------------------------------------------------------------------
-use app\uapi\common\controller\Jhsms;
 // 应用公共文件
 
 /**
@@ -561,3 +560,17 @@ function arraySort($data,$key,$sort = 'asc')
 
 }
 
+/**
+ * @auth YW
+ * @date 2019.04.14
+ * @purpose 数组追加url
+ * @return array
+ */
+function array2addUrl($data,$param)
+{
+    foreach ($data as $key => $value)
+    {
+        $data[$key]['url'] = $param['weburl'];
+    }
+    return $data;
+}
